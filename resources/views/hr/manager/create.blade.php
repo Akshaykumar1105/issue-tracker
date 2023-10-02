@@ -67,9 +67,9 @@
                                     </div>
                                 @endif
                                 <div class="form-group mb-4 ">
-                                    <label for="mobile_no" class="form-label">Mobile Number</label>
+                                    <label for="mobile" class="form-label">Mobile Number</label>
                                     <input type="number" value="{{ isset($manager) ? $manager->mobile : '' }}"
-                                        class="form-control shadow-none" name="mobile_no" id="mobile_no" placeholder="7410852000">
+                                        class="form-control shadow-none" name="mobile" id="mobile" placeholder="7410852000">
                                 </div>
 
                                 <div class="form-group " style=";font-size: 20px;">
@@ -135,7 +135,7 @@
                         required: true,
                         equalTo: "#password" // Confirm password must match password
                     },
-                    mobile_no: {
+                    mobile: {
                         required: true,
                         minlength: 10,
                         maxlength: 10,
@@ -160,7 +160,7 @@
                         required: "Please confirm your password.",
                         equalTo: "Passwords do not match.",
                     },
-                    mobile_no: {
+                    mobile: {
                         required: "Please enter your 10-digit mobile number.",
                         minlength: "Mobile number must be exactly 10 digits.",
                         maxlength: "Mobile number must be exactly 10 digits.",

@@ -156,10 +156,6 @@
                                     value: 'SEND_FOR_REVIEW',
                                     label: 'Send For Review'
                                 },
-                                {
-                                    value: 'COMPLETED',
-                                    label: 'Completed'
-                                }
                             ];
 
                             // Initialize the options HTML

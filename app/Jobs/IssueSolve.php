@@ -1,0 +1,35 @@
+<?php
+
+namespace App\Jobs;
+
+use Illuminate\Bus\Queueable;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Queue\InteractsWithQueue;
+use App\Mail\IssueSolve as MailIssueSolve;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Contracts\Queue\ShouldBeUnique;
+
+
+class IssueSolve implements ShouldQueue
+{
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+
+    protected $issueSolve;
+    /**
+     * Create a new job instance.
+     */
+    public function __construct($issueSolve){
+        $this->issueSolve = $issueSolve;
+        $this->onQueue('low');
+    }
+
+    /**
+     * Execute the job.
+     */
+    public function handle(): void{
+        $token = new MailIssueSolve($this->issueSolve['issue']);
+        Mail::to($this->issueSolve['email'])->send($token);
+    }
+}

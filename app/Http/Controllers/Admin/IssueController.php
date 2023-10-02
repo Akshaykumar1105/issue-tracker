@@ -23,16 +23,8 @@ class IssueController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $query = Issue::with('company');
-            if ($request->filter) {
-                $query->where('priority', $request->filter);
-            }
-            if ($request->duedate) {
-                $query->where('due_date', $request->duedate);
-            }
-            if ($request->company) {
-                $query->where('company_id', $request->company);
-            }
+           
+            $query = $this->issueService->collection($query = null, $request);
             return DataTables::of($query)
                 ->orderColumn('title', function ($query, $order) {
                     $query->orderBy('id', $order);

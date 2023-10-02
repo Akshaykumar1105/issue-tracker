@@ -11,15 +11,13 @@ use App\Services\HrService;
 use App\Services\ManagerService;
 use Yajra\DataTables\Facades\DataTables;
 
-class UserController extends Controller
-{
+class UserController extends Controller{
 
     protected $userService;
     protected $hrService;
     protected $managerService;
 
-    public function __construct(UserService $userService, HrService $hrService, ManagerService $managerService)
-    {
+    public function __construct(UserService $userService, HrService $hrService, ManagerService $managerService){
         $this->userService = $userService;
         $this->hrService = $hrService;
         $this->managerService = $managerService;
@@ -34,8 +32,7 @@ class UserController extends Controller
         return view('admin.user.index', ['companies' => $company]);
     }
 
-    public function show(Request $request, User $manager)
-    {
+    public function show(Request $request, User $manager){
         if ($request->ajax()) {
             return $this->userService->recourse($request, $manager);
         }

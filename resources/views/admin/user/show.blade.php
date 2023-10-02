@@ -14,11 +14,10 @@
         
 
         <div>
-            <a href="{{route('admin.company.index')}}" style="float: right;" class="btn btn-outline-secondary">Back</a>
+            <a href="{{route('admin.user.index', ['listing' => 'hr'])}}" style="float: right;" class="btn btn-outline-secondary">Back</a>
         </div>
 
-        <div class=""
-            style="padding: 10px;border: 0 solid rgba(0,0,0,.125);
+        <div class="" style="padding: 10px;border: 0 solid rgba(0,0,0,.125);
     border-radius: .25rem;background-color: #fff;box-shadow: 0 0 1px rgba(0,0,0,.125), 0 1px 3px rgba(0,0,0,.2);margin-bottom: 1rem;margin-top: 5rem;">
 
             <table class="table" id="companyData">

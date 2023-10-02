@@ -5,9 +5,27 @@
 
 @section('style')
     <link href="{{ asset('asset/css/datatables.min.css') }}" rel="stylesheet">
+    <style>
+        .slow .toggle-group {
+            transition: left 0.7s;
+            -webkit-transition: left 0.7s;
+        }
+
+        .img {
+            padding: 50px;
+        }
+
+        .image--cover {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: fill;
+            object-position: center center;
+        }
+    </style>
 @endsection
 @section('content')
-    <section class="content" style="margin: 0 auto; max-width: 1050px">
+    <section class="content" style="margin: 0 auto; max-width: 100%">
         <div class="" style="margin-bottom: 20px;">
             @if (request('listing') === 'manager')
                 <h1>Managers</h1>
@@ -30,10 +48,11 @@
                 </select>
             </div>
 
-            <table class="table" id="companyData">
+            <table class="table" id="companyData" style="width: 100%">
                 <thead>
                     <tr>
                         <th scope="col">{{ __('messages.table.id') }}</th>
+                        <th>Profile</th>
                         <th>{{ __('messages.table.name') }}</th>
                         <th scope="col">{{ __('messages.table.email') }}</th>
                         <th>Company</th>
@@ -82,11 +101,15 @@
                         }
                     },
                     {
+                        "data" : "profile",
+                    },
+                    {
                         "data": "name",
                     },
                     {
                         "data": "email",
                     },
+                    
                     {
                         "data": "company.name",
                     },

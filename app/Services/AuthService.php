@@ -2,14 +2,15 @@
 
 namespace App\Services;
 
+use App\Jobs\ResetPassword;
 use Carbon\Carbon;
 use App\Models\User;
+use App\Models\Company;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Mail\ResetPasswordEmail;
 use App\Models\PasswordResetToken;
 use App\Mail\ConfirmPasswordEmail;
-use App\Models\Company;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Hash;
@@ -34,39 +35,39 @@ class AuthService
         // dd($company->is_active == config('site.status.active')); 
 
         if ($user->hasRole(config('site.role.admin'))) {
-            return  response()->json([
+            return  [
                 'success' =>  __('messages.auth.login'),
                 'route' => route('admin.dashboard')
-            ]);
+            ];
         }
         else if ($user->hasRole(config('site.role.hr')) && $company->is_active == config('site.status.active') ) {
             
-            return  response()->json([
+            return [
                 'success' =>  __('messages.auth.login'),
                 'route' => route('hr.dashboard')
-            ]);
+            ];
         }
         else if ($user->hasRole(config('site.role.manager')) && $company->is_active == config('site.status.active') ) {
-            return  response()->json([
+            return[
                 'success' =>  __('messages.auth.login'),
                 'route' => route('manager.dashboard')
-            ]);
+            ];
         }
         else {
             $this->logout();
-            return response()->json([
+            return [
                 'success' =>  __('messages.auth.not-valid'),
                 'route' => route('home')
-            ]);
+            ];
         }
     }
 
     public function logout(){
         auth()->logout();
-        return response()->json([
+        return [
             'success' =>  __('messages.auth.logout'),
             'route' => route('login')
-        ]);
+        ];
     }
 
 
@@ -80,10 +81,14 @@ class AuthService
                 'token' => $token,
                 'created_at' => Carbon::now()
             ]);
-            Mail::to($request->email)->send(new ResetPasswordEmail($token));
-            return response()->json(['message' => __('messages.email.reset-email')]);
+            ResetPassword::dispatch([
+                'email' => $request->email,
+                'token' => $token,
+            ])->delay(now()->addMinutes(1));
+            // Mail::to($request->email)->send(new ResetPasswordEmail($token));
+            return['message' => __('messages.email.reset-email')];
         } else {
-            return response()->json(['message' => __('messages.email.email-fail')]);
+            return ['message' => __('messages.email.email-fail')];
         }
     }
 
@@ -123,9 +128,9 @@ class AuthService
             'password' => Hash::make($request->password)
         ]);
 
-        return response()->json([
+        return [
             'success' =>  __('entity.entityUpdated', ['entity' => 'Your password'])
-        ]);
+        ];
     }
 
 

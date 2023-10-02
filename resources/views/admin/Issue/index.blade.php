@@ -16,7 +16,7 @@
     </style>
 @endsection
 @section('content')
-    <section class="content" style="margin: 0 auto; max-width: 1050px">
+    <section class="content" style="margin: 0 auto; max-width: 100%">
         <h1>Issue</h1>
 
         <div
@@ -49,7 +49,7 @@
                 </div>
             </div>
 
-            <table class="table" id="companyData">
+            <table class="table" id="companyData" style="width: 100%;">
                 <thead>
                     <tr>
                         <th>{{ __('messages.table.id') }}</th>
@@ -136,6 +136,23 @@
                     },
                     {
                         "data": "priority",
+                        render: function(data, type, row) {
+                            var colorClass = '';
+                            switch (data) {
+                                case 'LOW':
+                                    colorClass ='text-white bg-green text-center rounded-lg'; // CSS class for low priority (green color)
+                                    break;
+                                case 'MEDIUM':
+                                    colorClass ='text-white bg-yellow  text-center rounded-lg'; // CSS class for medium priority (yellow color)
+                                    break;
+                                case 'HIGH':
+                                    colorClass ='text-white bg-red  text-center rounded-lg'; // CSS class for high priority (red color)
+                                    break;
+                                default:
+                                    colorClass = ''; // Default class
+                            }
+                            return '<div style="width:70px" class="' + colorClass + ' bg-opacity-75">' + data + '</div>';
+                        }
                     },
                     {
                         "data": "due_date",

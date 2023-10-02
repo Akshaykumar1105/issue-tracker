@@ -79,9 +79,7 @@
     </div>
 
     <!-- Button trigger modal -->
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#logoutModel">
-        Launch demo modal
-    </button>
+    
 
     <!-- Modal -->
     <div class="modal fade" id="logoutModel" tabindex="-1"  aria-hidden="true">

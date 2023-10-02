@@ -14,7 +14,7 @@
     </style>
 @endsection
 @section('content')
-    <section class="content" style="margin: 0 auto; max-width: 1050px">
+    <section class="content" style="margin: 0 auto; max-width: 100%">
         <h1>@lang('messages.company.title')</h1>
         <div class="" style="margin: 0 auto; float: right;">
             <a class="btn btn-primary" href="{{ route('admin.company.create') }}">@lang('messages.company.register')</a>
@@ -24,7 +24,7 @@
             style="margin-top: 70px;padding: 10px;border: 0 solid rgba(0,0,0,.125);
     border-radius: .25rem;background-color: #fff;box-shadow: 0 0 1px rgba(0,0,0,.125), 0 1px 3px rgba(0,0,0,.2);margin-bottom: 1rem;">
 
-            <table class="table" id="companyData">
+            <table class="table" id="companyData" style="width: 100%">
                 <thead>
                     <tr>
                         <th >{{ __('messages.table.id') }}</th>
@@ -153,7 +153,7 @@
                             closeButton: true,
                             progressBar: true,
                         }
-                        toastr.error(message);
+                        toastr.success(message);
                         $('.table').DataTable().ajax.reload();
                     }
                 });

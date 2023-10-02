@@ -13,15 +13,13 @@ use App\Http\Requests\Admin\Company\Store;
 use App\Http\Requests\Admin\Company\Update;
 
 
-class CompanyController extends Controller
-{
+class CompanyController extends Controller{
 
     protected $companyService;
     protected $managerService;
     protected $hrService;
 
-    public function __construct(CompanyService $companyService, ManagerService $managerService, HrService $hrService)
-    {
+    public function __construct(CompanyService $companyService, ManagerService $managerService, HrService $hrService){
         $this->companyService = $companyService;
         $this->managerService = $managerService;
         $this->hrService = $hrService;
@@ -81,8 +79,7 @@ class CompanyController extends Controller
         return $this->companyService->update($request, $company);
     }
 
-    public function destroy()
-    {
+    public function destroy(){
         return  $this->companyService->destroy();
     }
 }

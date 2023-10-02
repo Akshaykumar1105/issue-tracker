@@ -13,23 +13,28 @@ use Plank\Mediable\Facades\MediaUploader;
 class ManagerService
 {
 
-    public function collection($companyId = null, $request){
+    protected $user;
+    public function __construct()
+    {
+        $this->user = new User();
+    }
+
+    public function collection($companyId = null, $request)
+    {
 
         if ($request->listing == config('site.role.manager')) {
             $data = User::with('company')->whereNotNull('parent_id');
-
             if ($companyId) {
                 $data = User::with('company')->whereNotNull('parent_id')->where('company_id', $companyId);
             }
             if ($request->filter) {
                 $data->where('company_id', $request->filter);
             }
-
         } else if ($companyId && $request->listing == config('site.role.manager')) {
             $data = User::where('company_id', $companyId)->whereNotNull('parent_id')->select('id', 'name', 'email', 'mobile');
         } else {
             $id = auth()->user()->id;
-            $data = User::where('parent_id', $id)->select('id', 'name', 'email', 'mobile');
+            return User::where('parent_id', $id)->select('id', 'name', 'email', 'mobile');
         }
 
         return DataTables::of($data)->with('media')->addIndexColumn()
@@ -40,7 +45,7 @@ class ManagerService
                 $user = User::find($row->id);
                 $media = $user->firstMedia('user');
                 $img = asset('storage/user/' . $media->filename . '.' . $media->extension);
-                $profile = '<img class="image--cover" src=' . $img . ' />';
+                $profile = '<div style=" padding: 20px; width: 40px; height: 40px; background-size: cover; background-image: url('.$img.');" class="img-circle elevation-2" alt="User Image"></div>';
                 return $profile;
             })
             ->addColumn('action', function ($row, Request $request) {
@@ -48,8 +53,7 @@ class ManagerService
                 if ($request->listing == 'manager') {
                     $actionBtn = '<p>No Action</p>';
                     return $actionBtn;
-                }
-                else{
+                } else {
                     $actionBtn = '<a href=' . $editRoute . ' id="edit' . $row->id . '" data-userId="' . $row->id . '" class="edit btn btn-success btn-sm">Edit</a> <button type="submit" data-userId="' . $row->id . '" class="delete btn btn-danger btn-sm" data-bs-toggle="modal"
                     data-bs-target="#deleteManager">Delete</button>';
                     return $actionBtn;
@@ -63,21 +67,22 @@ class ManagerService
         $companyId = auth()->user()->company_id;
         $hrId = auth()->user()->id;
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'company_id' => $companyId,
-            'mobile' => $request->mobile_no,
-            'parent_id' => $hrId
-        ]);
+        // Fill the user model with data from the request
+        $this->user->fill($request->all());
 
-        $user->assignRole('manager');
+        // Set the company_id and parent_id attributes
+        $this->user->company_id = $companyId;
+        $this->user->parent_id = $hrId;
+
+        // Save the user model
+        $this->user->save();
+
+        $this->user->assignRole('manager');
 
         if ($request->file('profile_img')) {
             $media =  MediaUploader::fromSource($request->file('profile_img'))->toDisk('public')
                 ->toDirectory('user')->upload();
-            $user->attachMedia($media, 'user');
+            $this->user->attachMedia($media, 'user');
         }
 
         $email = $request->email;
@@ -85,25 +90,17 @@ class ManagerService
 
         Mail::to($email)->send(new ManagerCredentialsEmail($email, $password));
 
-        return response()->json([
+        return [
             'success' =>  __('entity.entityCreated', ['entity' => 'Manager']),
             'route' => route('hr.manager.index')
-        ]);
-    }
-
-
-    public function edit($manager)
-    {
+        ];
     }
 
     public function update($request, $manager)
     {
         $update = User::where('id', $manager)->first();
-        $update->update([
-            'name' => $request->name,
-            'email' => $request->email,
-            'mobile' => $request->mobile_no,
-        ]);
+
+        $update->fill($request->all())->save();
 
         $profileImg = $request->file('profile_img');
         $oldProfile = $update->firstMedia('user');
@@ -117,10 +114,10 @@ class ManagerService
             $update->syncMedia($oldProfile, 'user');
         }
 
-        return  response()->json([
+        return  [
             'success' =>  __('entity.entityUpdated', ['entity' => 'Your data']),
             'route' => route('hr.manager.index')
-        ]);
+        ];
     }
 
     public function destroy($request)

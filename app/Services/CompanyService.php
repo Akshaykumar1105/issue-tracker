@@ -24,56 +24,58 @@ class CompanyService
         $this->hrService = $hrService;
     }
 
-    public function collection($companyId, $request){
+    public function collection($companyId, $request)
+    {
 
         if ($request->listing == config('site.role.hr')) {
             return $this->hrService->collection($companyId, $request);
-        }
-        else if ($request->listing == config('site.role.manager')){
+        } else if ($request->listing == config('site.role.manager')) {
             return $this->managerService->collection($companyId, $request);
         }
     }
 
-    public function store($request){
+    public function store($request)
+    {
         $this->companyModel->fill($request->all())->save();
 
         $company = Company::where('email', $request->email)->first();
-        $email = $company->email; 
+        $email = $company->email;
         $companyUuid = $company->uuid;
         Mail::to($email)->send(new IssueReportSubmission($companyUuid));
-        return response()->json([
+        return [
             'success' => __('entity.entityCreated', ['entity' => 'Company']),
             'route' => route('admin.company.index')
-        ]);
+        ];
     }
 
-    public function update($request, $company){
+    public function update($request, $company)
+    {
         // $company = Company::where('id', $company)->first();
         $company->fill($request->validated());
         $company->save();
 
-        return  response()->json([
+        return  [
             'success' => __('entity.entityUpdated', ['entity' => 'Company']),
             'route' => route('admin.company.index')
-        ]);
+        ];
     }
 
-    public function destroy(){
+    public function destroy()
+    {
         $id = request()->id;
         Company::where('id', $id)->delete();
-        return  response()->json([
+        return [
             'success' => __('entity.entityDeleted', ['entity' => 'Company']),
-        ]);
+        ];
     }
 
     public function status($request){
         $company = $request->userId;
-        if ($request->status == 1) {
-            Company::where('id', $company)->update(['is_active' => config('site.status.is_active')]);
-            return  response()->json(['success' => __('messages.status.inactive')]);
-        } else {
-            Company::where('id', $company)->update(['is_active' => config('site.status.active')]);
-            return  response()->json(['success' => __('messages.status.active')]);
-        }
+        $isActive = $request->status == 1 ? config('site.status.is_active') : config('site.status.active');
+
+        Company::where('id', $company)->update(['is_active' => $isActive]);
+
+        $message = $isActive ? __('messages.status.active') : __('messages.status.inactive');
+        return ['success' => $message];
     }
 }

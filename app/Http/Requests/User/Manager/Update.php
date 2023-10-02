@@ -24,7 +24,7 @@ class Update extends FormRequest
         return [
             'name' => 'required',
             'email' => 'required|email|unique:users,email,'.$this->manager,
-            'mobile_no' => 'required|digits:10',
+            'mobile' => 'required|digits:10',
             'profile_img' => 'nullable|mimes:jpeg,png,jpg,gif|max:4096'
         ];
     }
