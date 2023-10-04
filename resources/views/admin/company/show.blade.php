@@ -14,7 +14,7 @@
     </style>
 @endsection
 @section('content')
-    <section class="content" style="margin: 0 auto; max-width: 1050px">
+    <section class="content" style="margin: 0 auto; max-width: 100%">
         @if (request('listing') === 'manager')
             <h1>Managers</h1>
         @else
@@ -27,10 +27,11 @@
             style="margin-top: 70px;padding: 10px;border: 0 solid rgba(0,0,0,.125);
     border-radius: .25rem;background-color: #fff;box-shadow: 0 0 1px rgba(0,0,0,.125), 0 1px 3px rgba(0,0,0,.2);margin-bottom: 1rem;">
 
-            <table class="table" id="companyData">
+            <table class="table" id="companyData" style="width: 100%;">
                 <thead>
                     <tr>
                         <th scope="col">{{ __('messages.table.id') }}</th>
+                        <th>{{ __('messages.table.profile') }}</th>
                         <th>{{ __('messages.table.name') }}</th>
                         <th scope="col">{{ __('messages.table.email') }}</th>
                         <th scope="col">Mobile</th>
@@ -89,6 +90,9 @@
                         name: 'DT_RowIndex',
                         orderable: false,
                         searchable: false
+                    },
+                    {
+                        "data": "profile",
                     },
                     {
                         "data": "name",

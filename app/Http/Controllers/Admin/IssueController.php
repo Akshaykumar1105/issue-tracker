@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Company;
 use App\Models\User;
-use App\Services\User\IssueService;
+use App\Services\IssueService;
 use Yajra\DataTables\Facades\DataTables;
 
 class IssueController extends Controller

@@ -9,7 +9,7 @@
 
     <div class="w-50 mx-auto my-5">
         <h2 style="font-weight: 200;margin: 12px 0;">Generate issue</h2>
-        <form action="{{ route('issue.store') }}" id="issue" method="post">
+        <form action="{{ route('issue.store', ['company' => ':uuid']) }}".replace(:uuid, $uuid) id="issue" method="post">
             @csrf
             <div class="row">
                 <input type="hidden" class="form-control shadow-none" value="{{$uuid}}" name="issueUuid" id="issueUuid">
@@ -35,7 +35,7 @@
                         <label for="hr" class="form-label">Human resources<span
                                 class="text-danger ms-1">*</span></label>
                         <div style="position: relative;">
-                            <select class="form-control" style="color: #888888 !important;" value="{{ old('company') }}" name="hr_id" id="hr">
+                            <select class="form-control"  value="{{ old('company') }}" name="hr_id" id="hr">
                                 <option value="default">Select Human resources</option>
                                 @foreach ($hrs as $hr)
                                     <option value="{{ $hr->id }}">{{ $hr->name }}</option>
@@ -122,6 +122,7 @@
                                 progressBar: true,
                             }
                             toastr.success(response.success);
+                            $(form).validate().resetForm();
                         },
                         error: function(xhr, status, error) {
                             var response = JSON.parse(xhr.responseText);

@@ -18,7 +18,8 @@ class HrController extends Controller
     }
     
     public function index(){
-        return $this->userService->index();
+        $company = $this->userService->index();
+        return view('user.hr.register', ['companies' => $company]);
     }
 
     public function store(Store $request){

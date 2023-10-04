@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Manager;
 
 use App\Models\Issue;
 use Illuminate\Http\Request;
-use App\Services\User\IssueService;
+use App\Services\IssueService;
 use App\Http\Controllers\Controller;
 use App\Models\Comment;
 use App\Models\User;
@@ -43,19 +43,11 @@ class IssueController extends Controller
     }
 
     public function edit(Issue $issue){
-        $comments = Comment::with('users.media')->where('issue_id', $issue->id)->orderBy('created_at')->get();
-        
-        return view('manager.issue.create', ['issue' => $issue, 'comments' => $comments]);
+        // dd($comments);
+        return view('manager.issue.create', ['issue' => $issue]);
     }
 
     public function update($id, Request $request){
         return $this->issueService->update($id, $request);
-        // dd($id);
-        // Issue::find($id)->fill($request->all())->save();
-
-        // return  response()->json([
-        //     'success' => __('entity.entityUpdated', ['entity' => 'Issue']),
-        //     'route' => route('manager.issue.index')
-        // ]);
     }
 }

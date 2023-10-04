@@ -16,17 +16,15 @@ class HrService
         $this->user = new User();
     }
 
-    public function index()
-    {
-        $company = Company::where('is_active', 1)->get();
-        if (!auth()->user()) {
-            return view('user.hr.register', ['companies' => $company]);
+    public function index(){
+        if (auth()->user()) {
+            return redirect()->route('home');
         }
-        return redirect()->route('home');
+        return Company::where('is_active', 1)->get();
+        
     }
 
-    public function store($request)
-    {
+    public function store($request){
         $this->user->fill($request->all())->save();
 
         $this->user->assignRole('hr');
@@ -42,8 +40,7 @@ class HrService
         ];
     }
 
-    public function update($request)
-    {
+    public function update($request){
         $id = auth()->user()->id;
         $user = User::find($id);
         $user->fill($request->all())->save();
@@ -68,9 +65,7 @@ class HrService
         ];
     }
 
-
-    public function collection($companyId = null, $request)
-    {
+    public function collection($companyId = null, $request){
         if ($request->listing == config('site.role.hr')) {
             //if companyId not null
             if ($companyId) {
@@ -78,32 +73,11 @@ class HrService
             } else {
                 $query = User::with('company')->whereNull('parent_id')->whereNotNull('company_id');
             }
-
             // fillter by company
             if ($request->filter) {
                 $query->where('company_id',  $request->filter);
             }
-            return DataTables::of($query)
-                ->addIndexColumn()
-                ->addColumn('profile', function ($row) {
-                    $user = User::find($row->id);
-                    $media = $user->firstMedia('user');
-                    $img = asset('storage/user/' . $media->filename . '.' . $media->extension);
-                    $profile = '<div style=" padding: 20px; width: 40px; height: 40px; background-size: cover; background-image: url('.$img.');" class="img-circle elevation-2" alt="User Image"></div>';
-                    
-                    return $profile;
-                })
-                ->orderColumn('name', function ($query, $order) {
-                    $query->orderBy('id', $order);
-                })
-                ->addColumn('action', function ($row) {
-                    $manager = $row->id;
-                    $showManager = route('admin.user.show', ['manager' => $manager]);
-                    $actionBtn = '<a href=' . $showManager . ' id="edit' . $row->id . '" data-userId="' . $row->id . '" class="view btn btn-primary btn-sm">View</a>';
-                    return $actionBtn;
-                })
-                ->rawColumns(['action', 'profile'])
-                ->make(true);
+            return $query;
         }
     }
 }

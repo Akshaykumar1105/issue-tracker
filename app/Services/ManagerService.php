@@ -36,45 +36,41 @@ class ManagerService
             $id = auth()->user()->id;
             return User::where('parent_id', $id)->select('id', 'name', 'email', 'mobile');
         }
-
-        return DataTables::of($data)->with('media')->addIndexColumn()
-            ->orderColumn('name', function ($query, $order) {
-                $query->orderBy('id', $order);
-            })
-            ->addColumn('profile', function ($row) {
-                $user = User::find($row->id);
-                $media = $user->firstMedia('user');
-                $img = asset('storage/user/' . $media->filename . '.' . $media->extension);
-                $profile = '<div style=" padding: 20px; width: 40px; height: 40px; background-size: cover; background-image: url('.$img.');" class="img-circle elevation-2" alt="User Image"></div>';
-                return $profile;
-            })
-            ->addColumn('action', function ($row, Request $request) {
-                $editRoute = route('hr.manager.edit', ['manager' => $row->id]);
-                if ($request->listing == 'manager') {
-                    $actionBtn = '<p>No Action</p>';
-                    return $actionBtn;
-                } else {
-                    $actionBtn = '<a href=' . $editRoute . ' id="edit' . $row->id . '" data-userId="' . $row->id . '" class="edit btn btn-success btn-sm">Edit</a> <button type="submit" data-userId="' . $row->id . '" class="delete btn btn-danger btn-sm" data-bs-toggle="modal"
-                    data-bs-target="#deleteManager">Delete</button>';
-                    return $actionBtn;
-                }
-            })
-            ->rawColumns(['profile', 'action'])
-            ->make(true);
+        return $data;
+        // return DataTables::of($data)->with('media')->addIndexColumn()
+        //     ->orderColumn('name', function ($query, $order) {
+        //         $query->orderBy('id', $order);
+        //     })
+        //     ->addColumn('profile', function ($row) {
+        //         $user = User::find($row->id);
+        //         $media = $user->firstMedia('user');
+        //         $img = asset('storage/user/' . $media->filename . '.' . $media->extension);
+        //         $profile = '<div style=" padding: 20px; width: 40px; height: 40px; background-size: cover; background-image: url('.$img.');" class="img-circle elevation-2" alt="User Image"></div>';
+        //         return $profile;
+        //     })
+        //     ->addColumn('action', function ($row, Request $request) {
+        //         $editRoute = route('hr.manager.edit', ['manager' => $row->id]);
+        //         if ($request->listing == 'manager') {
+        //             $actionBtn = '<p>No Action</p>';
+        //             return $actionBtn;
+        //         } else {
+        //             $actionBtn = '<a href=' . $editRoute . ' id="edit' . $row->id . '" data-userId="' . $row->id . '" class="edit btn btn-success btn-sm">Edit</a> <button type="submit" data-userId="' . $row->id . '" class="delete btn btn-danger btn-sm" data-bs-toggle="modal"
+        //             data-bs-target="#deleteManager">Delete</button>';
+        //             return $actionBtn;
+        //         }
+        //     })
+        //     ->rawColumns(['profile', 'action'])
+        //     ->make(true);
     }
 
     public function store($request){
         $companyId = auth()->user()->company_id;
         $hrId = auth()->user()->id;
-
         // Fill the user model with data from the request
         $this->user->fill($request->all());
-
         // Set the company_id and parent_id attributes
         $this->user->company_id = $companyId;
         $this->user->parent_id = $hrId;
-
-        // Save the user model
         $this->user->save();
 
         $this->user->assignRole('manager');
@@ -96,12 +92,9 @@ class ManagerService
         ];
     }
 
-    public function update($request, $manager)
-    {
+    public function update($request, $manager){
         $update = User::where('id', $manager)->first();
-
         $update->fill($request->all())->save();
-
         $profileImg = $request->file('profile_img');
         $oldProfile = $update->firstMedia('user');
 

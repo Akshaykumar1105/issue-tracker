@@ -5,12 +5,11 @@ namespace App\Http\Controllers\User;
 use App\Models\User;
 use App\Models\Company;
 use Illuminate\Http\Request;
-use App\Services\User\IssueService;
+use App\Services\IssueService;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\Issue\Store;
-use App\Services\User\UserService;
 
-class UserController extends Controller{
+class HomeController extends Controller{
 
     protected $issueService;
 

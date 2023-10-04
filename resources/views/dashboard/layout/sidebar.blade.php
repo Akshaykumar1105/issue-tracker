@@ -11,7 +11,6 @@
     <div class="sidebar">
         <!-- Sidebar user panel (optional) -->
 
-
         <!-- SidebarSearch Form -->
 
         <!-- Sidebar Menu -->
@@ -80,23 +79,26 @@
                         </a>
                     </li>
                     
-                    <li class="nav-item {{ Request::is('hr/issue*') ? 'manu-open menu-is-opening ' : '' }}">
+                    <li class="nav-item {{ Request::is('hr/issue') ? 'menu-is-opening  manu-open' : '' }}">
                         <a href="#" class="nav-link ">
                             <i class="nav-icon fas fa-tachometer-alt"></i>
-                            <p>
-                                Issues
-                                <i class="right fas fa-angle-left"></i>
-                            </p>
+                            <p>Issues<i class="right fas fa-angle-left"></i></p>
                         </a>
                         <ul class="nav nav-treeview" style="{{ Request::is('hr/issue*') ? 'display: block;' : '' }}">
                             <li class="nav-item">
-                                <a href="{{ route('hr.issue.index', ['listing' => 'pending']) }}" class="nav-link {{ request()->fullUrlIs('http://127.0.0.1:8000/hr/issue?listing=pending') ? 'active' : '' }}">
+                                <a href="{{ route('hr.issue.index', ['listing' => 'pending']) }}" class="nav-link {{ request('listing') === 'pending' ? 'active' : ''}}">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Pending Issue</p>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="{{ route('hr.issue.index', ['listing' => 'all-issue']) }}" class="nav-link {{ request()->fullUrlIs('http://127.0.0.1:8000/hr/issue?listing=all-issue') ? 'active' : '' }}">
+                                <a href="{{ route('hr.issue.index', ['listing' => 'review-issue']) }}" class="nav-link {{ request('listing') === 'review-issue' ? 'active' : ''}}">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Review Issue</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('hr.issue.index', ['listing' => 'all-issue']) }}" class="nav-link {{ request('listing') === 'all-issue' ? 'active' : ''}}">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>All Issue</p>
                                 </a>
@@ -113,11 +115,32 @@
                             <p>Dashboard</p>
                         </a>
                     </li>
-                    <li class="nav-item {{ Request::is('manager/issue*') ? 'menu-open' : '' }}"">
+                    {{-- <li class="nav-item {{ Request::is('manager/issue*') ? 'menu-open' : '' }}"">
                         <a href="{{ route('manager.issue.index') }}" class="nav-link">
                             <i class="nav-icon fas fa-chart-pie"></i>
                             <p>Issues</p>
                         </a>
+                    </li> --}}
+                    <li class="nav-item {{ Request::is('manager/issue*') ? 'manu-open menu-is-opening' : '' }}">
+                        <a href="#" class="nav-link ">
+                            <i class="nav-icon fas fa-tachometer-alt"></i>
+                            <p>Issues<i class="right fas fa-angle-left"></i></p>
+                        </a>
+                        <ul class="nav nav-treeview" style="{{ Request::is('manager/issue*') ? 'display: block;' : '' }}">
+                            <li class="nav-item">
+                                <a href="{{ route('manager.issue.index', ['listing' => 'pending']) }}" class="nav-link {{ request('listing') === 'pending' ? 'active' : ''}}">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Pending Issue</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('manager.issue.index', ['listing' => 'all-issue']) }}" class="nav-link {{ request('listing') === 'all-issue' ? 'active' : ''}}">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>All Issue</p>
+                                </a>
+                            </li>
+                            
+                        </ul>
                     </li>
                 @endrole
 

@@ -18,4 +18,8 @@ class Comment extends Model{
     public function users(){
         return $this->belongsToMany(User::class, 'comment_user', 'comment_id', 'user_id' );
     }
+
+    public function commentUpvotes(){
+        return $this->hasMany(CommentUpvotes::class);
+    }
 }

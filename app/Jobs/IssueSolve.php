@@ -22,7 +22,6 @@ class IssueSolve implements ShouldQueue
      */
     public function __construct($issueSolve){
         $this->issueSolve = $issueSolve;
-        $this->onQueue('low');
     }
 
     /**

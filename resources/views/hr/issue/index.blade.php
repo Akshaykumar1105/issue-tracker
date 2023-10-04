@@ -147,18 +147,18 @@
                             var colorClass = '';
                             switch (data) {
                                 case 'LOW':
-                                    colorClass ='text-white bg-green text-center rounded-lg'; // CSS class for low priority (green color)
+                                    colorClass ='badge bg-success'; // CSS class for low priority (green color)
                                     break;
                                 case 'MEDIUM':
-                                    colorClass ='text-white bg-yellow  text-center rounded-lg'; // CSS class for medium priority (yellow color)
+                                    colorClass ='badge bg-yellow'; // CSS class for medium priority (yellow color)
                                     break;
                                 case 'HIGH':
-                                    colorClass ='text-white bg-red  text-center rounded-lg'; // CSS class for high priority (red color)
+                                    colorClass ='badge bg-red'; // CSS class for high priority (red color)
                                     break;
                                 default:
                                     colorClass = ''; // Default class
                             }
-                            return '<div class="' + colorClass + ' bg-opacity-75">' + data + '</div>';
+                            return '<div style="width:70px" class="' + colorClass + ' bg-opacity-75">' + data + '</div>';
                         }
                     },
                     {

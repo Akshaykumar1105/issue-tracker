@@ -28,13 +28,13 @@
     {{-- <link href="https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap4.min.css" rel="stylesheet"> --}}
 @endsection
 @section('content')
-    <section class="content" style="margin: 0 auto; max-width: 1050px">
+    <section class="content" style="margin: 0 auto; max-width: 100%">
         <h1>Issues</h1>
 
 
 
         <div
-            class=""style="margin-top:70px; padding:10px;border: 0 solid rgba(0,0,0,.125);
+            class=""style="margin-top:50px; padding:10px;border: 0 solid rgba(0,0,0,.125);
     border-radius: .25rem;background-color: #fff;box-shadow: 0 0 1px rgba(0,0,0,.125), 0 1px 3px rgba(0,0,0,.2);margin-bottom: 1rem;">
             <div class="d-flex mb-3">
                 <div class="me-3">
@@ -53,7 +53,7 @@
                         class="datepicker form-control" data-provide="datepicker">
                 </div>
             </div>
-            <table class="table" id="issue">
+            <table class="table" id="issue" style="width: 100%;">
                 <thead>
                     <tr>
                         <th scope="col">{{ __('messages.table.id') }}</th>
@@ -115,6 +115,7 @@
                     url: "{{ route('manager.issue.index') }}",
                     dataType: "JSON",
                     data: function(d) {
+                        d.listing = "{{ request('listing') }}";
                         d.filter = priority;
                         d.duedate = date;
                         d.table = 'manager';
@@ -131,7 +132,24 @@
                     },
 
                     {
-                        "data": "priority"
+                        "data": "priority",
+                        render: function(data, type, row) {
+                            var colorClass = '';
+                            switch (data) {
+                                case 'LOW':
+                                    colorClass ='badge bg-success'; // CSS class for low priority (green color)
+                                    break;
+                                case 'MEDIUM':
+                                    colorClass ='badge bg-yellow'; // CSS class for medium priority (yellow color)
+                                    break;
+                                case 'HIGH':
+                                    colorClass ='badge bg-red'; // CSS class for high priority (red color)
+                                    break;
+                                default:
+                                    colorClass = ''; // Default class
+                            }
+                            return '<div style="width:70px" class="' + colorClass + ' bg-opacity-75">' + data + '</div>';
+                        }
                     },
                     {
                         "data": "due_date"
@@ -144,6 +162,10 @@
 
                             // Define an array of status options with their values and labels
                             const statusOptions = [
+                                {
+                                    value: 'OPEN',
+                                    label: 'Open'
+                                },
                                 {
                                     value: 'IN_PROGRESS',
                                     label: 'In Progress'
@@ -219,7 +241,12 @@
                             closeButton: true,
                             progressBar: true,
                         }
-                        toastr.success(response.success);
+                        if(response.success){
+                            toastr.success(response.success);
+                        }else{
+                            toastr.error(response.error);
+                        }
+
                         $('.table').DataTable().ajax.reload();
 
                     },

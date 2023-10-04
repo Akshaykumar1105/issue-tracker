@@ -8,7 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Comment;
 use App\Models\IssueUser;
 use App\Models\User;
-use App\Services\User\IssueService;
+use App\Services\IssueService;
 use Yajra\DataTables\Facades\DataTables;
 
 class IssueController extends Controller{
@@ -41,9 +41,7 @@ class IssueController extends Controller{
 
     public function edit(Issue $issue){
         $manager = $this->issueService->edit($issue);
-        $comments = Comment::with('users.media')->where('issue_id', $issue->id)->orderBy('created_at')->get();
-
-        return view('hr.issue.create', ['issue' => $issue, 'managers' => $manager, 'comments' => $comments]);
+        return view('hr.issue.create', ['issue' => $issue, 'managers' => $manager]);
     }
 
     public function update(Request $request, $id){

@@ -204,7 +204,6 @@
                         processData: false, // Important: Don't process the data
                         contentType: false,
                         success: function(response) {
-
                             toastr.options = {
                                 closeButton: true,
                                 progressBar: true,
