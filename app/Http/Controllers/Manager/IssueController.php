@@ -21,8 +21,7 @@ class IssueController extends Controller
         $this->issueService = $issueService;
     }
 
-    public function index(Request $request)
-    {
+    public function index(Request $request){
         if ($request->ajax()) {
             $query = $this->issueService->collection($query = null, $request);
             return DataTables::of($query)
@@ -43,7 +42,6 @@ class IssueController extends Controller
     }
 
     public function edit(Issue $issue){
-        // dd($comments);
         return view('manager.issue.create', ['issue' => $issue]);
     }
 

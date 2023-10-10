@@ -16,10 +16,12 @@ class IssueService
 {
 
     protected $issue;
+    protected $commentService; 
 
-    public function __construct()
+    public function __construct(CommentService $commentService)
     {
-        $this->issue = new Issue; // Use $this->issue to assign the instance to the class property.
+        $this->issue = new Issue; 
+        $this->commentService = $commentService;
     }
 
     public function index($request){
@@ -76,14 +78,15 @@ class IssueService
         Issue::find($id)->fill($request->all())->save();
 
         if ($request->body) {
-            $comment = Comment::create([
-                'issue_id' => $id,
-                'body' => $request->body,
-                'status' => $request->status
-            ]);
-            $commentId = $comment->id;
-            $user = auth()->user();
-            $user->comments()->attach([$commentId => ['user_id' => $user->id]]);
+            $this->commentService->store($request, $id);
+            // $comment = Comment::create([
+            //     'issue_id' => $id,
+            //     'body' => $request->body,
+            //     'status' => $request->status
+            // ]);
+            // $commentId = $comment->id;
+            // $user = auth()->user();
+            // $user->comments()->attach([$commentId => ['user_id' => $user->id]]);
         }
         return  ['success' => __('entity.entityUpdated', ['entity' => 'Issue'])];
     }
@@ -113,7 +116,7 @@ class IssueService
             $companyId = auth()->user()->id;
             $query = Issue::where('manager_id', $companyId);
             if ($request->listing == 'pending') {
-                $query->where('status' , 'SEND_FOR_REVIEW');
+                $query->where('status' , '<>', 'SEND_FOR_REVIEW');
             }
             $this->filters($request, $query);
         }

@@ -4,7 +4,7 @@ namespace App\Http\Requests\User;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class User extends FormRequest
+class Update extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,7 +23,7 @@ class User extends FormRequest
     {
         $id = auth()->user()->id;   
         return [
-            'name' => 'required',
+            'name' => 'required|max:255',
             'email' => 'required|email|unique:users,email,'.$id,
             'mobile' => 'required|digits:10',
         ];

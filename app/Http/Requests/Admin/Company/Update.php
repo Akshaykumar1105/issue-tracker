@@ -23,7 +23,7 @@ class Update extends FormRequest
     {
         return [
             
-            'name' => 'required|min:6',
+            'name' => 'required|min:6|max:255',
             'email' => 'required|email|unique:companies,email,'.$this->company->id.'id',
         ];
     }

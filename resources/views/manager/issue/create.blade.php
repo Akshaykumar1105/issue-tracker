@@ -9,6 +9,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
         integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.5.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
     <style>
         .slow .toggle-group {
             transition: left 0.7s;
@@ -212,11 +214,11 @@
         }
 
         /* .dislike:hover,
-                                                    .like:hover {
-                                                        color: #2EBDD1;
-                                                        transition: all .2s ease-in-out;
-                                                        transform: scale(1.1);
-                                                    } */
+                                                                                    .like:hover {
+                                                                                        color: #2EBDD1;
+                                                                                        transition: all .2s ease-in-out;
+                                                                                        transform: scale(1.1);
+                                                                                    } */
 
         .active i {
             color: #2EBDD1;
@@ -287,7 +289,7 @@
                                     </select>
                                 </div>
                                 <div class="col-md-4 form-group">
-                                    <label class="d-block font-weight-bold ">Add Comment</label>
+                                    <label class="d-block font-weight-bold ">Comment</label>
                                     <input id="body" name="body" class="d-block form-control"
                                         placeholder="Enter your comment">
                                 </div>
@@ -312,6 +314,9 @@
     <script src="{{ asset('asset/js/jquery-datatables.min.js') }}"></script>
     <script src="{{ asset('asset/js/datatable.min.js') }}"></script>
     <script src="{{ asset('asset/js/datepicker.min.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.5.2/dist/js/bootstrap.min.js"></script>
+
     <script>
         // Your custom JavaScript file
         $(document).ready(function() {
@@ -328,7 +333,7 @@
                     },
                     success: function(response) {
                         // Replace the content of the commentBox with the rendered HTML
-                        $('#commentBox').html(response.html);
+                        $('#commentBox').html(response.comments);
                         // You can perform additional actions or updates here
                     },
                     error: function(xhr, textStatus, errorThrown) {
@@ -339,6 +344,27 @@
                 });
             }
             commentBox();
+
+            $("#commentDropdown").click(function() {
+                $("#commentMenu").toggle();
+            });
+
+            $(".edit-comment").click(function() {
+                alert("Edit Comment clicked");
+                $("#commentMenu").hide();
+            });
+
+            $(".delete-comment").click(function() {
+                alert("Delete Comment clicked");
+                $("#commentMenu").hide();
+            });
+
+            $(document).click(function(event) {
+                if (!$(event.target).closest(".dropdown").length) {
+                    $("#commentMenu").hide();
+                }
+            });
+
 
             $(document).on("click", ".like", function() {
                 event.preventDefault();
@@ -352,9 +378,12 @@
 
                 // Get the CSRF token from the meta tag
                 var csrfToken = $('meta[name="csrf-token"]').attr('content');
-
+                var voteCountElement = likeButton.closest('.rating').next().children();
+                var currentVoteCount = parseInt(voteCountElement.text());
                 if (userId == true) {
-                    // If the user has already upvoted, send a DELETE request to remove the upvote
+                    var voteCountElement = likeButton.closest('.rating').next().children();
+                    var currentVoteCount = parseInt(voteCountElement.text());
+
                     $.ajax({
                         url: "{{ route('comment.upvote.destroy', ['commentId' => ':id']) }}"
                             .replace(':id', commentId),
@@ -368,10 +397,19 @@
                             likeButton.removeClass('active');
 
                             // Find the vote count element and update its content
-                            var voteCountElement = likeButton.closest('.rating').next().children();
-                            var currentVoteCount = parseInt(voteCountElement.text());
+                            var voteCountElement = likeButton.closest('.rating')
+                                .next()
+                                .children();
+                            var currentVoteCount = parseInt(voteCountElement
+                                .text());
                             var newVoteCount = currentVoteCount - 1;
+
+                            if (newVoteCount == 1) {
+                                likeButton.addClass('active');
+                            }
                             voteCountElement.text(newVoteCount);
+                            likeButton.data('user', false);
+                            console.log(likeButton.data('user'));
                         },
                         error: function(xhr, textStatus, errorThrown) {
                             // Handle errors (e.g., display an error message)
@@ -380,6 +418,7 @@
                             alert('An error occurred while removing the upvote.');
                         }
                     });
+
                 } else {
                     // If the user hasn't upvoted, send a POST request to add the upvote
                     $.ajax({
@@ -396,10 +435,11 @@
                             likeButton.addClass('active');
 
                             // Find the vote count element and update its content
-                            var voteCountElement = likeButton.closest('.rating').next().children();
-                            var currentVoteCount = parseInt(voteCountElement.text());
+
                             var newVoteCount = currentVoteCount + 1;
                             voteCountElement.text(newVoteCount);
+                            likeButton.data('user', true);
+                            console.log(likeButton.data('user'));
                         },
                         error: function(xhr, textStatus, errorThrown) {
                             // Handle errors (e.g., display an error message)
@@ -418,7 +458,7 @@
 
             $("#issueEdit").validate({
                 errorElement: "span",
-                errorClass: "text-danger",
+                errorClass: "text-danger fw-normal",
                 rules: {
                     priority: {
                         required: true // Priority radio button is required
@@ -452,7 +492,8 @@
                     }
                 },
                 submitHandler: function(form) {
-                    let selectedStatus = $("select[name='status']").find(":selected").data("status");
+                    let selectedStatus = $("select[name='status']").find(":selected").data(
+                        "status");
                     console.log(selectedStatus);
                     let formData = $(form).serialize() + "&status=" + selectedStatus;
                     // console.log(formData);

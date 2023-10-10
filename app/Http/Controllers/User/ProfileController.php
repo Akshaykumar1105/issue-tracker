@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\User\User;
+use App\Http\Requests\User\Update;
 use App\Services\HrService;
 use App\Services\UserService;
 
@@ -21,7 +21,7 @@ class ProfileController extends Controller{
         return view('dashboard.profile', ['user' => $user]);
     }
 
-    public function update(User $request, $id){
+    public function update(Update $request, $id){
         return $this->userService->update($request, $id);
     }
 }

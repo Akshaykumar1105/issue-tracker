@@ -78,7 +78,7 @@
 
                                 <!-- /.card-body -->
                                 <div class="card-footer">
-                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                    <button type="submit" class="btn btn-primary">Update</button>
                                 </div>
                             </form>
                         </div>
@@ -128,7 +128,7 @@
                                 <!-- /.card-body -->
 
                                 <div class="card-footer">
-                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                    <button type="submit" class="btn btn-primary">Update</button>
                                 </div>
                             </form>
                         </div>
@@ -166,11 +166,17 @@
             $(document).on('click', '#logout', function() {
                 $('#logoutModel').modal('hide');
             });
+
+            $.validator.addMethod("lettersonly", function(value, element) {
+                return this.optional(element) || /^[a-zA-Z\s]+$/i.test(value);
+            }, "Please enter letters only (no special characters or numbers).")
+
             $("#userView").validate({
-                errorClass: "text-danger",
+                errorClass: "text-danger fw-normal",
                 rules: {
                     name: {
                         required: true,
+                        lettersonly:true
                     },
                     email: {
                         required: true,
@@ -241,9 +247,16 @@
 
             // change password
 
+            $.validator.addMethod("pattern", function(value, element) {
+                    // Use a regular expression to check if the password meets the criteria
+                    return /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/.test(value);
+                },
+                "Password must include at least one uppercase letter, one lowercase letter, one digit, and one special character."
+                );
+
             $("#changePassword").validate({
                 errorElement: "span",
-                errorClass: "text-danger",
+                errorClass: "text-danger fw-normal",
                 rules: {
                     old_password: {
                         required: true,
@@ -251,7 +264,8 @@
                     },
                     password: {
                         required: true,
-                        minlength: 8, // Minimum password length
+                        minlength: 8,
+                        pattern: true,
                     },
                     password_confirmation: {
                         required: true,
@@ -297,7 +311,7 @@
                                 closeButton: true,
                                 progressBar: true,
                             }
-                            toastr.error(response.error);
+                            toastr.error(response.message);
                             $(form).validate().resetForm();
                             form.reset();
                         },

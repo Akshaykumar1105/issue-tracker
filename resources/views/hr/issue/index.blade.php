@@ -34,21 +34,25 @@
             style="margin-top:30px; padding:10px;border: 0 solid rgba(0,0,0,.125);
     border-radius: .25rem;background-color: #fff;box-shadow: 0 0 1px rgba(0,0,0,.125), 0 1px 3px rgba(0,0,0,.2);margin-bottom: 1rem;">
             <div class="d-flex">
-                <div class="me-3">
-                    <label class="d-block font-weight-bold " style="width: 150px;">Priority</label>
-                    <select id="selectPriority" class="custom-select custom-select-sm form-control form-control-sm">
-                        <option value="">All</option>
-                        <option value="LOW">Low</option>
-                        <option value="MEDIUM">Medium</option>
-                        <option value="HIGH">High</option>
-                    </select>
-                </div>
+                @if (!(request('listing') == 'pending'))
+                    <div class="me-3">
+                        <label class="d-block font-weight-bold" style="width: 150px;">Priority</label>
+                        <select id="selectPriority" class="custom-select custom-select-sm form-control form-control-sm">
+                            <option value="">All</option>
+                            <option value="LOW" {{ request('priority') == 'low' ? 'selected' : '' }}>Low</option>
+                            <option value="MEDIUM" {{ request('priority') == 'medium' ? 'selected' : '' }}>Medium</option>
+                            <option value="HIGH" {{ request('priority') == 'high' ? 'selected' : '' }}>High</option>
+                        </select>
+                    </div>
 
-                <div>
-                    <label class="d-block font-weight-bold">Due date </label>
-                    <input id="dueDate" data-date-format="yyyy-mm-dd" name="date" style="height: 31px;"
-                        class="datepicker form-control" data-provide="datepicker">
-                </div>
+                    <div>
+                        <label class="d-block font-weight-bold">Due date</label>
+                        <input id="dueDate" type="date" value="{{ request('duedate') }}"
+                            data-date-format="{{ config('date') }}" name="date" style="height: 31px;"
+                            class="form-control">
+                    </div>
+                @endif
+
             </div>
             <table class="table" id="issue" style="width: 100%;">
                 <thead>
@@ -56,8 +60,8 @@
                         <th scope="col">{{ __('messages.table.id') }}</th>
                         <th style="width: 200px">{{ __('messages.table.title') }}</th>
                         @if (!Request::is('hr/issue?*'))
-                            <th>Priority</th>
-                            <th>Due Date</th>
+                            <th>{{ __('messages.table.priority') }}</th>
+                            <th>{{ __('messages.table.due_date') }}</th>
                             <th>{{ __('messages.table.manager') }}</th>
                             <th>{{ __('messages.table.status') }}</th>
                         @endif
@@ -98,16 +102,10 @@
 @section('script')
     <script src="{{ asset('asset/js/jquery-datatables.min.js') }}"></script>
     <script src="{{ asset('asset/js/datatable.min.js') }}"></script>
-    <script src="{{ asset('asset/js/datepicker.min.js') }}"></script>
-
 
     <script>
         // Your custom JavaScript file
         $(document).ready(function() {
-
-            $('.datepicker').datepicker({
-                // Date format to match your database date format
-            });
 
             let priority = '';
             let date = '';
@@ -147,18 +145,22 @@
                             var colorClass = '';
                             switch (data) {
                                 case 'LOW':
-                                    colorClass ='badge bg-success'; // CSS class for low priority (green color)
+                                    colorClass =
+                                        'badge bg-success'; // CSS class for low priority (green color)
                                     break;
                                 case 'MEDIUM':
-                                    colorClass ='badge bg-yellow'; // CSS class for medium priority (yellow color)
+                                    colorClass =
+                                        'badge bg-yellow'; // CSS class for medium priority (yellow color)
                                     break;
                                 case 'HIGH':
-                                    colorClass ='badge bg-red'; // CSS class for high priority (red color)
+                                    colorClass =
+                                        'badge bg-red'; // CSS class for high priority (red color)
                                     break;
                                 default:
                                     colorClass = ''; // Default class
                             }
-                            return '<div style="width:70px" class="' + colorClass + ' bg-opacity-75">' + data + '</div>';
+                            return '<div style="width:70px" class="' + colorClass +
+                                ' bg-opacity-75">' + data + '</div>';
                         }
                     },
                     {
@@ -241,17 +243,39 @@
                 ],
                 lengthMenu: [10, 25, 50, 100], // Define your page limit options
                 pageLength: 10,
+                order: [
+                    [1, 'desc']
+                ],
             });
 
-            $(document).on('change', "#selectPriority", function() {
-                console.log($(this).val());
-                priority = $(this).val();
-                $('.table').DataTable().ajax.reload();
-            });
+            function filterUrl() {
+                let filter = "{{ route('hr.issue.index') }}";
+                let listing = "{{ request('listing') }}";
 
-            $(document).on('change', "#dueDate", function() {
-                console.log($(this).val());
-                date = $(this).val();
+                if (listing !== 'review-issue') {
+                    filter += "?listing=all-issue";
+                } else {
+                    filter += "?listing=review-issue";
+                }
+
+                if (priority) {
+                    filter += "&priority=" + priority.toLowerCase();
+                }
+
+                if (date) {
+                    filter += "&duedate=" + date;
+                }
+
+                // Update the browser's URL without reloading the page
+                history.pushState({}, '', filter);
+            }
+
+
+            $(document).on('change', "#selectPriority, #dueDate", function() {
+                priority = $("#selectPriority").val();
+                date = $("#dueDate").val();
+
+                filterUrl();
                 $('.table').DataTable().ajax.reload();
             });
 

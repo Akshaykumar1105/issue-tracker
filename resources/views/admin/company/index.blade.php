@@ -4,7 +4,6 @@
 @endsection
 
 @section('style')
-    {{-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" /> --}}
     <link href="{{ asset('asset/css/datatables.min.css') }}" rel="stylesheet">
     <style>
         .slow .toggle-group {
@@ -15,9 +14,9 @@
 @endsection
 @section('content')
     <section class="content" style="margin: 0 auto; max-width: 100%">
-        <h1>@lang('messages.company.title')</h1>
+        <h1>{{__('messages.company.title')}}</h1>
         <div class="" style="margin: 0 auto; float: right;">
-            <a class="btn btn-primary" href="{{ route('admin.company.create') }}">@lang('messages.company.register')</a>
+            <a class="btn btn-primary" href="{{ route('admin.company.create') }}">{{__('messages.company.register')}}</a>
         </div>
 
         <div class=""
@@ -89,7 +88,6 @@
                     {
                         "data": "is_active",
                         render: function(data, type, row) {
-
                             var checked = data == 1 ? 'checked' : '';
                             return '<div class="form-check form-switch p-1"><input ' + checked +
                                 ' data-userId=' + row.id + ' name="status" value="' + data +

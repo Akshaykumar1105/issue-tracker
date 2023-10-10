@@ -22,7 +22,7 @@ class Store extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'required|min:8',
+            'title' => 'required|min:8|max:255',
             'description' => 'required',
             'hr_id' => 'required',
             'email' => 'required|email'

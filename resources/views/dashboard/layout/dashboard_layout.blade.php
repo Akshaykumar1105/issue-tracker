@@ -10,6 +10,7 @@
     @include('dashboard.layout.includes.style')
     @yield('style')
     <script src="{{ asset('/asset/plugins/jquery/jquery.min.js') }}"></script>
+    @stack('dropdown-css')
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -128,6 +129,7 @@
         })
     </script>
     @yield('script')
+    @stack('dropdown-js')
 </body>
 
 </html>

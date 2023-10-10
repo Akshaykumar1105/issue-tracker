@@ -3,12 +3,12 @@
 return [
     'company' => [
         'title' => 'Companies',
-        'register' => 'Register a Company',
+        'register' => 'Create Company',
     ],
 
     'manager' => [
         'title' => 'Managers',
-        'register' => 'Register a Manager',
+        'register' => 'Create Manager',
         'edit' => 'Edit Manager',
     ],
 
@@ -24,7 +24,7 @@ return [
     'auth' => [
         'login' => 'Login Successful!',
         'loginFail' => 'Invalid Email or Password!',
-        'logout' => 'You have been logged out!',
+        'logout' => 'You have successfully logged out.',
         'not-valid' => 'Your company is not active.',
     ],
 
@@ -43,7 +43,7 @@ return [
         'id' => 'Sr. No.',
         'name' => 'Name',
         'status' => 'Status',
-        'number' => 'Number',
+        'number' => 'Mobile',
         'email' => 'Email',
         'action' => 'Action',
         'profile' => 'Profile',
@@ -54,6 +54,7 @@ return [
         'due_date' => 'Due Date',
         'manager' => 'Assigned To',
         'address' => 'Address',
+        'company' => "Company",
     ],
 
     'status' => [

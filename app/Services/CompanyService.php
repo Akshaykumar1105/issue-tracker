@@ -24,6 +24,10 @@ class CompanyService
         $this->hrService = $hrService;
     }
 
+    public function index(){
+        return Company::where('is_active', config('site.status.active'))->get();
+    }
+
     public function collection($companyId, $request){
         if ($request->listing == config('site.role.hr')) {
             $query =  $this->hrService->collection($companyId, $request);
@@ -66,10 +70,8 @@ class CompanyService
     }
 
     public function update($request, $company){
-        // $company = Company::where('id', $company)->first();
         $company->fill($request->validated());
         $company->save();
-
         return  [
             'success' => __('entity.entityUpdated', ['entity' => 'Company']),
             'route' => route('admin.company.index')
@@ -78,7 +80,7 @@ class CompanyService
 
     public function destroy(){
         $id = request()->id;
-        Company::where('id', $id)->delete();
+        $this->companyModel->where('id', $id)->delete();
         return [
             'success' => __('entity.entityDeleted', ['entity' => 'Company']),
         ];
@@ -87,8 +89,7 @@ class CompanyService
     public function status($request){
         $company = $request->userId;
         $isActive = $request->status == config('site.status.active') ? config('site.status.is_active') : config('site.status.active');
-
-        Company::where('id', $company)->update(['is_active' => $isActive]);
+        $this->companyModel->where('id', $company)->update(['is_active' => $isActive]);
 
         $message = $isActive ? __('messages.status.active') : __('messages.status.inactive');
         return ['success' => $message];

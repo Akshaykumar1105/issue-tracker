@@ -114,11 +114,18 @@
                 });
             }
 
+
+            $.validator.addMethod("lettersonly", function(value, element) {
+                return this.optional(element) || /^[a-zA-Z\s]+$/i.test(value);
+            }, "Please enter letters only (no special characters or numbers).");
+
             $("#companyRegister").validate({
                 errorClass: "text-danger font-weight-normal",
                 rules: {
                     name: {
                         required: true,
+                        maxlength: 255,
+                        lettersonly: true
                     },
                     email: {
                         required: true,
@@ -127,7 +134,9 @@
                     number: {
                         required: true,
                         number: true,
-                        digits: 10
+                        minlength: 10,
+                        maxlength: 10,
+                        digits:true
                     },
                     address: {
                         required: true,
@@ -135,19 +144,22 @@
                 },
                 messages: {
                     name: {
-                        required: "Please enter company name.",
+                        required: "Please enter name.",
+                        maxlength: "Name should not exceed 50 characters.",
                     },
                     email: {
-                        required: "Please enter company email.",
+                        required: "Please enter email.",
                         email: "Please enter a valid email address.",
                     },
                     number: {
-                        required: "Please enter company mobile number.",
-                        number: "Please enter a valid number",
-                        digits: "The number must have exactly 10 digits"
+                        required: "Please enter mobile number.",
+                        number: "Please enter a valid number.",
+                        digits: "The number must have exactly 10 digits",
+                        minlength: "Phone number must be exactly 10 digits.",
+                        maxlength: "Phone number must be exactly 10 digits.",
                     },
                     address: {
-                        required: "Please enter company address.",
+                        required: "Please enter address.",
                     },
                 },
                 submitHandler: function(form) {

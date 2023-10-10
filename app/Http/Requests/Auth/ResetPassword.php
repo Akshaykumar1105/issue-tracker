@@ -9,8 +9,7 @@ class ResetPassword extends FormRequest
     /**
      * Determine if the user is authorized to make this request.
      */
-    public function authorize(): bool
-    {
+    public function authorize(): bool{
         return true;
     }
 
@@ -22,7 +21,15 @@ class ResetPassword extends FormRequest
     public function rules(): array
     {
         return [
-            'password' => 'required|confirmed|min:8',
+            'password' => 'required|confirmed|min:8|regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\x])(?=.*[!$#%]).*$/',
         ];
     }
+
+    public function messages(){
+        return [
+            'password.regex' => 'The password must include at least one uppercase letter, one lowercase letter, one digit, and one special character.',
+        ];
+    }
+
+    
 }

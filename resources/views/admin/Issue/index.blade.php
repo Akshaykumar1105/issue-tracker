@@ -6,7 +6,6 @@
 @section('style')
     {{-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" /> --}}
     <link href="{{ asset('asset/css/datatables.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('asset/css/datepicker.min.css') }}" rel="stylesheet">
 
     <style>
         .slow .toggle-group {
@@ -28,7 +27,8 @@
                     <select id="selectCompany" class="custom-select custom-select-sm form-control form-control-sm ">
                         <option value="">Select company</option>
                         @foreach ($companies as $company)
-                            <option value="{{ $company->id }}">{{ $company->name }}</option>
+                            <option value="{{ $company->id }}"
+                                {{ request('company_id') == $company->id ? 'selected' : '' }}>{{ $company->name }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -36,16 +36,16 @@
                     <label class="d-block font-weight-bold " style="width: 150px;">Priority</label>
                     <select id="selectPriority" class="custom-select custom-select-sm form-control form-control-sm">
                         <option value="">All</option>
-                        <option value="LOW">Low</option>
-                        <option value="MEDIUM">Medium</option>
-                        <option value="HIGH">High</option>
+                        <option value="LOW" {{ request('priority') == 'low' ? 'selected' : '' }}>Low</option>
+                        <option value="MEDIUM" {{ request('priority') == 'medium' ? 'selected' : '' }}>Medium</option>
+                        <option value="HIGH" {{ request('priority') == 'high' ? 'selected' : '' }}>High</option>
                     </select>
                 </div>
 
                 <div>
                     <label class="d-block font-weight-bold">Due date </label>
-                    <input id="dueDate" data-date-format="yyyy-mm-dd" name="date" style="height: 31px;" class="datepicker form-control"
-                        data-provide="datepicker">
+                    <input id="dueDate" type="date" value="{{ request('duedate') }}"
+                        data-date-format="{{ config('date') }}" name="date" style="height: 31px;" class="form-control">
                 </div>
             </div>
 
@@ -54,7 +54,7 @@
                     <tr>
                         <th>{{ __('messages.table.id') }}</th>
                         <th style="width: 200px">{{ __('messages.table.title') }}</th>
-                        <th>Company</th>
+                        <th>{{ __('messages.table.company') }}</th>
                         <th>{{ __('messages.table.priority') }}</th>
                         <th>{{ __('messages.table.due_date') }}</th>
                         <th>{{ __('messages.table.action') }}</th>
@@ -65,7 +65,6 @@
                 </tbody>
             </table>
         </div>
-
 
         <!-- Modal -->
 
@@ -93,14 +92,9 @@
 @section('script')
     <script src="{{ asset('asset/js/jquery-datatables.min.js') }}"></script>
     <script src="{{ asset('asset/js/datatable.min.js') }}"></script>
-    <script src="{{ asset('asset/js/datepicker.min.js') }}"></script>
     <script>
         // Your custom JavaScript file
         $(document).ready(function() {
-            $('.datepicker').datepicker({
-                // Date format to match your database date format
-
-            });
 
             let priority = '';
             let date = '';
@@ -132,7 +126,6 @@
                     },
                     {
                         "data": "company.name",
-
                     },
                     {
                         "data": "priority",
@@ -140,18 +133,22 @@
                             var colorClass = '';
                             switch (data) {
                                 case 'LOW':
-                                    colorClass ='badge bg-success'; // CSS class for low priority (green color)
+                                    colorClass =
+                                        'badge bg-success'; // CSS class for low priority (green color)
                                     break;
                                 case 'MEDIUM':
-                                    colorClass ='badge bg-yellow'; // CSS class for medium priority (yellow color)
+                                    colorClass =
+                                        'badge bg-yellow'; // CSS class for medium priority (yellow color)
                                     break;
                                 case 'HIGH':
-                                    colorClass ='badge bg-red'; // CSS class for high priority (red color)
+                                    colorClass =
+                                        'badge bg-red'; // CSS class for high priority (red color)
                                     break;
                                 default:
                                     colorClass = ''; // Default class
                             }
-                            return '<div style="width:70px" class="' + colorClass + ' bg-opacity-75">' + data + '</div>';
+                            return '<div style="width:70px" class="' + colorClass +
+                                ' bg-opacity-75">' + data + '</div>';
                         }
                     },
                     {
@@ -172,30 +169,45 @@
                 ],
             });
 
-            $(document).on('change', "#selectPriority", function() {
-                console.log($(this).val());
-                priority = $(this).val();
+            function filterUrl() {
+                let filter = "{{ route('admin.issue.index') }}";
+
+                // Define an array to store query parameters
+                const queryParams = [];
+
+                if (company) {
+                    queryParams.push("company_id=" + company.toLowerCase());
+                }
+
+                if (priority) {
+                    queryParams.push("priority=" + priority.toLowerCase());
+                }
+
+                if (date) {
+                    queryParams.push("duedate=" + date);
+                }
+
+                // Append the query parameters to the URL
+                if (queryParams.length > 0) {
+                    filter += "?" + queryParams.join("&");
+                }
+
+                history.pushState({}, '', filter);
+            }
+
+            $(document).on('change', "#selectPriority, #dueDate, #selectCompany", function() {
+                priority = $("#selectPriority").val();
+                date = $("#dueDate").val();
+                company = $("#selectCompany").val();
+
+                filterUrl();
                 $('.table').DataTable().ajax.reload();
             });
-
-            $(document).on('change', "#dueDate", function() {
-                console.log($(this).val());
-                date = $(this).val();
-                $('.table').DataTable().ajax.reload();
-            });
-
-            $(document).on('change', "#selectCompany", function() {
-                console.log($(this).val());
-                company = $(this).val();
-                $('.table').DataTable().ajax.reload();
-            });
-
 
             let issue;
             $(document).on("click", ".delete", function(event) {
                 event.preventDefault();
                 issue = $(this).attr("data-issueid");
-                console.log(issue);
             });
 
             $(document).on("click", "#issuedelete", function(event) {
@@ -214,7 +226,6 @@
                     success: function(response) {
                         $("#deleteIssue").modal("toggle");
                         var message = response.success;
-                        console.log(message)
                         toastr.options = {
                             closeButton: true,
                             progressBar: true,
@@ -225,7 +236,6 @@
                 });
             }
 
-            $(".datepicker-dropdown").css("z-index", "10000")
         });
     </script>
 @endsection

@@ -9,6 +9,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
         integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- Include Bootstrap CSS and JavaScript -->
+
     <style>
         .slow .toggle-group {
             transition: left 0.7s;
@@ -114,7 +117,7 @@
         }
 
         .msg-bubble {
-            max-width: 450px;
+            max-width: 500px;
             padding: 15px;
             border-radius: 15px;
             background: var(--left-msg-bg);
@@ -230,6 +233,47 @@
             color: #2EBDD1;
             z-index: 5;
         }
+
+        .custom-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .selected-option {
+            background-color: #f0f0f0;
+            cursor: pointer;
+            width: 10px;
+            position: relative;
+            left: -10px;
+            z-index: 1;
+        }
+
+        .options {
+            display: none;
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            border: 1px solid #ccc;
+            border-top: none;
+            position: absolute;
+            width: 100%;
+            width: 100px;
+            left: -100px;
+            z-index: 1;
+            background-color: #fff;
+        }
+
+        .options li a {
+            text-decoration: none;
+            color: #000;
+            padding: 5px;
+            cursor: pointer;
+            display: block;
+        }
+
+        .options li:hover {
+            background-color: #e0e0e0;
+        }
     </style>
     {{-- <link href="https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap4.min.css" rel="stylesheet"> --}}
 @endsection
@@ -245,9 +289,6 @@
                 <div class="row">
                     <div class="col-12 col-md-12 ">
                         <div class="row">
-                            {{-- @php
-                              $issueId = $issue->id;   
-                            @endphp --}}
                             <form method="post" action="{{ route('hr.issue.update', ['issue' => $issue->id]) }}"
                                 id="issueEdit">
                                 @method('patch')
@@ -287,7 +328,7 @@
                                 <div class="col-md-4 form-group">
                                     <label for="manager_id" class="form-label fw-bold">Assign To<span
                                             class="text-danger ms-1">*</span></label>
-                                    <select name="manager_id" class="d-block form-control-sm">
+                                    <select name="manager_id" class="d-block form-control" style="appearance: revert;">
                                         <option value="default">Select Manager</option>
                                         @foreach ($managers as $manager)
                                             <option value='{{ $manager->id }}'
@@ -308,7 +349,8 @@
                                 <div class="col-md-4 form-group">
                                     <label for="email" class="form-label fw-bold">Status<span
                                             class="text-danger ms-1">*</span></label>
-                                    <select name="status" class="d-block form-control form-control-sm">
+                                    <select name="status" class="d-block form-control form-control"
+                                        style="appearance: auto;">
                                         <option value="default">Select Status</option>
                                         <option vlaue="OPEN" data-status="OPEN"
                                             {{ $issue->status == 'OPEN' ? 'selected' : '' }}>Open</option>
@@ -327,7 +369,7 @@
                                 </div>
 
                                 <div class="col-md-4 form-group">
-                                    <label class="d-block font-weight-bold ">Add Comment</label>
+                                    <label class="d-block font-weight-bold ">Comment</label>
                                     <input id="body" data-date-format="yyyy-mm-dd" name="body"
                                         class="d-block form-control" placeholder="Enter your comment">
                                 </div>
@@ -349,7 +391,6 @@
 
     </section>
     <div id="commentBox"></div>
-
 @endsection
 
 @section('script')
@@ -359,10 +400,8 @@
     <script>
         // Your custom JavaScript file
         $(document).ready(function() {
-            $('.datepicker').datepicker({
-                // Date format to match your database date format
-
-            });
+            $('.datepicker').datepicker({});
+            var csrfToken = $('meta[name="csrf-token"]').attr('content');
 
             function commentBox() {
                 $.ajax({
@@ -372,9 +411,55 @@
                         issueId: {{ $issue->id }}
                     },
                     success: function(response) {
-                        // Replace the content of the commentBox with the rendered HTML
-                        $('#commentBox').html(response.html);
-                        // You can perform additional actions or updates here
+                        $('#commentBox').html(response.comments);
+
+                        $(".selected-option").on("click", function(e) {
+                            $(this).next(".options").show(); // Show the dropdown
+                        });
+
+                        $(document).on("click", function(e) {
+                            if (!$(e.target).closest(".custom-dropdown").length) {
+                                $(".options").hide();
+                            }
+                        });
+
+                        $(".edit-comment").on("click", function(e) {
+                            e.preventDefault();
+                            var commentId = $(this).data("comment-id");
+                            console.log(commentId);
+                            // Toggle visibility of elements for the specific comment
+                            $("#comment-text-" + commentId).hide();
+                            console.log("#comment-text-" + commentId);
+                            $("#comment-edit-" + commentId).show();
+                            $(this).parents('.right-msg').find('.comment-edit').show();
+                            $(this).parents('.right-msg').find('.save-comment').show();
+                            $(this).parents('.right-msg').find('.options').hide()
+                            $(this).hide();
+                        });
+
+                        $(".save-comment").on("click", function(e) {
+                            e.preventDefault();
+                            var commentId = $(this).data("comment-id");
+                            $(this).parents('.right-msg').find('.edit-comment').show()
+                            $(this).parent().prev().hide();
+                            $(this).parent().prev().prev().show();
+                            $(this).parents('.msg-bubble').find('.edit-comment').show();
+                            $(this).hide();
+                            let commentBody = $(this).parent().prev().val()
+                            $.ajax({
+                                url: "{{ route('comment.update', ['commentId' => ':id']) }}"
+                                    .replace(':id', commentId),
+                                type: "PATCH",
+                                data: {
+                                    _token: csrfToken,
+                                    body: commentBody
+                                },
+                                success: function(response) {
+                                    $("#comment-text-" + commentId).text(
+                                        commentBody);
+                                }
+                            })
+                        });
                     },
                     error: function(xhr, textStatus, errorThrown) {
                         // Handle errors here
@@ -382,24 +467,55 @@
                         alert('An error occurred while loading comments.');
                     }
                 });
+
+
+                $(document).on('click', '.commentDelete', function() {
+                    var commentId = $(this).data("comment-id");
+                    var deleteComment = $(this);
+                    $.ajax({
+                        url: "{{ route('comment.destroy', ['commentId' => ':id']) }}".replace(
+                            ':id', commentId),
+                        type: "delete",
+                        data: {
+                            _token: csrfToken,
+                        },
+                        success: function(response) {
+                            $("#comment-text-"+commentId).parents(".right-msg").hide();
+                            var message = response.success;
+                            console.log(message)
+                            toastr.options = {
+                                closeButton: true,
+                                progressBar: true,
+                            }
+                            toastr.success(message);
+                        }
+                    })
+                })
+
             }
             commentBox();
 
             $(document).on("click", ".like", function() {
-                event.preventDefault();
-                // Toggle the "active" class
-                $(this).toggleClass('active');
 
+            });
+
+            $(document).on("click", ".like", function() {
+                event.preventDefault();
+                var likeButton = $(this);
+                $(this).addClass('active');
                 let upvote = $(this).data('upvote');
                 let userId = $(this).data('user');
                 let commentId = $(this).data('commentid');
                 let authId = $(this).data('authid');
 
                 // Get the CSRF token from the meta tag
-                var csrfToken = $('meta[name="csrf-token"]').attr('content');
 
+                var voteCountElement = likeButton.closest('.rating').next().children();
+                var currentVoteCount = parseInt(voteCountElement.text());
                 if (userId == true) {
-                    // If the user has already upvoted, send a DELETE request to remove the upvote
+                    var voteCountElement = likeButton.closest('.rating').next().children();
+                    var currentVoteCount = parseInt(voteCountElement.text());
+
                     $.ajax({
                         url: "{{ route('comment.upvote.destroy', ['commentId' => ':id']) }}"
                             .replace(':id', commentId),
@@ -409,15 +525,26 @@
                         },
                         success: function(response) {
                             console.log('Upvote removed successfully.');
-                            commentBox();
+                            likeButton.removeClass('active');
+
+                            var voteCountElement = likeButton.closest('.rating').next()
+                                .children();
+                            var currentVoteCount = parseInt(voteCountElement.text());
+                            var newVoteCount = currentVoteCount - 1;
+
+                            if (newVoteCount == 1) {
+                                likeButton.addClass('active');
+                            }
+                            voteCountElement.text(newVoteCount);
+                            likeButton.data('user', false);
+                            console.log(likeButton.data('user'));
                         },
                         error: function(xhr, textStatus, errorThrown) {
-                            console.error('Error: ' + textStatus);
-                            alert('An error occurred while removing the upvote.');
+                            console.error('An error occurred while removing the upvote.');
                         }
                     });
+
                 } else {
-                    // If the user hasn't upvoted, send a POST request to add the upvote
                     $.ajax({
                         url: "{{ route('comment.upvote.post', ['commentId' => ':id']) }}"
                             .replace(':id', commentId),
@@ -428,11 +555,15 @@
                         },
                         success: function(response) {
                             console.log('Upvoted successfully.');
-                            commentBox();
+                            likeButton.addClass('active');
+
+                            var newVoteCount = currentVoteCount + 1;
+                            voteCountElement.text(newVoteCount);
+                            likeButton.data('user', true);
+                            console.log(likeButton.data('user'));
                         },
                         error: function(xhr, textStatus, errorThrown) {
-                            console.error('Error: ' + textStatus);
-                            alert('An error occurred while upvoting.');
+                            console.error('An error occurred while upvoting.');
                         }
                     });
                 }
@@ -445,7 +576,7 @@
 
             $("#issueEdit").validate({
                 errorElement: "span",
-                errorClass: "text-danger",
+                errorClass: "text-danger fw-normal",
                 rules: {
                     priority: {
                         required: true // Priority radio button is required
@@ -512,6 +643,8 @@
                     })
                 },
             });
+
+
 
         });
     </script>

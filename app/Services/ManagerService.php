@@ -19,9 +19,7 @@ class ManagerService
         $this->user = new User();
     }
 
-    public function collection($companyId = null, $request)
-    {
-
+    public function collection($companyId = null, $request){
         if ($request->listing == config('site.role.manager')) {
             $data = User::with('company')->whereNotNull('parent_id');
             if ($companyId) {
@@ -37,30 +35,6 @@ class ManagerService
             return User::where('parent_id', $id)->select('id', 'name', 'email', 'mobile');
         }
         return $data;
-        // return DataTables::of($data)->with('media')->addIndexColumn()
-        //     ->orderColumn('name', function ($query, $order) {
-        //         $query->orderBy('id', $order);
-        //     })
-        //     ->addColumn('profile', function ($row) {
-        //         $user = User::find($row->id);
-        //         $media = $user->firstMedia('user');
-        //         $img = asset('storage/user/' . $media->filename . '.' . $media->extension);
-        //         $profile = '<div style=" padding: 20px; width: 40px; height: 40px; background-size: cover; background-image: url('.$img.');" class="img-circle elevation-2" alt="User Image"></div>';
-        //         return $profile;
-        //     })
-        //     ->addColumn('action', function ($row, Request $request) {
-        //         $editRoute = route('hr.manager.edit', ['manager' => $row->id]);
-        //         if ($request->listing == 'manager') {
-        //             $actionBtn = '<p>No Action</p>';
-        //             return $actionBtn;
-        //         } else {
-        //             $actionBtn = '<a href=' . $editRoute . ' id="edit' . $row->id . '" data-userId="' . $row->id . '" class="edit btn btn-success btn-sm">Edit</a> <button type="submit" data-userId="' . $row->id . '" class="delete btn btn-danger btn-sm" data-bs-toggle="modal"
-        //             data-bs-target="#deleteManager">Delete</button>';
-        //             return $actionBtn;
-        //         }
-        //     })
-        //     ->rawColumns(['profile', 'action'])
-        //     ->make(true);
     }
 
     public function store($request){

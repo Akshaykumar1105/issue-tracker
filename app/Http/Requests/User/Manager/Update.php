@@ -22,7 +22,7 @@ class Update extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required',
+            'name' => 'required|max:255',
             'email' => 'required|email|unique:users,email,'.$this->manager,
             'mobile' => 'required|digits:10',
             'profile_img' => 'nullable|mimes:jpeg,png,jpg,gif|max:4096'

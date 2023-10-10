@@ -66,15 +66,11 @@
                         @csrf
                         @method('PATCH')
                         <input name="token" type="hidden" value="{{ $token }}" />
-                        <!-- Email input -->
-                        
-
                         <!-- Password input -->
                         <div class="form-outline ">
                             <label class="form-label" for="password">Password<span class="text-danger"> *</span></label>
                             <input type="password" name="password" id="password" class="form-control" />
-                            <label id="password-error" class="error text-danger" for="password"></label>
-                            
+                            <label id="password-error" class="error text-danger" for="password"></label> 
                         </div>
 
                         <div class="form-outline ">
@@ -84,7 +80,6 @@
                                 class="form-control" />
                             <label id="password_confirmation-error" class="error text-danger"
                                 for="confirmPassword"></label>
-                            
                         </div>
 
                         <div class="mb-2 position-relative">
@@ -113,8 +108,6 @@
         integrity="sha512-3pIirOrwegjM6erE5gPSwkUzO+3cTjpnV9lexlNZqvupR64iZBnOOTiiLPb9M36zpMScbmUNIcHUqKD47M719g=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-
-
     <script>
         $(document).ready(function() {
             $("#resetPassword").validate({
@@ -140,12 +133,12 @@
                         email: "Please enter a valid email address."
                     },
                     password: {
-                        required: "Please enter your password",
-                        minlength: "Password must be at least 8 characters long"
+                        required: "Please enter your password.",
+                        minlength: "Password must be at least 8 characters long."
                     },
                     password_confirmation: {
-                        required: "Please confirm your password",
-                        equalTo: "Passwords do not match"
+                        required: "Please confirm your password.",
+                        equalTo: "Passwords do not match."
                     }
                 },
                 submitHandler: function(form) {
@@ -182,13 +175,6 @@
             });
         });
     </script>
-    <!-- Optional JavaScript; choose one of the two! -->
-
-    <!-- Option 1: Bootstrap Bundle with Popper -->
-
-
-
 </body>
 
 </html>
-<!-- Pills navs -->

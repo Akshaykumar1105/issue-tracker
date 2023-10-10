@@ -20,6 +20,11 @@ return [
         'admin' => 'admin',
         'hr' => 'hr',
         'manager' => 'manager'
-    ]
+    ],
+
+    'date' => 'd/m/Y',
+    'date_time' => 'Y-m-d H:i:s',
+    'time' => 'h:i A',
+
 ];
 ?>

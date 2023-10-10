@@ -46,8 +46,7 @@
 
                         <!-- Email input -->
                         <div class="form-outline mb-3">
-                            <label class="form-label mb-3" for="email">Email<span class="text-danger">
-                                    *</span></label>
+                            <label class="form-label mb-3" for="email">Email<span class="text-danger">*</span></label>
                             <input type="email" name="email" value="{{ old('email') }}" id="email"
                                 class="form-control" />
                         </div>
@@ -60,17 +59,12 @@
                                 <span class="password-toggle" id="togglePassword">
                                     <i class="fa fa-eye-slash"></i> <!-- Default icon -->
                                 </span>
-
                             </div>
 
                             <div class="mt-4 d-flex justify-content-between align-items-center">
                                 <button type="submit" class="btn btn-primary btn-block mb-2">Sign in</button>
-
-                                <a href="{{ route('forgot-password') }}"style="text-decoration: none;">Forgot
-                                    Password?</a>
+                                <a href="{{ route('forgot-password') }}"style="text-decoration: none;">Forgot Password?</a>
                             </div>
-
-                            <!-- Submit button -->
                     </form>
                 </div>
             </div>
@@ -106,7 +100,7 @@
             });
 
             $("#userlogin").validate({
-                errorClass: "text-danger",
+                errorClass: "text-danger fw-normal",
                 rules: {
                     email: {
                         required: true,

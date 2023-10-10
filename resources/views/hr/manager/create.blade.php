@@ -69,7 +69,8 @@
                                 <div class="form-group mb-4 ">
                                     <label for="mobile" class="form-label">Mobile Number</label>
                                     <input type="number" value="{{ isset($manager) ? $manager->mobile : '' }}"
-                                        class="form-control shadow-none" name="mobile" id="mobile" placeholder="7410852000">
+                                        class="form-control shadow-none" name="mobile" id="mobile"
+                                        placeholder="7410852000">
                                 </div>
 
                                 <div class="form-group " style=";font-size: 20px;">
@@ -114,14 +115,22 @@
 
             $.validator.addMethod("lettersonly", function(value, element) {
                 return this.optional(element) || /^[a-zA-Z\s]+$/i.test(value);
-            }, "Letters only, please.");
+            }, "Please enter letters only (no special characters or numbers).");
+
+            $.validator.addMethod("pattern", function(value, element) {
+                    // Use a regular expression to check if the password meets the criteria
+                    return /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/.test(value);
+                },
+                "Password must include at least one uppercase letter, one lowercase letter, one digit, and one special character."
+            );
 
             $("#managerCreate").validate({
                 errorClass: "text-danger fw-normal",
                 rules: {
                     name: {
                         required: true,
-                        lettersonly: true
+                        lettersonly: true,
+                        maxlength: 255,
                     },
                     email: {
                         required: true,
@@ -129,11 +138,12 @@
                     },
                     password: {
                         required: true,
-                        minlength: 8, // Minimum password length
+                        minlength: 8, 
+                        pattern: true,
                     },
                     password_confirmation: {
                         required: true,
-                        equalTo: "#password" // Confirm password must match password
+                        equalTo: "#password"
                     },
                     mobile: {
                         required: true,
@@ -154,7 +164,8 @@
                     },
                     password: {
                         required: "Please enter your password.",
-                        minlength: "Password must be at least 8 characters long."
+                        minlength: "Password must be at least 8 characters long.",
+                        pattern: "Password must include at least one uppercase letter, one lowercase letter, one digit, and one special character.",
                     },
                     password_confirmation: {
                         required: "Please confirm your password.",

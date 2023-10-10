@@ -7,23 +7,22 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Company;
 use App\Models\User;
+use App\Services\CompanyService;
 use App\Services\IssueService;
 use Yajra\DataTables\Facades\DataTables;
 
-class IssueController extends Controller
-{
+class IssueController extends Controller{
 
     protected $issueService;
+    protected $companyService;
 
-    public function __construct(IssueService $issueService)
-    {
+    public function __construct(IssueService $issueService, CompanyService $companyService){
         $this->issueService = $issueService;
+        $this->companyService = $companyService;
     }
 
-    public function index(Request $request)
-    {
+    public function index(Request $request){
         if ($request->ajax()) {
-           
             $query = $this->issueService->collection($query = null, $request);
             return DataTables::of($query)
                 ->orderColumn('title', function ($query, $order) {
@@ -36,18 +35,16 @@ class IssueController extends Controller
                 })
                 ->make(true);
         }
-        $company = Company::where('is_active', config('site.status.active'))->get();
+        $company = $this->companyService->index();
         return view('admin.Issue.index', ['companies' => $company]);
     }
 
-    public function show($id)
-    {
+    public function show($id){
         $issue = $this->issueService->show($id);
         return view('admin.issue.show', ['issue' => $issue, 'route' => route('admin.issue.index')]);
     }
 
-    public function destroy(Request $request)
-    {
+    public function destroy(Request $request){
         // dd($request);
         return $this->issueService->destroy($request);
     }

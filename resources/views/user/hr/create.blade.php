@@ -6,10 +6,11 @@
     <link rel="stylesheet" href="{{ asset('asset/css/dropify.min.css') }}">
     <link rel="stylesheet" href="{{ asset('asset/css/loader.css') }}">
     <style>
-        #login{
+        #login {
             color: black;
         }
-        #login:hover{
+
+        #login:hover {
             color: #51B56D;
         }
     </style>
@@ -50,7 +51,7 @@
 
             </div>
 
-            <div class="d-flex justify-space-between">
+            <div class="d-flex justify-space-between" style="gap: 10px;">
                 <div class="form-group mb-4">
                     <label for="company_id" class="form-label">Company</label>
                     <select class="form-control" value="{{ old('company_id') }}" name="company_id" id='company_id'
@@ -62,20 +63,12 @@
                     </select>
 
                 </div>
-                <div class="form-group mb-4 ">
+                <div class="form-group mb-4 " style="flex-grow: 1;">
                     <label for="mobile" class="form-label">Mobile</label>
                     <input type="number" value="{{ old('mobile') }}" class="form-control shadow-none" name="mobile"
                         id="mobile">
                 </div>
             </div>
-
-            {{-- <div class="form-group mb-4">
-                <label for="img" class="form-label">Profile Image</label>
-                <input type="file" value="{{old('img')}}" class="form-control shadow-none pt-3" name="img" id="img">
-                @error('img')
-                    <p class="text-danger text-sm">{{ $message }}</p>
-                @enderror
-            </div> --}}
 
             <div class="form-group col-span-6 mb-4" style="width: 50%;font-size: 20px;">
                 <label for="profile_img" class="form-label">{{ __('messages.form.img') }}</label>
@@ -86,7 +79,8 @@
 
             <div class="d-flex align-items-center mb-3">
                 <button class="btn btn-primary w-25 " type="submit">Submit</button>
-                <a href="{{route('login')}}" id="login" style="text-decoration: none;" class="ms-3">Already have an Account?</a>
+                <a href="{{ route('login') }}" id="login" style="text-decoration: none;" class="ms-3">Already have an
+                    Account?</a>
             </div>
         </form>
     </div>
@@ -114,11 +108,24 @@
                 return fileSize <= param; // Compare the file size to the maximum allowed size
             });
 
+            $.validator.addMethod("pattern", function(value, element) {
+                    // Use a regular expression to check if the password meets the criteria
+                    return /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/.test(value);
+                },
+                "Password must include at least one uppercase letter, one lowercase letter, one digit, and one special character."
+            );
+
+            $.validator.addMethod("lettersonly", function(value, element) {
+                return this.optional(element) || /^[a-zA-Z\s]+$/i.test(value);
+            }, "Please enter letters only (no special characters or numbers).");
+
+
             $("#hrRegister").validate({
-                errorClass: "text-danger",
+                errorClass: "text-danger fw-normal",
                 rules: {
                     name: {
                         required: true,
+                        lettersonly: true
                     },
                     email: {
                         required: true,
@@ -126,7 +133,8 @@
                     },
                     password: {
                         required: true,
-                        minlength: 8, // Minimum password length
+                        pattern: true,
+                        minlength: 8,
                     },
                     password_confirmation: {
                         required: true,
@@ -142,32 +150,33 @@
                         maxlength: 10,
                         digits: true
                     },
-
                 },
                 messages: {
+                    name: {
+                        required: "{{ __('validation.required', ['attribute' => 'name']) }}",
+                    },
                     email: {
-                        required: "Please enter your email.",
-                        email: "Please enter a valid email address.",
+                        required: "{{ __('validation.required', ['attribute' => 'email']) }}",
+                        email: "{{ __('validation.email', ['attribute' => 'email']) }}",
                     },
                     password: {
-                        required: "Please enter your password.",
-                        minlength: "Password must be at least 8 characters long."
+                        required: "{{ __('validation.required', ['attribute' => 'password']) }}",
+                        minlength: "{{ __('validation.min.string', ['attribute' => 'password', 'min' => '8']) }}",
+                        pattern: "Password must include at least one uppercase letter, one lowercase letter, one digit, and one special character.",
                     },
                     password_confirmation: {
                         required: "Please confirm your password.",
                         equalTo: "Passwords do not match.",
                     },
                     company_id: {
-                        required: "Please select an option.",
-                        valueNotEquals: "Company filed is required.",
+                        required: "{{ __('validation.required', ['attribute' => 'company']) }}",
                     },
                     mobile: {
-                        required: "Please enter your 10-digit mobile number.",
-                        minlength: "Mobile number must be exactly 10 digits.",
-                        maxlength: "Mobile number must be exactly 10 digits.",
+                        required: "{{ __('validation.required', ['attribute' => 'mobile']) }}",
+                        minlength: "{{ __('validation.min.string', ['attribute' => 'mobile', 'min' => '10']) }}",
+                        maxlength: "{{ __('validation.max.string', ['attribute' => 'mobile', 'max' => '10']) }}",
                         digits: "Mobile number can only contain numeric digits.",
                     },
-
                 },
                 submitHandler: function(form) {
                     $(".loader-container").fadeIn();

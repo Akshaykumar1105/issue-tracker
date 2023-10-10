@@ -16,17 +16,14 @@ use App\Http\Requests\Admin\Company\Update;
 class CompanyController extends Controller{
 
     protected $companyService;
-    protected $managerService;
-    protected $hrService;
+  
 
-    public function __construct(CompanyService $companyService, ManagerService $managerService, HrService $hrService){
+    public function __construct(CompanyService $companyService){
         $this->companyService = $companyService;
-        $this->managerService = $managerService;
-        $this->hrService = $hrService;
+       
     }
 
-    public function index(Request $request)
-    {
+    public function index(Request $request){
         if ($request->ajax()) {
             if($request->listing){
                 return $this->companyService->collection($companyId = null, $request);
@@ -38,8 +35,8 @@ class CompanyController extends Controller{
                 })
                 ->addColumn('action', function ($row) {
                     $edit = route('admin.company.edit', ['company' => $row->id]);
-                    $hr = route('admin.company.show', ['company' => $row->id, 'listing' => 'hr']);
-                    $manager = route('admin.company.show', ['company' => $row->id, 'listing' => 'manager']);
+                    $hr = route('admin.hr.index', ['company_id' => $row->id]);
+                    $manager = route('admin.manager.index', ['company_id' => $row->id]);
                     $actionBtn = '<div class="d-flex" style="flex-direction: column;justify-content: initial;align-items: baseline;gap: 10px;"><div><a href=' . $edit . ' id="edit' . $row->id . '" data-userId="' . $row->id . '" class="edit btn btn-success btn-sm">Edit</a> <button type="submit" data-userId="' . $row->id . '" class="delete btn btn-danger btn-sm" data-bs-toggle="modal"
                 data-bs-target="#deleteCompany">Delete</button></div> <div><a href=' . $hr . ' id="viewHr' . $row->id . '" data-userId="' . $row->id . '" class="hr btn btn-primary btn-sm">View Hr</a> <a href=' . $manager . ' type="submit" data-userId="' . $row->id . '"  class="manager btn btn-primary btn-sm">View Manager</a></div></div>';
                     return $actionBtn;
@@ -51,31 +48,26 @@ class CompanyController extends Controller{
         return view('admin.company.index');
     }
 
-    public function create()
-    {
+    public function create(){
         return view('admin.company.create');
     }
 
-    public function store(Store $request)
-    {
+    public function store(Store $request){
         return $this->companyService->store($request);
     }
 
-    public function show($companyId, Request $request)
-    {
+    public function show($companyId, Request $request){
         if ($request->ajax()) {
             return $this->companyService->collection($companyId, $request);
         }
         return view('admin.company.show', ['company' => $companyId]);
     }
 
-    public function edit(Company $company)
-    {
+    public function edit(Company $company){
         return view('admin.company.create', ['company' =>  $company]);
     }
 
-    public function update(Update $request, Company $company)
-    {
+    public function update(Update $request, Company $company){
         return $this->companyService->update($request, $company);
     }
 

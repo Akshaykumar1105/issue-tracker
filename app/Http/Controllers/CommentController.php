@@ -2,26 +2,44 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
+use App\Services\CommentService;
 use App\Http\Controllers\Controller;
 use App\Models\Comment;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\View;
-
 
 class CommentController extends Controller
 {
+
+    protected $commentService;
+    protected $comment;
+
+    public function __construct(CommentService $commentService){
+        $this->commentService = $commentService;
+        $this->comment = new Comment();
+    }
+
     public function index(Request $request){
-        $comments = Comment::with('users.media')
-        ->with('commentUpvotes')
-        ->where('issue_id', $request->issueId)
-        ->orderBy('created_at')
-        ->get();
+        $comment = $this->commentService->index($request);
+        return ['comments' => $comment];
+    }
 
-    // Render the Blade template and pass the $comments variable to it
-    $html = View::make('comment', ['comments' => $comments])->render();
+    public function edit($id, Request $request){
+       
+    }
 
+    public function update($id, Request $request){
+        $comment = $this->comment->where('id', $id)->first();
 
-    // Return the HTML content as a JSON response
-    return response()->json(['html' => $html]);
+        $comment->update([
+            'body' => $request->body
+        ]);
+    }
+
+    public function destroy($id){
+        $comment = $this->comment->where('id', $id)->first();
+        $comment->delete();
+        return [
+            'success' => __('entity.entityDeleted', ['entity' => 'Comment']),
+        ];
     }
 }

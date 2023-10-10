@@ -852,7 +852,7 @@
             }, "Please select a company from the list.");
 
             $("#issue").validate({
-                errorClass: "text-danger",
+                errorClass: "text-danger fw-normal",
                 rules: {
                     title: {
                         required: true,

@@ -17,18 +17,15 @@ class HrService
     }
 
     public function index(){
-        if (auth()->user()) {
+        if (!auth()->user()->hasRole(config('site.role.admin'))) {
             return redirect()->route('home');
         }
         return Company::where('is_active', 1)->get();
-        
     }
 
     public function store($request){
         $this->user->fill($request->all())->save();
-
         $this->user->assignRole('hr');
-
         if ($request->file('profile_img')) {
             $media =  MediaUploader::fromSource($request->file('profile_img'))->toDisk('public')
                 ->toDirectory('user')->upload();
@@ -77,6 +74,15 @@ class HrService
             if ($request->filter) {
                 $query->where('company_id',  $request->filter);
             }
+            // $query = User::with('company')
+            //     ->whereNull('parent_id')
+            //     ->where(function ($query) use ($companyId) {
+            //         $query->where('company_id', $companyId)
+            //             ->orWhereNotNull('company_id');
+            //     })
+            //     ->when($request->filter, function ($query, $filter) {
+            //         return $query->where('company_id', $filter);
+            //     });
             return $query;
         }
     }

@@ -22,12 +22,18 @@ class Store extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required',
+            'name' => 'required|max:255',
             'email' => 'required|email|unique:users',
-            'password' => 'required|min:8',
+            'password' => 'required|min:8|regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\x])(?=.*[!$#%]).*$/',
             'password_confirmation' => 'required|same:password',
             'mobile' => 'required|digits:10',
             'profile_img' => 'required|mimes:jpeg,png,jpg,gif|max:4096'
+        ];
+    }
+
+    public function messages(){
+        return [
+            'password.regex' => 'The password must include at least one uppercase letter, one lowercase letter, one digit, and one special character.',
         ];
     }
 }

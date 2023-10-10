@@ -2,17 +2,21 @@
 @section('style')
     <!-- toastr css -->
     <link rel="stylesheet" href="{{ asset('asset/css/toastr.css') }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+        integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 @endsection
 @section('content')
     <x-loader />
 
     <div class="w-50 mx-auto my-5">
         <h2 style="font-weight: 200;margin: 12px 0;">Generate issue</h2>
-        <form action="{{ route('issue.store', ['company' => ':uuid']) }}".replace(:uuid, $uuid) id="issue" method="post">
+        <form action="{{ route('issue.store', ['company' => ':uuid']) }}".replace(:uuid, $uuid) id="issue"
+            method="post">
             @csrf
             <div class="row">
-                <input type="hidden" class="form-control shadow-none" value="{{$uuid}}" name="issueUuid" id="issueUuid">
+                <input type="hidden" class="form-control shadow-none" value="{{ $uuid }}" name="issueUuid"
+                    id="issueUuid">
                 <div class="col-lg-12 mb-4 pb-2">
                     <div class="form-group">
                         <label for="title" class="form-label">Title<span class="text-danger ms-1">*</span></label>
@@ -35,13 +39,14 @@
                         <label for="hr" class="form-label">Human resources<span
                                 class="text-danger ms-1">*</span></label>
                         <div style="position: relative;">
-                            <select class="form-control"  value="{{ old('company') }}" name="hr_id" id="hr">
+                            <select class="form-control" value="{{ old('company') }}" name="hr_id" id="hr">
                                 <option value="default">Select Human resources</option>
                                 @foreach ($hrs as $hr)
                                     <option value="{{ $hr->id }}">{{ $hr->name }}</option>
                                 @endforeach
                             </select>
-                            <i style="position: absolute;top: 50%;right: 20px;transform: translateY(-50%);" class="fa-solid fa-chevron-down"></i>
+                            <i style="position: absolute;top: 50%;right: 20px;transform: translateY(-50%);"
+                                class="fa-solid fa-chevron-down"></i>
                         </div>
                     </div>
                 </div>
@@ -74,11 +79,17 @@
                 return arg !== value;
             }, "Please select a company from the list.");
 
+            $.validator.addMethod("lettersonly", function(value, element) {
+                return this.optional(element) || /^[a-zA-Z\s]+$/i.test(value);
+            }, "Letters only, please.");
+
             $("#issue").validate({
-                errorClass: "text-danger",
+                errorClass: "text-danger fw-normal",
                 rules: {
                     title: {
                         required: true,
+                        lettersonly: true,
+                        maxlength: 70
                     },
                     description: {
                         required: true,
@@ -97,14 +108,16 @@
                 messages: {
                     hr_id: {
                         required: "Please select an option.",
-                        valueNotEquals: "Please select Hr!"
+                        valueNotEquals: "Please select any option!"
                     },
                     email: {
-                        required: "Please enter your email.",
+                        required: "Please enter your email address.",
                         email: "Please enter a valid email address.",
                     },
                     title: {
                         required: "Please enter a title.",
+                        lettersonly: "Title should contain only letters.",
+                        maxlength: "Title should not exceed 70 characters."
                     },
                     description: {
                         required: "Please enter a description.",

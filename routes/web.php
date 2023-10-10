@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\CompanyController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Admin\CompanyStatusController;
+use App\Http\Controllers\Admin\ManagerController as AdminManagerController;
 use App\Http\Controllers\User\ChangePasswordController;
 use App\Http\Controllers\Auth\ForgetPasswordController;
 use App\Http\Controllers\CommentController;
@@ -59,9 +60,12 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->grou
     Route::post('/status', CompanyStatusController::class)->name('company.status');
 
     // User
-    Route::prefix('/user')->group(function () {
-        Route::get('', [UserController::class, 'index'])->name('user.index');
-        Route::get('/manager/{manager}', [UserController::class, 'show'])->name('user.show');
+    Route::prefix('/hr')->group(function () {
+        Route::get('', [UserController::class, 'index'])->name('hr.index');
+    });
+
+    Route::prefix('/manager')->group(function () {
+        Route::get('', [AdminManagerController::class, 'index'])->name('manager.index');
     });
     
     //issue
@@ -103,8 +107,9 @@ Route::prefix('manager')->name('manager.')->middleware(['auth', 'role:manager'])
     Route::resource('/issue', ManagerIssueController::class);
 
 });
-
 Route::post('/issue/comment/{commentId}/upvotes', [CommentUpvoteController::class, 'store'])->name('comment.upvote.post');
 Route::delete('/issue/comment/{commentId}/upvotes', [CommentUpvoteController::class, 'destroy'])->name('comment.upvote.destroy');
 // Route::resource('/comment-upvotes', CommentUpvoteController::class)->only(['destroy']);
 Route::get('/comment', [CommentController::class, 'index'])->name('comment.index');
+Route::patch('/comment/{commentId}/edit', [CommentController::class, 'update'])->name('comment.update');
+Route::delete('/comment/{commentId}/delete', [CommentController::class, 'destroy'])->name('comment.destroy');

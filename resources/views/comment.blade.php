@@ -7,7 +7,7 @@
             <span><i class="fas fa-cog"></i></span>
         </div>
     </header>
-    
+
     @if (!$comments->isEmpty())
         <main class="msger-chat" style="max-height: 400px; overflow-y: auto;">
             @foreach ($comments as $comment)
@@ -18,7 +18,6 @@
 
                 {{-- Move $user definition inside this loop --}}
                 @foreach ($comment->users as $user)
-
                     @foreach ($user->media as $img)
                     @endforeach
                 @endforeach
@@ -34,17 +33,34 @@
                     <div class="msg right-msg">
                         <div style="padding: 25px; margin: 0 0 0 10px;background-size: cover; background-image: url('@if (isset(auth()->user()->getMedia('user')->first()->filename)) {{ asset('storage/user/' .auth()->user()->getMedia('user')->first()->filename .'.' .auth()->user()->getMedia('user')->first()->extension) }}');" @else{{ asset('/asset/dist/img/AdminLTELogo.png') }} @endif class="img-circle
                             elevation-2" alt="User Image"></div>
+                        <div class="dropdown">
+                            <div class="custom-dropdown">
+                                <div class="selected-option"><i class="fa-solid fa-ellipsis-vertical"></i></div>
+                                <ul class="options">
+                                    <li data-value="option1"><a id="comment{{ $comment->id }}" data-comment-id="{{$comment->id}}" class="edit-comment"
+                                            href="">Edit</a></li>
+                                    <li data-value="option2"><a href="#" id="commentDelete{{ $comment->id }}" class="commentDelete" data-comment-id="{{$comment->id}}">Delete</a></li>
+                                </ul>
+                            </div>
 
-                        {{ $comment->id }}
-                        <div class="msg-bubble d-block">
+                        </div>
+
+                        <div class="msg-bubble d-block" style="width: 100%;">
                             <div class="msg-info">
                                 <div class="msg-info-name">{{ auth()->user()->name }}</div>
                                 <div class="msg-info-time">{{ $comment->created_at->toDayDateTimeString() }}</div>
                             </div>
 
                             <div class="msg-text">
-                                {{ $comment->body }}
+                                <div class="comment-text" id="comment-text-{{ $comment->id }}">
+                                    {{ $comment->body }}
+                                </div>
+                                <textarea class="comment-edit form-control" name="body" style="display: none;">{{ $comment->body }}</textarea>
+                                <div class="comment-buttons">
+                                    <button class="save-comment btn btn-primary mt-2" data-comment-id="{{$comment->id}}" style="display: none;">Save</button>
+                                </div>
                             </div>
+
                             <div class="msg-text">
                                 Status:-{{ $comment->status }}
                             </div>
@@ -61,7 +77,8 @@
                                             <i class="fa fa-thumbs-up fa-2x likethumb" aria-hidden="true"></i>
                                         </div>
                                     </div>
-                                    <p style="margin: 0 0 0 60px;" id="voteCount"> Total Vote: <span>{{ count($comment->commentUpvotes) }}
+                                    <p style="margin: 0 0 0 60px;" id="voteCount"> Total Vote:
+                                        <span>{{ count($comment->commentUpvotes) }}
                                     </p>
                                 @else
                                     <div class="rating">
@@ -73,7 +90,8 @@
                                             <i class="fa fa-thumbs-up fa-2x likethumb" aria-hidden="true"></i>
                                         </div>
                                     </div>
-                                    <p style="margin: 0 0 0 60px;" id="voteCount"> Total Vote: <span>{{ count($comment->commentUpvotes) }}
+                                    <p style="margin: 0 0 0 60px;" id="voteCount"> Total Vote:
+                                        <span>{{ count($comment->commentUpvotes) }}
                                     </p>
                                 @endif
                             </div>
@@ -108,7 +126,9 @@
                                             <i class="fa fa-thumbs-up fa-2x likethumb" aria-hidden="true"></i>
                                         </div>
                                     </div>
-                                    <p style="margin: 0 0 0 60px;" id="voteCount">Total Vote: <span>{{ count($comment->commentUpvotes) }}</p>
+                                    <p style="margin: 0 0 0 60px;" id="voteCount">Total Vote:
+                                        <span>{{ count($comment->commentUpvotes) }}
+                                    </p>
                                 @else
                                     <div class="rating">
                                         <!-- No upvotes, display a like button without the active class -->
@@ -117,11 +137,13 @@
                                             <i class="fa fa-thumbs-up fa-2x likethumb" aria-hidden="true"></i>
                                         </div>
                                     </div>
-                                    <p style="margin: 0 0 0 60px;" id="voteCount">Total Vote: <span>{{ count($comment->commentUpvotes) }}</p>
+                                    <p style="margin: 0 0 0 60px;" id="voteCount">Total Vote:
+                                        <span>{{ count($comment->commentUpvotes) }}
+                                    </p>
                                 @endif
                             </div>
 
-                            {{-- <x-vote :comment="$comment" :vote="$vote"/> --}}
+                            {{-- <x-vote :comment="$comment" :vote="$vote" --}}
                         </div>
                     </div>
                 @endif
@@ -130,8 +152,4 @@
     @else
         <p style="margin: 30px;text-align:center; font-size: 32px;">No comment yet.</p>
     @endif
-    {{-- <form class="msger-inputarea">
-        <input type="text" class="msger-input" placeholder="Enter your message...">
-        <button type="submit" class="msger-send-btn">Send</button>
-    </form> --}}
 </section>
