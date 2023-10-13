@@ -18,21 +18,18 @@ class IssueController extends Controller
         $this->issueService = $issueService;
     }
 
-    public function index(Request $request)
-    {
-        $uuid = $request->input('company');
-
-        $company = Company::where('uuid', $uuid)->first();
-
+    public function index($company, Request $request)
+    {        
+        $companyObj = Company::where('uuid', $company)->first();
         if (!$company) {
             return abort(404);
         }
 
-        $hrs = User::where('company_id', $company->id)
+        $hrs = User::where('company_id', $companyObj->id)
             ->whereNull('parent_id')
             ->get();
 
-        return view('user.issue.create', compact('uuid', 'hrs'));
+        return view('user.issue.create', compact('companyObj', 'hrs'));
     }
 
     public function store(Store $request)

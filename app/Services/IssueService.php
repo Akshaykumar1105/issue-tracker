@@ -60,7 +60,7 @@ class IssueService
             JobsIssueSolve::dispatch([
                 'email' => $email,
                 'issue' => $issue,
-            ])->delay(now()->addMinutes(5));
+            ]);
         }
 
         if ($request->status == 'SEND_FOR_REVIEW') {
@@ -68,7 +68,7 @@ class IssueService
             ReviewIssue::dispatch([
                 'email' => $email,
                 'issue' => $issue,
-            ])->delay(now()->addMinutes(5));
+            ]);
         }
 
         if (auth()->user()->hasRole('manager') && $request->status === 'OPEN') {
@@ -79,14 +79,6 @@ class IssueService
 
         if ($request->body) {
             $this->commentService->store($request, $id);
-            // $comment = Comment::create([
-            //     'issue_id' => $id,
-            //     'body' => $request->body,
-            //     'status' => $request->status
-            // ]);
-            // $commentId = $comment->id;
-            // $user = auth()->user();
-            // $user->comments()->attach([$commentId => ['user_id' => $user->id]]);
         }
         return  ['success' => __('entity.entityUpdated', ['entity' => 'Issue'])];
     }
@@ -98,28 +90,32 @@ class IssueService
     }
 
     public function collection($query, $request){
-        if ($request->table == config('site.table.admin')) {
-            $query = Issue::with('company');
-            $this->filters($request, $query);
-        } else if ($request->table == config('site.table.hr')) {
-            $id = auth()->user()->id;
-            $query = Issue::with('user')->where('hr_id', $id);
-
-            if ($request->listing == 'pending') {
-                $query = Issue::with('user')->whereNull(['due_date', 'manager_id'])->where('hr_id', $id);
-            }
-            else if($request->listing == 'review-issue'){
-                $query = Issue::with('user')->where('hr_id', $id)->where('status' , 'SEND_FOR_REVIEW');
-            }
-            $this->filters($request, $query);
-        } else if ($request->table == config('site.table.manager')) {
-            $companyId = auth()->user()->id;
-            $query = Issue::where('manager_id', $companyId);
-            if ($request->listing == 'pending') {
-                $query->where('status' , '<>', 'SEND_FOR_REVIEW');
-            }
-            $this->filters($request, $query);
+        switch ($request->table) {
+            case config('site.table.admin'):
+                $query = Issue::with('company');
+                break;
+    
+            case config('site.table.hr'):
+                $id = auth()->user()->id;
+                $query = Issue::with('user')->where('hr_id', $id);
+    
+                if ($request->type == 'pending') {
+                    $query->whereNull(['due_date', 'manager_id']);
+                } elseif ($request->type == 'review-issue') {
+                    $query->where('status', 'SEND_FOR_REVIEW');
+                }
+                break;
+    
+            case config('site.table.manager'):
+                $companyId = auth()->user()->id;
+                $query = Issue::where('manager_id', $companyId);
+    
+                if ($request->type == 'pending') {
+                    $query->where('status', '<>', 'SEND_FOR_REVIEW');
+                }
+                break;
         }
+        $this->filters($request, $query);
         return $query;
     }
 

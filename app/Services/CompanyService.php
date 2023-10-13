@@ -2,7 +2,9 @@
 
 namespace App\Services;
 
+use App\Jobs\IssueReportSubmission as JobsIssueReportSubmission;
 use App\Mail\IssueReportSubmission;
+use App\Models\CommentUpvotes;
 use App\Models\Company;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -29,32 +31,14 @@ class CompanyService
     }
 
     public function collection($companyId, $request){
+        $query = Company::select('id', 'name', 'email', 'number', 'address', 'is_active', 'created_at');
+
         if ($request->listing == config('site.role.hr')) {
             $query =  $this->hrService->collection($companyId, $request);
         } else if ($request->listing == config('site.role.manager')) {
             $query = $this->managerService->collection($companyId, $request);
         }
-        return DataTables::of($query)
-                ->addIndexColumn()
-                ->addColumn('profile', function ($row) {
-                    $user = User::find($row->id);
-                    $media = $user->firstMedia('user');
-                    $img = asset('storage/user/' . $media->filename . '.' . $media->extension);
-                    $profile = '<div style=" padding: 20px; width: 40px; height: 40px; background-size: cover; background-image: url('.$img.');" class="img-circle elevation-2" alt="User Image"></div>';
-                    
-                    return $profile;
-                })
-                ->orderColumn('name', function ($query, $order) {
-                    $query->orderBy('id', $order);
-                })
-                ->addColumn('action', function ($row) {
-                    $manager = $row->id;
-                    $showManager = route('admin.user.show', ['manager' => $manager]);
-                    $actionBtn = '<a href=' . $showManager . ' id="edit' . $row->id . '" data-userId="' . $row->id . '" class="view btn btn-primary btn-sm">View</a>';
-                    return $actionBtn;
-                })
-                ->rawColumns(['action', 'profile'])
-                ->make(true);
+        return $query;
     }
 
     public function store($request){
@@ -62,7 +46,9 @@ class CompanyService
         $company = Company::where('email', $request->email)->first();
         $email = $company->email;
         $companyUuid = $company->uuid;
-        Mail::to($email)->send(new IssueReportSubmission($companyUuid));
+        // dd($email);
+        JobsIssueReportSubmission::dispatchSync($email);
+        // Mail::to($email)->send(new IssueReportSubmission($companyUuid));
         return [
             'success' => __('entity.entityCreated', ['entity' => 'Company']),
             'route' => route('admin.company.index')
@@ -90,7 +76,6 @@ class CompanyService
         $company = $request->userId;
         $isActive = $request->status == config('site.status.active') ? config('site.status.is_active') : config('site.status.active');
         $this->companyModel->where('id', $company)->update(['is_active' => $isActive]);
-
         $message = $isActive ? __('messages.status.active') : __('messages.status.inactive');
         return ['success' => $message];
     }

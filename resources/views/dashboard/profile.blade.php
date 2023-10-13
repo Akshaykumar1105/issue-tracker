@@ -184,21 +184,27 @@
                     },
                     mobile: {
                         required: true,
+                        number:true,
                         minlength: 10,
                         maxlength: 10,
-                        digits: true
+                        digits: true,
                     },
                 },
                 messages: {
+                    name: {
+                        required: "{{__('validation.required', ['attribute' => 'name'])}}",
+                        maxlength: "{{__('validation.max_digits', ['attribute' => 'name', 'max' => '255'])}}",
+                    },
                     email: {
-                        required: "Please enter your email.",
-                        email: "Please enter a valid email address.",
+                        required: "{{__('validation.required', ['attribute' => 'email'])}}",
+                        email: "{{__('validation.valid' , ['attribute' => 'email'])}}",
                     },
                     mobile: {
-                        required: "Please enter your 10-digit mobile number.",
-                        minlength: "Mobile number must be exactly 10 digits.",
-                        maxlength: "Mobile number must be exactly 10 digits.",
-                        digits: "Mobile number can only contain numeric digits."
+                        required: "{{__('validation.required', ['attribute' => 'number'])}}",
+                        number: "{{__('validation.valid' , ['attribute' => 'number'])}}",
+                        digits: "The number must be a 10 digits",
+                        minlength:  "{{__('validation.min_digits', ['attribute' => 'number', 'min' => '10'])}}",
+                        maxlength: "{{__('validation.max_digits', ['attribute' => 'number', 'max' => '10'])}}",
                     },
                 },
                 submitHandler: function(form) {

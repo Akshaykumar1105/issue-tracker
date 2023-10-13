@@ -213,17 +213,52 @@
             color: #000;
         }
 
-        /* .dislike:hover,
-                                                                                    .like:hover {
-                                                                                        color: #2EBDD1;
-                                                                                        transition: all .2s ease-in-out;
-                                                                                        transform: scale(1.1);
-                                                                                    } */
-
         .active i {
             color: #2EBDD1;
             z-index: 5;
         }
+
+        .custom-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .selected-option {
+            background-color: #f0f0f0;
+            cursor: pointer;
+            width: 10px;
+            position: relative;
+            left: -10px;
+            z-index: 1;
+        }
+
+        .options {
+            display: none;
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            border: 1px solid #ccc;
+            border-top: none;
+            position: absolute;
+            width: 100%;
+            width: 100px;
+            left: -100px;
+            z-index: 1;
+            background-color: #fff;
+        }
+
+        .options li a {
+            text-decoration: none;
+            color: #000;
+            padding: 5px;
+            cursor: pointer;
+            display: block;
+        }
+
+        .options li:hover {
+            background-color: #e0e0e0;
+        }
+
     </style>
     {{-- <link href="https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap4.min.css" rel="stylesheet"> --}}
 @endsection
@@ -308,6 +343,24 @@
     </section>
 
     <div id="commentBox"></div>
+
+    <div class="modal fade" id="deleteComment" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Comment Delete</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    {{__('messages.conformation.delete', ['attribute' => 'comment?'])}}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" id="comment-delete" class="btn btn-danger">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('script')
@@ -323,7 +376,6 @@
             $('.datepicker').datepicker({});
             var csrfToken = $('meta[name="csrf-token"]').attr('content');
 
-            // Make an AJAX request to the CommentController@index endpoint
             function commentBox() {
                 $.ajax({
                     url: "{{ route('comment.index') }}",
@@ -332,9 +384,53 @@
                         issueId: {{ $issue->id }}
                     },
                     success: function(response) {
-                        // Replace the content of the commentBox with the rendered HTML
                         $('#commentBox').html(response.comments);
-                        // You can perform additional actions or updates here
+
+                        $(".selected-option").on("click", function(e) {
+                            $(this).next(".options").show(); // Show the dropdown
+                        });
+
+                        $(document).on("click", function(e) {
+                            if (!$(e.target).closest(".custom-dropdown").length) {
+                                $(".options").hide();
+                            }
+                        });
+
+                        $(".edit-comment").on("click", function(e) {
+                            e.preventDefault();
+                            var commentId = $(this).data("comment-id");
+                            $("#comment-text-" + commentId).hide();
+                            $("#comment-edit-" + commentId).show();
+                            const rightMsg = $(this).parents('.right-msg');
+                            rightMsg.find('.comment-edit, .save-comment').show();
+                            rightMsg.find('.options').hide();
+                            $(this).hide();
+                        });
+
+                        $(".save-comment").on("click", function(e) {
+                            e.preventDefault();
+                            const commentId = $(this).data("comment-id");
+                            $(this).parents('.right-msg').find('.edit-comment').show()
+                            $(this).parent().prev().hide();
+                            $(this).parent().prev().prev().show();
+                            $(this).parents('.msg-bubble').find('.edit-comment').show();
+                            $(this).hide();
+
+                            let commentBody = $(this).parent().prev().val()
+                            $.ajax({
+                                url: "{{ route('comment.update', ['commentId' => ':id']) }}"
+                                    .replace(':id', commentId),
+                                type: "PATCH",
+                                data: {
+                                    _token: csrfToken,
+                                    body: commentBody
+                                },
+                                success: function(response) {
+                                    $("#comment-text-" + commentId).text(
+                                        commentBody);
+                                }
+                            })
+                        });
                     },
                     error: function(xhr, textStatus, errorThrown) {
                         // Handle errors here
@@ -342,6 +438,39 @@
                         alert('An error occurred while loading comments.');
                     }
                 });
+                let deleteCommentId;
+                let deleteComment;
+                $(document).on('click', '.commentDelete', function() {
+                    deleteCommentId = $(this).data("comment-id");
+                    deleteComment = $(this);
+                });
+
+                $(document).on("click", "#comment-delete", function(event) {
+                    event.preventDefault();
+                    commentDelete(deleteCommentId, deleteComment);
+                });
+
+                function commentDelete(deleteCommentId, deleteComment) {
+                    $.ajax({
+                        url: "{{ route('comment.destroy', ['commentId' => ':id']) }}".replace(':id',
+                            deleteCommentId),
+                        type: "delete",
+                        data: {
+                            _token: csrfToken,
+                        },
+                        success: function(response) {
+                            $("#deleteComment").modal("toggle");
+                            deleteComment.parents(".right-msg").hide();
+                            var message = response.success;
+                            console.log(message);
+                            toastr.options = {
+                                closeButton: true,
+                                progressBar: true,
+                            };
+                            toastr.success(message);
+                        }
+                    });
+                }
             }
             commentBox();
 
@@ -454,7 +583,7 @@
 
             $.validator.addMethod("valueNotEquals", function(value, element, arg) {
                 return arg !== value;
-            }, "Please select a company from the list.");
+            }, "{{__('validation.valueNotEquals', ['attribute' => 'issue status'])}}");
 
             $("#issueEdit").validate({
                 errorElement: "span",
@@ -477,15 +606,15 @@
                 },
                 messages: {
                     priority: {
-                        required: "Please select a priority"
+                        required: "{{__('validation.required', ['attribute' => 'priority'])}}",
                     },
                     status: {
-                        required: "Please select a status",
-                        valueNotEquals: "Please select issue status!",
+                        required: required: "{{__('validation.required', ['attribute' => 'status'])}}",,
+                        valueNotEquals: "{{__('validation.valueNotEquals', ['attribute' => 'issue status'])}}",
                     },
                     assignManager: {
-                        required: "Please select a status",
-                        valueNotEquals: "Please select issue status!",
+                        required: required: "{{__('validation.required', ['attribute' => 'manager'])}}",
+                        valueNotEquals: "{{__('validation.valueNotEquals', ['attribute' => 'manager'])}}",
                     },
                     date: {
                         date: "Please enter a valid date"

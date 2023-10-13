@@ -30,7 +30,7 @@ class IssueController extends Controller{
                 })
                 ->addColumn('action', function ($row) {
                     $editRoute = route('admin.issue.show', ['issue' => $row->id]);
-                    $actionBtn = '<a href=' . $editRoute . ' data-issueId="' . $row->id . '" class="view btn btn-primary btn-sm">View</a> <a href="delete" data-issueId="' . $row->id . '"  class="delete  btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteIssue">Delete</a>';
+                    $actionBtn = '<a href=' . $editRoute . ' data-issue-id="' . $row->id . '" class="view btn btn-primary btn-sm">View</a> <a href="delete" data-issue-id="' . $row->id . '"  class="delete  btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteIssue">Delete</a>';
                     return $actionBtn;
                 })
                 ->make(true);
@@ -45,7 +45,6 @@ class IssueController extends Controller{
     }
 
     public function destroy(Request $request){
-        // dd($request);
         return $this->issueService->destroy($request);
     }
 }

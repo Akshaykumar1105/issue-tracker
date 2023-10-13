@@ -30,12 +30,8 @@
 @section('content')
     <section class="content" style="margin: 0 auto; max-width: 100%">
         <h1>Issues</h1>
-
-
-
         <div
-            class=""style="margin-top:50px; padding:10px;border: 0 solid rgba(0,0,0,.125);
-    border-radius: .25rem;background-color: #fff;box-shadow: 0 0 1px rgba(0,0,0,.125), 0 1px 3px rgba(0,0,0,.2);margin-bottom: 1rem;">
+            class=""style="margin-top:50px; padding:10px;border: 0 solid rgba(0,0,0,.125);border-radius: .25rem;background-color: #fff;box-shadow: 0 0 1px rgba(0,0,0,.125), 0 1px 3px rgba(0,0,0,.2);margin-bottom: 1rem;">
             <div class="d-flex mb-3">
                 <div class="me-3">
                     <label class="d-block font-weight-bold " style="width: 150px;">Priority</label>
@@ -49,8 +45,8 @@
 
                 <div>
                     <label class="d-block font-weight-bold">Due date </label>
-                    <input id="dueDate" data-date-format="yyyy-mm-dd" name="date" style="height: 31px;"
-                        class="datepicker form-control" data-provide="datepicker">
+                    <input id="dueDate" class="form-control" type="date" value="{{ request('duedate') }}"
+                        data-date-format="{{ config('date') }}" name="date" style="height: 31px;">
                 </div>
             </div>
             <table class="table" id="issue" style="width: 100%;">
@@ -65,28 +61,9 @@
                     </tr>
                 </thead>
                 <tbody>
-
+                    
                 </tbody>
             </table>
-        </div>
-
-        <!-- Modal -->
-        <div class="modal fade" id="deleteManager" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Manager Delete</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        Do you want to delete this manager!
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" id="managerDelete" class="btn btn-danger">Delete</button>
-                    </div>
-                </div>
-            </div>
         </div>
     </section>
 @endsection
@@ -98,13 +75,7 @@
     <script src="{{ asset('asset/js/datepicker.min.js') }}"></script>
 
     <script>
-        // Your custom JavaScript file
         $(document).ready(function() {
-
-            $('.datepicker').datepicker({
-                // Date format to match your database date format
-            });
-
             let priority = '';
             let date = '';
 
@@ -115,12 +86,12 @@
                     url: "{{ route('manager.issue.index') }}",
                     dataType: "JSON",
                     data: function(d) {
-                        d.listing = "{{ request('listing') }}";
+                        d.type = "{{ request('type') }}";
                         d.filter = priority;
                         d.duedate = date;
                         d.table = 'manager';
                     }
-                }, // Route to your DataTablesController@index
+                },
                 columns: [{
                         'data': 'DT_RowIndex',
                         'name': 'DT_RowIndex',
@@ -137,18 +108,22 @@
                             var colorClass = '';
                             switch (data) {
                                 case 'LOW':
-                                    colorClass ='badge bg-success'; // CSS class for low priority (green color)
+                                    colorClass =
+                                        'badge bg-success'; // CSS class for low priority (green color)
                                     break;
                                 case 'MEDIUM':
-                                    colorClass ='badge bg-yellow'; // CSS class for medium priority (yellow color)
+                                    colorClass =
+                                        'badge bg-yellow'; // CSS class for medium priority (yellow color)
                                     break;
                                 case 'HIGH':
-                                    colorClass ='badge bg-red'; // CSS class for high priority (red color)
+                                    colorClass =
+                                        'badge bg-red'; // CSS class for high priority (red color)
                                     break;
                                 default:
                                     colorClass = ''; // Default class
                             }
-                            return '<div style="width:70px" class="' + colorClass + ' bg-opacity-75">' + data + '</div>';
+                            return '<div style="width:70px" class="' + colorClass +
+                                ' bg-opacity-75">' + data + '</div>';
                         }
                     },
                     {
@@ -157,40 +132,18 @@
                     {
                         "data": "status",
                         render: function(data, type, row) {
-                            // console.log(data);
-                            console.log(row);
-
-                            // Define an array of status options with their values and labels
                             const statusOptions = [
-                                {
-                                    value: 'OPEN',
-                                    label: 'Open'
-                                },
-                                {
-                                    value: 'IN_PROGRESS',
-                                    label: 'In Progress'
-                                },
-                                {
-                                    value: 'ON_HOLD',
-                                    label: 'On Hold'
-                                },
-                                {
-                                    value: 'SEND_FOR_REVIEW',
-                                    label: 'Send For Review'
-                                },
+                                { value: 'OPEN', label: 'Open' },
+                                { value: 'IN_PROGRESS', label: 'In Progress' },
+                                { value: 'ON_HOLD', label: 'On Hold' },
+                                { value: 'SEND_FOR_REVIEW', label: 'Send For Review' }
                             ];
-
-                            // Initialize the options HTML
                             let optionsHtml = '';
-
-                            // Loop through the status options and build the HTML
                             for (const option of statusOptions) {
                                 const selected = data === option.value ? 'selected' : '';
                                 optionsHtml +=
                                     `<option value="${option.value}" data-status="${option.value}" ${selected}>${option.label}</option>`;
                             }
-
-                            // Create the select element with the generated options
                             const selectHtml =
                                 `<select name="status" data-status="${row.id}" id="status" class="custom-select custom-select-sm form-control form-control-sm">${optionsHtml}</select>`;
 
@@ -209,19 +162,36 @@
                 ],
             });
 
-           
+            function filterUrl() {
+                let filter = "{{ route('manager.issue.index') }}";
+                let type = "{{ request('type') }}";
+
+                if (type !== 'pending') {
+                    filter += "?type=all-issue";
+                } else {
+                    filter += "?type=pending";
+                }
+
+                if (priority) {
+                    filter += "&priority=" + priority.toLowerCase();
+                }
+
+                if (date) {
+                    filter += "&duedate=" + date;
+                }
+                history.pushState({}, '', filter);
+            }
 
             $(document).on('change', "#selectPriority", function() {
-                console.log($(this).val());
                 priority = $(this).val();
                 $('.table').DataTable().ajax.reload();
+                filterUrl();
             });
 
-         
             $(document).on('change', "#dueDate", function() {
-                console.log($(this).val());
                 date = $(this).val();
                 $('.table').DataTable().ajax.reload();
+                filterUrl();
             });
 
             $(document).on('change', '#status', function() {
@@ -230,7 +200,8 @@
                 // console.log(id);
                 var csrfToken = $('meta[name="csrf-token"]').attr('content');
                 $.ajax({
-                    url: "{{ route('manager.issue.update', ['issue' => ':id']) }}".replace(':id', issueId),
+                    url: "{{ route('manager.issue.update', ['issue' => ':id']) }}".replace(':id',
+                        issueId),
                     type: 'patch',
                     data: {
                         status: status,
@@ -241,14 +212,12 @@
                             closeButton: true,
                             progressBar: true,
                         }
-                        if(response.success){
+                        if (response.success) {
                             toastr.success(response.success);
-                        }else{
+                        } else {
                             toastr.error(response.error);
                         }
-
                         $('.table').DataTable().ajax.reload();
-
                     },
                     error: function(xhr, status, error) {
                         var response = JSON.parse(xhr.responseText);
@@ -263,7 +232,6 @@
                     },
                 })
             })
-
         });
     </script>
 @endsection

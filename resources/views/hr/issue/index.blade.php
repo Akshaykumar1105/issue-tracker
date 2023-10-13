@@ -34,7 +34,7 @@
             style="margin-top:30px; padding:10px;border: 0 solid rgba(0,0,0,.125);
     border-radius: .25rem;background-color: #fff;box-shadow: 0 0 1px rgba(0,0,0,.125), 0 1px 3px rgba(0,0,0,.2);margin-bottom: 1rem;">
             <div class="d-flex">
-                @if (!(request('listing') == 'pending'))
+                @if (!(request('type') == 'pending'))
                     <div class="me-3">
                         <label class="d-block font-weight-bold" style="width: 150px;">Priority</label>
                         <select id="selectPriority" class="custom-select custom-select-sm form-control form-control-sm">
@@ -75,27 +75,6 @@
                 </tbody>
             </table>
         </div>
-
-
-
-        <!-- Modal -->
-        <div class="modal fade" id="deleteManager" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Manager Delete</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        Do you want to delete this manager!
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" id="managerDelete" class="btn btn-danger">Delete</button>
-                    </div>
-                </div>
-            </div>
-        </div>
     </section>
 @endsection
 
@@ -123,7 +102,7 @@
                     dataType: "JSON",
                     data: function(d) {
                         // Assign the value of the 'priority' variable to the 'filter' parameter
-                        d.listing = "{{ request('listing') }}";
+                        d.type = "{{ request('type') }}";
                         d.filter = priority;
                         d.duedate = date;
                         d.table = table;
@@ -250,12 +229,12 @@
 
             function filterUrl() {
                 let filter = "{{ route('hr.issue.index') }}";
-                let listing = "{{ request('listing') }}";
+                let type = "{{ request('type') }}";
 
-                if (listing !== 'review-issue') {
-                    filter += "?listing=all-issue";
+                if (type !== 'review-issue') {
+                    filter += "?type=all-issue";
                 } else {
-                    filter += "?listing=review-issue";
+                    filter += "?type=review-issue";
                 }
 
                 if (priority) {
@@ -265,7 +244,6 @@
                 if (date) {
                     filter += "&duedate=" + date;
                 }
-
                 // Update the browser's URL without reloading the page
                 history.pushState({}, '', filter);
             }

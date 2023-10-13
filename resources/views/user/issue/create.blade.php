@@ -11,6 +11,9 @@
 
     <div class="w-50 mx-auto my-5">
         <h2 style="font-weight: 200;margin: 12px 0;">Generate issue</h2>
+        @php
+            $uuid = $companyObj->uuid;    
+        @endphp
         <form action="{{ route('issue.store', ['company' => ':uuid']) }}".replace(:uuid, $uuid) id="issue"
             method="post">
             @csrf
@@ -74,22 +77,16 @@
     <script src="{{ asset('asset/js/toastr.min.js') }}"></script>
     <script>
         $(document).ready(function() {
-
             $.validator.addMethod("valueNotEquals", function(value, element, arg) {
                 return arg !== value;
             }, "Please select a company from the list.");
-
-            $.validator.addMethod("lettersonly", function(value, element) {
-                return this.optional(element) || /^[a-zA-Z\s]+$/i.test(value);
-            }, "Letters only, please.");
 
             $("#issue").validate({
                 errorClass: "text-danger fw-normal",
                 rules: {
                     title: {
                         required: true,
-                        lettersonly: true,
-                        maxlength: 70
+                        maxlength: 255
                     },
                     description: {
                         required: true,
@@ -103,25 +100,23 @@
                         required: true,
                         valueNotEquals: "defaultHr"
                     }
-
                 },
                 messages: {
                     hr_id: {
-                        required: "Please select an option.",
-                        valueNotEquals: "Please select any option!"
+                        required: "{{__('validation.required', ['attribute' => 'hr'])}}",
+                        valueNotEquals: "{{__('validation.valueNotEquals', ['attribute' => 'hr'])}}"
                     },
                     email: {
-                        required: "Please enter your email address.",
-                        email: "Please enter a valid email address.",
+                        required: "{{__('validation.required', ['attribute' => 'email'])}}",
+                        email: "{{__('validation.valid' , ['attribute' => 'email'])}}",
                     },
                     title: {
-                        required: "Please enter a title.",
-                        lettersonly: "Title should contain only letters.",
-                        maxlength: "Title should not exceed 70 characters."
+                        required: "{{__('validation.required', ['attribute' => 'title'])}}",
+                        maxlength: "{{__('validation.max_digits', ['attribute' => 'title', 'max' => '255'])}}",
                     },
                     description: {
-                        required: "Please enter a description.",
-                        minlength: "Description must be at least 50 characters long."
+                        required: "{{__('validation.required', ['attribute' => 'description'])}}",
+                        minlength:  "{{__('validation.min_digits', ['attribute' => 'description', 'min' => '50'])}}",
                     },
                 },
                 submitHandler: function(form) {

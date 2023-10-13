@@ -391,6 +391,22 @@
 
     </section>
     <div id="commentBox"></div>
+
+    <div class="modal fade" id="deleteComment" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Comment Delete</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">{{__('messages.conformation.delete', ['attribute' => 'comment?'])}}</div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" id="comment-delete" class="btn btn-danger">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('script')
@@ -426,25 +442,23 @@
                         $(".edit-comment").on("click", function(e) {
                             e.preventDefault();
                             var commentId = $(this).data("comment-id");
-                            console.log(commentId);
-                            // Toggle visibility of elements for the specific comment
                             $("#comment-text-" + commentId).hide();
-                            console.log("#comment-text-" + commentId);
                             $("#comment-edit-" + commentId).show();
-                            $(this).parents('.right-msg').find('.comment-edit').show();
-                            $(this).parents('.right-msg').find('.save-comment').show();
-                            $(this).parents('.right-msg').find('.options').hide()
+                            const rightMsg = $(this).parents('.right-msg');
+                            rightMsg.find('.comment-edit, .save-comment').show();
+                            rightMsg.find('.options').hide();
                             $(this).hide();
                         });
 
                         $(".save-comment").on("click", function(e) {
                             e.preventDefault();
-                            var commentId = $(this).data("comment-id");
+                            const commentId = $(this).data("comment-id");
                             $(this).parents('.right-msg').find('.edit-comment').show()
                             $(this).parent().prev().hide();
                             $(this).parent().prev().prev().show();
                             $(this).parents('.msg-bubble').find('.edit-comment').show();
                             $(this).hide();
+
                             let commentBody = $(this).parent().prev().val()
                             $.ajax({
                                 url: "{{ route('comment.update', ['commentId' => ':id']) }}"
@@ -467,37 +481,44 @@
                         alert('An error occurred while loading comments.');
                     }
                 });
-
-
+                let deleteCommentId;
+                let deleteComment;
                 $(document).on('click', '.commentDelete', function() {
-                    var commentId = $(this).data("comment-id");
-                    var deleteComment = $(this);
+                    deleteCommentId = $(this).data("comment-id");
+                    deleteComment = $(this);
+                });
+
+                $(document).on("click", "#comment-delete", function(event) {
+                    event.preventDefault();
+                    commentDelete(deleteCommentId, deleteComment);
+                });
+
+                function commentDelete(deleteCommentId, deleteComment) {
                     $.ajax({
-                        url: "{{ route('comment.destroy', ['commentId' => ':id']) }}".replace(
-                            ':id', commentId),
+                        url: "{{ route('comment.destroy', ['commentId' => ':id']) }}".replace(':id',
+                            deleteCommentId),
                         type: "delete",
                         data: {
                             _token: csrfToken,
                         },
                         success: function(response) {
-                            $("#comment-text-"+commentId).parents(".right-msg").hide();
+                            $("#deleteComment").modal("toggle");
+                            deleteComment.parents(".right-msg").hide();
                             var message = response.success;
-                            console.log(message)
+                            console.log(message);
                             toastr.options = {
                                 closeButton: true,
                                 progressBar: true,
-                            }
+                            };
                             toastr.success(message);
                         }
-                    })
-                })
+                    });
+                }
+
+
 
             }
             commentBox();
-
-            $(document).on("click", ".like", function() {
-
-            });
 
             $(document).on("click", ".like", function() {
                 event.preventDefault();
@@ -508,14 +529,11 @@
                 let commentId = $(this).data('commentid');
                 let authId = $(this).data('authid');
 
-                // Get the CSRF token from the meta tag
-
-                var voteCountElement = likeButton.closest('.rating').next().children();
-                var currentVoteCount = parseInt(voteCountElement.text());
+                var voteCount = likeButton.closest('.rating').next().children();
+                var currentVoteCount = parseInt(voteCount.text());
                 if (userId == true) {
-                    var voteCountElement = likeButton.closest('.rating').next().children();
-                    var currentVoteCount = parseInt(voteCountElement.text());
-
+                    // var voteCount = likeButton.closest('.rating').next().children();
+                    // var currentVoteCount = parseInt(voteCount.text());
                     $.ajax({
                         url: "{{ route('comment.upvote.destroy', ['commentId' => ':id']) }}"
                             .replace(':id', commentId),
@@ -527,15 +545,13 @@
                             console.log('Upvote removed successfully.');
                             likeButton.removeClass('active');
 
-                            var voteCountElement = likeButton.closest('.rating').next()
-                                .children();
-                            var currentVoteCount = parseInt(voteCountElement.text());
+                            var currentVoteCount = parseInt(voteCount.text());
                             var newVoteCount = currentVoteCount - 1;
 
                             if (newVoteCount == 1) {
                                 likeButton.addClass('active');
                             }
-                            voteCountElement.text(newVoteCount);
+                            voteCount.text(newVoteCount);
                             likeButton.data('user', false);
                             console.log(likeButton.data('user'));
                         },
@@ -558,7 +574,7 @@
                             likeButton.addClass('active');
 
                             var newVoteCount = currentVoteCount + 1;
-                            voteCountElement.text(newVoteCount);
+                            voteCount.text(newVoteCount);
                             likeButton.data('user', true);
                             console.log(likeButton.data('user'));
                         },
@@ -595,17 +611,17 @@
                 },
                 messages: {
                     priority: {
-                        required: "Please select a priority"
+                        required: "{{__('validation.required', ['attribute' => 'priority'])}}",
                     },
                     status: {
-                        required: "Please select a status",
-                        valueNotEquals: "Please select issue status!",
+                        required: "{{__('validation.required', ['attribute' => 'status'])}}",
+                        valueNotEquals: "{{__('validation.valueNotEquals', ['attribute' => 'issue status'])}}",
                     },
-                    manager_id: {
-                        required: "Please select a status",
-                        valueNotEquals: "Please select issue status!",
+                    assignManager: {
+                        required:"{{__('validation.required', ['attribute' => 'manager'])}}",
+                        valueNotEquals: "{{__('validation.valueNotEquals', ['attribute' => 'manager'])}}",
                     },
-                    due_date: {
+                    date: {
                         date: "Please enter a valid date"
                     }
                 },

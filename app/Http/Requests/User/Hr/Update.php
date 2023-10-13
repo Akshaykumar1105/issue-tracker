@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Admin\Company;
+namespace App\Http\Requests\User\Hr;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -22,8 +22,9 @@ class Update extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|min:6|max:255',
-            'email' => 'required|email|unique:companies,email,'.$this->company->id.'id',
+            'name' => 'required|max:50',
+            'email' => 'required|email|unique:users,email,'.$this->hr.',id',
+            'mobile' => 'required|digits:10',
         ];
     }
 }

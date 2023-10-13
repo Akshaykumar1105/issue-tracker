@@ -2,18 +2,17 @@
 
 namespace App\Http\Controllers\User;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\User\Update;
 use App\Services\HrService;
-use App\Services\UserService;
-
-// use MediaUploader;
+use App\Services\ProfileService;
+use App\Http\Requests\User\Update;
+use App\Http\Requests\User\Profile;
+use App\Http\Controllers\Controller;
 
 class ProfileController extends Controller{
-    protected $userService;
+    protected $profileService;
 
-    public function __construct(HrService $userService){
-        $this->userService = $userService;
+    public function __construct(ProfileService $profileService){
+        $this->profileService = $profileService;
     }
 
     public function index(){
@@ -21,7 +20,7 @@ class ProfileController extends Controller{
         return view('dashboard.profile', ['user' => $user]);
     }
 
-    public function update(Update $request, $id){
-        return $this->userService->update($request, $id);
+    public function update(Profile $request, $id){
+        return $this->profileService->update($request, $id);
     }
 }

@@ -41,7 +41,6 @@
             </table>
         </div>
 
-
         <!-- Modal -->
         <div class="modal fade" id="deleteCompany" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog">
@@ -51,11 +50,11 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        Do you want to delete this company!
+                        {{__('messages.conformation.delete', ['attribute' => 'company?'])}}
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" id="companydelete" class="btn btn-danger">Delete</button>
+                        <button type="button" id="companyDelete" class="btn btn-danger">Delete</button>
                     </div>
                 </div>
             </div>
@@ -90,7 +89,7 @@
                         render: function(data, type, row) {
                             var checked = data == 1 ? 'checked' : '';
                             return '<div class="form-check form-switch p-1"><input ' + checked +
-                                ' data-userId=' + row.id + ' name="status" value="' + data +
+                                ' data-user-id=' + row.id + ' name="status" value="' + data +
                                 '" class="status form-check-input m-0" type="checkbox" role="switch" /></div>';
                         },
                         searchable: false,
@@ -117,25 +116,22 @@
                 order: [
                     [2, 'desc']
                 ],
-                lengthMenu: [10, 25, 50, 100], // Define your page limit options
+                lengthMenu: [10, 25, 50, 100],
                 pageLength: 10,
             });
-
-
 
             let company;
             $(document).on("click", ".delete", function(event) {
                 event.preventDefault();
-                company = $(this).attr("data-userId");
-                // console.log(company);
+                company = $(this).attr("data-user-id");
             });
 
-            $(document).on("click", "#companydelete", function(event) {
+            $(document).on("click", "#companyDelete", function(event) {
                 event.preventDefault();
-                Companydelete(company)
+                deleteCompany(company)
             });
 
-            function Companydelete(company) {
+            function deleteCompany(company) {
                 $.ajax({
                     url: "{{ route('admin.company.destroy', ['company' => "company"]) }}",
                     data: {
@@ -145,8 +141,7 @@
                     type: "DELETE",
                     success: function(response) {
                         $("#deleteCompany").modal("toggle");
-                        var message = response.success;
-                        console.log(message)
+                        const  message = response.success;
                         toastr.options = {
                             closeButton: true,
                             progressBar: true,
@@ -157,7 +152,7 @@
                 });
             }
 
-            function statusChange(status, userId) {
+            function changeStatus(status, userId) {
                 $.ajax({
                     url: "{{ route('admin.company.status') }}",
                     data: {
@@ -182,10 +177,8 @@
             $(document).on("change", ".status", function(event) {
                 event.preventDefault();
                 let status = $(this).val();
-                let userId = $(this).attr('data-userId');
-                console.log(userId);
-                console.log(status);
-                statusChange(status, userId)
+                let userId = $(this).attr('data-user-id');
+                changeStatus(status, userId)
             });
         });
     </script>

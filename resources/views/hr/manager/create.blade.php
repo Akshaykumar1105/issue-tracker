@@ -112,13 +112,11 @@
         $(document).ready(function() {
             $('.dropify').dropify();
 
-
             $.validator.addMethod("lettersonly", function(value, element) {
                 return this.optional(element) || /^[a-zA-Z\s]+$/i.test(value);
-            }, "Please enter letters only (no special characters or numbers).");
+            }, "{{ __('validation.lettersonly') }}");
 
             $.validator.addMethod("pattern", function(value, element) {
-                    // Use a regular expression to check if the password meets the criteria
                     return /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/.test(value);
                 },
                 "Password must include at least one uppercase letter, one lowercase letter, one digit, and one special character."
@@ -138,7 +136,7 @@
                     },
                     password: {
                         required: true,
-                        minlength: 8, 
+                        minlength: 8,
                         pattern: true,
                     },
                     password_confirmation: {
@@ -147,6 +145,7 @@
                     },
                     mobile: {
                         required: true,
+                        number: true,
                         minlength: 10,
                         maxlength: 10,
                         digits: true
@@ -155,12 +154,12 @@
                 },
                 messages: {
                     name: {
-                        required: "Please enter Company name.",
-                        lettersonly: "Only letters and whitespaces are allowed."
+                        required: "{{ __('validation.required', ['attribute' => 'name']) }}",
+                        maxlength: "{{ __('validation.max_digits', ['attribute' => 'name', 'max' => '255']) }}",
                     },
                     email: {
-                        required: "Please enter your email.",
-                        email: "Please enter a valid email address.",
+                        required: "{{ __('validation.required', ['attribute' => 'email']) }}",
+                        email: "{{ __('validation.valid', ['attribute' => 'email']) }}",
                     },
                     password: {
                         required: "Please enter your password.",
@@ -171,11 +170,12 @@
                         required: "Please confirm your password.",
                         equalTo: "Passwords do not match.",
                     },
-                    mobile: {
-                        required: "Please enter your 10-digit mobile number.",
-                        minlength: "Mobile number must be exactly 10 digits.",
-                        maxlength: "Mobile number must be exactly 10 digits.",
-                        digits: "Mobile number can only contain numeric digits.",
+                    number: {
+                        required: "{{ __('validation.required', ['attribute' => 'number']) }}",
+                        number: "{{ __('validation.valid', ['attribute' => 'number']) }}",
+                        digits: "The number must be a 10 digits",
+                        minlength: "{{ __('validation.min_digits', ['attribute' => 'number', 'min' => '10']) }}",
+                        maxlength: "{{ __('validation.max_digits', ['attribute' => 'number', 'max' => '10']) }}",
                     },
                 },
                 submitHandler: function(form) {
@@ -215,8 +215,6 @@
                     })
                 },
             });
-
-
         });
     </script>
 @endsection

@@ -164,50 +164,34 @@
                 <div class="col-lg-4 col-md-6 service-item">
                     <a class="text-black" href="service-details.html">
                         <div class="block"> <span class="colored-box text-center h3 mb-4">01</span>
-                            <h3 class="mb-3 service-title">Personal loans</h3>
-                            <p class="mb-0 service-description">Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
-                                sed diam nonumy
-                                eirmod</p>
+                            <h3 class="mb-3 service-title">{{__('messages.service.first.title')}}</h3>
+                            <p class="mb-0 service-description">{{__('messages.service.first.description') }}</p>
                         </div>
                     </a>
                 </div>
                 <div class="col-lg-4 col-md-6 service-item">
                     <a class="text-black" href="service-details.html">
                         <div class="block"> <span class="colored-box text-center h3 mb-4">02</span>
-                            <h3 class="mb-3 service-title">Home Equity Loans</h3>
-                            <p class="mb-0 service-description">Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
-                                sed diam nonumy
-                                eirmod</p>
+                            <h3 class="mb-3 service-title">{{__('messages.service.second.title')}}</h3>
+                            <p class="mb-0 service-description">{{__('messages.service.second.description') }}</p>
                         </div>
                     </a>
                 </div>
                 <div class="col-lg-4 col-md-6 service-item">
                     <a class="text-black" href="service-details.html">
-                        <div class="block"> <span class="colored-box text-center h3 mb-4">
-
-
-                                03
-
+                        <div class="block"> <span class="colored-box text-center h3 mb-4">03
                             </span>
-                            <h3 class="mb-3 service-title">Student Loans</h3>
-                            <p class="mb-0 service-description">Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
-                                sed diam nonumy
-                                eirmod</p>
+                            <h3 class="mb-3 service-title">{{__('messages.service.third.title')}}</h3>
+                            <p class="mb-0 service-description">{{__('messages.service.third.description') }}</p>
                         </div>
                     </a>
                 </div>
                 <div class="col-lg-4 col-md-6 service-item">
                     <a class="text-black" href="service-details.html">
-                        <div class="block"> <span class="colored-box text-center h3 mb-4">
-
-
-                                04
-
+                        <div class="block"> <span class="colored-box text-center h3 mb-4">04
                             </span>
-                            <h3 class="mb-3 service-title">Mortgage Loans</h3>
-                            <p class="mb-0 service-description">Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
-                                sed diam nonumy
-                                eirmod</p>
+                            <h3 class="mb-3 service-title">{{__('messages.service.fourth.title')}}</h3>
+                            <p class="mb-0 service-description">{{__('messages.service.fourth.description') }}</p>
                         </div>
                     </a>
                 </div>
@@ -877,23 +861,24 @@
                 },
                 messages: {
                     company_id: {
-                        required: "Please select an option.",
-                        valueNotEquals: "Please select company!",
+                        required: "{{__('validation.required', ['attribute' => 'hr'])}}",
+                        valueNotEquals: "{{__('validation.valueNotEquals', ['attribute' => 'company'])}}"
                     },
-                    hr_id:{
-                        valueNotEquals: "Please select Hr!"
+                    hr_id: {
+                        required: "{{__('validation.required', ['attribute' => 'hr'])}}",
+                        valueNotEquals: "{{__('validation.valueNotEquals', ['attribute' => 'hr'])}}"
                     },
                     email: {
-                        required: "Please enter your email.",
-                        email: "Please enter a valid email address.",
+                        required: "{{__('validation.required', ['attribute' => 'email'])}}",
+                        email: "{{__('validation.valid' , ['attribute' => 'email'])}}",
                     },
                     title: {
-                        required: "Please enter a title.",
+                        required: "{{__('validation.required', ['attribute' => 'title'])}}",
+                        maxlength: "{{__('validation.max_digits', ['attribute' => 'title', 'max' => '255'])}}",
                     },
-                    
                     description: {
-                        required: "Please enter a description.",
-                        minlength: "Description must be at least 50 characters long."
+                        required: "{{__('validation.required', ['attribute' => 'description'])}}",
+                        minlength:  "{{__('validation.min_digits', ['attribute' => 'description', 'min' => '50'])}}",
                     },
                 },
                 submitHandler: function(form) {

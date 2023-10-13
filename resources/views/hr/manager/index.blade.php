@@ -26,7 +26,7 @@
     {{-- <link href="https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap4.min.css" rel="stylesheet"> --}}
 @endsection
 @section('content')
-    <section class="content" style="margin: 0 auto; max-width: 1050px">
+    <section class="content" style="margin: 0 auto; max-width: 100%">
         <h1>{{ __('messages.manager.title') }}</h1>
         <div class="" style="margin: 0 auto; float: right;">
             <a class="btn btn-primary" href="{{ route('hr.manager.create') }}">{{ __('messages.manager.register') }}</a>
@@ -37,7 +37,7 @@
             style="margin-top:70px; padding:10px;border: 0 solid rgba(0,0,0,.125);
     border-radius: .25rem;background-color: #fff;box-shadow: 0 0 1px rgba(0,0,0,.125), 0 1px 3px rgba(0,0,0,.2);margin-bottom: 1rem;">
 
-            <table class="table" id="managerData">
+            <table class="table" id="managerData" style="width: 100%;">
                 <thead>
                     <tr>
                         <th scope="col">{{ __('messages.table.id') }}</th>
@@ -63,7 +63,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        Do you want to delete this manager!
+                        {{__('messages.conformation.delete', ['attribute' => 'manager?'])}}
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -90,7 +90,7 @@
                     url: "{{ route('hr.manager.index') }}",
                     dataType: "JSON",
 
-                }, // Route to your DataTablesController@index
+                },
                 columns: [{
                         'data': 'DT_RowIndex',
                         'name': 'DT_RowIndex',
@@ -127,20 +127,17 @@
             let id; 
             $(document).on("click", ".delete", function(event) {
                 event.preventDefault();
-
                 id = $(this).attr("data-userId");
-                console.log(id);
-
             });
 
-            $(document).on("click", "#managerDelete", function(event) {
+            $(document).on("click", "#deleteManager", function(event) {
                 event.preventDefault();
-                Companydelete(id)
+                deleteManager(id)
             });
 
-            function Companydelete(id) {
+            function deleteManager(id) {
                 $.ajax({
-                    url: "{{ route('hr.manager.destroy', ['manager' => 'id']) }}",
+                    url: "{{ route('hr.manager.destroy', ['manager' => ':id']) }}".replace(':id', id),
                     data: {
                         "id": id,
                         "_token": "{{ csrf_token() }}"

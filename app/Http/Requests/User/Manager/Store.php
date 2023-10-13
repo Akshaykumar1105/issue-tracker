@@ -21,17 +21,28 @@ class Store extends FormRequest
      */
     public function rules(): array
     {
-        return [
+        $rules =  [
             'name' => 'required|max:255',
             'email' => 'required|email|unique:users',
-            'password' => 'required|min:8|regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\x])(?=.*[!$#%]).*$/',
+            'password' => 'required|min:8|regex:/^(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*])(?=.*[0-9]).{8,}$/',
             'password_confirmation' => 'required|same:password',
             'mobile' => 'required|digits:10',
-            'profile_img' => 'required|mimes:jpeg,png,jpg,gif|max:4096'
+            'profile_img' => 'required|mimes:jpeg,png,jpg,gif|max:4096',
+
         ];
+
+        if (auth()->user()->hasRole(config('site.role.admin'))) {
+            $rules . [
+                'company_id' => 'required',
+                'hr_id' => 'required',
+            ];
+        }
+
+        return $rules;
     }
 
-    public function messages(){
+    public function messages()
+    {
         return [
             'password.regex' => 'The password must include at least one uppercase letter, one lowercase letter, one digit, and one special character.',
         ];

@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Jobs\ConfirmPassword;
 use App\Jobs\ResetPassword;
 use Carbon\Carbon;
 use App\Models\User;
@@ -92,7 +93,7 @@ class AuthService
         }
     }
 
-    public function resetPassword($request){
+    public function updateResetPassword($request){
         $token = PasswordResetToken::where([
             'token' => $request->token
         ])->first();
@@ -107,7 +108,7 @@ class AuthService
             'password' => Hash::make($request->password)
         ]);
 
-        Mail::to($email)->send(new ConfirmPasswordEmail());
+        ConfirmPassword::dispatchSync($email);
 
         PasswordResetToken::where([
             'token' => $request->token,
@@ -117,13 +118,11 @@ class AuthService
     }
 
     public function changePassword($request){
-        // dd($request);
         if (!Hash::check($request->old_password, auth()->user()->password)) {
             return response()->json([
                 'error' =>  __('messages.password.not_macth')
             ],401);
         }
-        #Update the new Password
         User::where('id', auth()->user()->id)->update([
             'password' => Hash::make($request->password)
         ]);
@@ -134,18 +133,15 @@ class AuthService
     }
 
 
-    public function resetPasswordIndex($token){
+    public function resetPassword($token){
         $resetToken = PasswordResetToken::where('token', $token)->first();
         if($resetToken){
-
             if(Carbon::now()->greaterThan($resetToken->created_at->addMinutes(config('site.password.expired')))){
                 $resetToken->delete();
                 return abort(404);
             }
-
-            return view('auth.reset_password' , ['token' => $token] );
+            return view('auth.reset-password' , ['token' => $token] );
         }
-
         return redirect()->route('home');
     }
 }

@@ -11,8 +11,7 @@ class HrService
 {
 
     protected $user;
-    public function __construct()
-    {
+    public function __construct(){
         $this->user = new User();
     }
 
@@ -37,10 +36,10 @@ class HrService
         ];
     }
 
-    public function update($request){
-        $id = auth()->user()->id;
+    public function update($id, $request){
         $user = User::find($id);
-        $user->fill($request->all())->save();
+        $user->fill($request->all());
+        $user->save();
 
         $profileImg = $request->file('profile_img');
         $oldProfile = $user->firstMedia('user');
@@ -62,27 +61,24 @@ class HrService
         ];
     }
 
+    public function destroy($id){
+        $user = User::find($id);
+        $user->delete();
+        return [
+            'success' => __('entity.entityDeleted', ['entity' => 'Hr']),
+        ];
+    }
+
     public function collection($companyId = null, $request){
         if ($request->listing == config('site.role.hr')) {
-            //if companyId not null
             if ($companyId) {
                 $query = User::with('company')->whereNull('parent_id')->where('company_id', $companyId);
             } else {
                 $query = User::with('company')->whereNull('parent_id')->whereNotNull('company_id');
             }
-            // fillter by company
             if ($request->filter) {
                 $query->where('company_id',  $request->filter);
             }
-            // $query = User::with('company')
-            //     ->whereNull('parent_id')
-            //     ->where(function ($query) use ($companyId) {
-            //         $query->where('company_id', $companyId)
-            //             ->orWhereNotNull('company_id');
-            //     })
-            //     ->when($request->filter, function ($query, $filter) {
-            //         return $query->where('company_id', $filter);
-            //     });
             return $query;
         }
     }

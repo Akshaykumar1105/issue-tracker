@@ -13,22 +13,19 @@ use App\Http\Requests\Admin\Company\Store;
 use App\Http\Requests\Admin\Company\Update;
 
 
-class CompanyController extends Controller{
+class CompanyController extends Controller
+{
 
     protected $companyService;
-  
+
 
     public function __construct(CompanyService $companyService){
         $this->companyService = $companyService;
-       
     }
 
     public function index(Request $request){
         if ($request->ajax()) {
-            if($request->listing){
-                return $this->companyService->collection($companyId = null, $request);
-            }
-            $query = Company::select('id', 'name', 'email', 'number', 'address', 'is_active', 'created_at');
+            $query = $this->companyService->collection($companyId = null, $request);
             return DataTables::of($query)
                 ->orderColumn('name', function ($query, $order) {
                     $query->orderBy('id', $order);
@@ -54,13 +51,6 @@ class CompanyController extends Controller{
 
     public function store(Store $request){
         return $this->companyService->store($request);
-    }
-
-    public function show($companyId, Request $request){
-        if ($request->ajax()) {
-            return $this->companyService->collection($companyId, $request);
-        }
-        return view('admin.company.show', ['company' => $companyId]);
     }
 
     public function edit(Company $company){

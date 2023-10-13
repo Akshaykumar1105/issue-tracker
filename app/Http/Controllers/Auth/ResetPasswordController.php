@@ -17,11 +17,10 @@ class ResetPasswordController extends Controller
     }
     
     public function index($token){
-        return $this->authservice->resetPasswordIndex($token);
-        
+        return $this->authservice->resetPassword($token);
     }
 
     public function update(ResetPassword $request){
-       return $this->authservice->resetPassword($request);
+       return $this->authservice->updateResetPassword($request);
     }
 }

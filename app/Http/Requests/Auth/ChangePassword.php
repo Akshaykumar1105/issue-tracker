@@ -26,24 +26,16 @@ class ChangePassword extends FormRequest
             'password' => [
                 'required',
                 'min:8',
-                'regex:/^(?=.*[a-z])/i',
-                'regex:/^(?=.*[A-Z])/i',
-                'regex:/^(?=.*\d)/',
-                'regex:/^(?=.*[@$!%*?&])/',
+                'regex:/^(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*])(?=.*[0-9]).{8,}$/',
                 'confirmed',
             ],
             'password_confirmation' => 'required|min:8|same:password'
         ];
     }
 
-    public function messages()
-    {
+    public function messages(){
         return [
-            'password.regex' => 'The password must include:',
-            'password.regex.0' => 'At least one letter (case-insensitive)',
-            'password.regex.1' => 'At least one uppercase letter (case-insensitive)',
-            'password.regex.2' => 'At least one digit',
-            'password.regex.3' => 'At least one special character',
+            'password.regex' => 'The password must include at least one uppercase letter, one lowercase letter, one digit, and one special character.',
         ];
     }
 }

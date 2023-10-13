@@ -34,8 +34,16 @@
             @endif
         </div>
 
+        <div class="" style="margin: 0 auto; float: right;">
+            <a class="btn btn-primary"
+                href="{{ Route::currentRouteName() === 'admin.hr.index' ? route('admin.hr.create') : route('admin.manager.create') }}">
+                {{ Route::currentRouteName() === 'admin.hr.index' ? __('messages.create', ['attribute' => 'Hr']) : __('messages.create', ['attribute' => 'Manager']) }}
+            </a>
+        </div>
+
+
         <div
-            class=""style="padding: 10px;border: 0 solid rgba(0,0,0,.125);border-radius: .25rem;background-color: #fff;box-shadow: 0 0 1px rgba(0,0,0,.125), 0 1px 3px rgba(0,0,.2);margin-bottom: 1rem;">
+            class=""style="margin-top:70px;padding: 10px;border: 0 solid rgba(0,0,0,.125);border-radius: .25rem;background-color: #fff;box-shadow: 0 0 1px rgba(0,0,0,.125), 0 1px 3px rgba(0,0,.2);margin-bottom: 1rem;">
 
             <div class="d-flex" style="gap:20px;">
                 <div class="mb-3" style="flex-grow: .11;">
@@ -73,6 +81,10 @@
                         <th>{{ __('messages.table.name') }}</th>
                         <th scope="col">{{ __('messages.table.email') }}</th>
                         <th>{{ __('messages.table.company') }}</th>
+                        @if (Route::currentRouteName() == 'admin.hr.index')
+                        @else
+                            <th>{{ __('messages.table.hr') }}</th>
+                        @endif
                         <th>{{ __('messages.table.action') }}</th>
                     </tr>
                 </thead>
@@ -80,6 +92,28 @@
 
                 </tbody>
             </table>
+        </div>
+
+        <div class="modal fade" id="deleteUser" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Company Delete</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        @if (Route::currentRouteName() == 'admin.hr.index')
+                            {{ __('messages.conformation.delete', ['attribute' => 'Hr?']) }}
+                        @else
+                            {{ __('messages.conformation.delete', ['attribute' => 'Manager?']) }}
+                        @endif
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" id="deleteUser" class="btn btn-danger">Delete</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 @endsection
@@ -93,23 +127,24 @@
             let company = "";
             let hr = '';
             let newUrl = '';
-            var currentRoute = '{{ Route::currentRouteName() }}';
+            let currentRoute = '{{ Route::currentRouteName() }}';
+
+            let filter;
+
+            if (currentRoute == 'admin.manager.index') {
+                filter = "{{ route('admin.manager.index') }}";
+            } else if (currentRoute == 'admin.hr.index') {
+                filter = "{{ route('admin.hr.index') }}";
+            }
 
             function filterUrl() {
-                let filter = "{{ route('admin.manager.index') }}";
-                const queryParams = [];
+                let queryParams = [];
 
-                if (company) {
-                    queryParams.push("company_id=" + company.toLowerCase());
-                }
-                if (hr) {
-                    queryParams.push("hr_id=" + hr);
-                }
-
-                if (queryParams.length > 0) {
-                    filter += "?" + queryParams.join("&");
-                }
-                history.pushState({}, '', filter);
+                if (company) queryParams.push("company_id=" + company.toLowerCase());
+                if (hr) queryParams.push("hr_id=" + hr);
+                const queryString = queryParams.join("&");
+                const filterWithQuery = queryString ? filter + "?" + queryString : filter;
+                history.pushState({}, '', filterWithQuery);
             }
 
             $(document).on('change', "#selectCompany", function() {
@@ -137,6 +172,7 @@
                         let urlParams = new URLSearchParams(window.location.search);
                         d.filter = urlParams.get('company_id') || "";
                         d.hr = urlParams.get('hr_id') || "";
+                        d.role = "{{ config('site.role.admin') }}";
                     }
                 },
                 columns: [{
@@ -156,11 +192,14 @@
                     {
                         "data": "email",
                     },
-
                     {
                         "data": "company.name",
                     },
-                    {
+                    @if (Route::currentRouteName() !== 'admin.hr.index')
+                        {
+                            "data": "hr_user.name",
+                        },
+                    @endif {
                         "data": "action",
                         orderable: false,
                         searchable: false
@@ -173,6 +212,44 @@
                 pageLength: 10,
             });
 
+            let user;
+            $(document).on("click", ".delete", function(event) {
+                event.preventDefault();
+                user = $(this).attr("data-user-id");
+            });
+
+
+            $(document).on("click", "#deleteUser", function(event) {
+                event.preventDefault();
+                deleteUser(user)
+            });
+
+            function deleteUser(user) {
+                let deleteUser;
+                if (currentRoute == 'admin.manager.index') {
+                    deleteUser = "{{ route('admin.manager.destroy', ['manager' => ':id']) }}".replace(':id', user);
+                } else {
+                    deleteUser = "{{ route('admin.hr.destroy', ['hr' => ':id']) }}".replace(':id', user);
+                }
+                $.ajax({
+                    url: deleteUser,
+                    data: {
+                        "id": user,
+                        "_token": "{{ csrf_token() }}"
+                    },
+                    type: "DELETE",
+                    success: function(response) {
+                        $("#deleteUser").modal("toggle");
+                        const message = response.success;
+                        toastr.options = {
+                            closeButton: true,
+                            progressBar: true,
+                        }
+                        toastr.success(message);
+                        $('.table').DataTable().ajax.reload();
+                    }
+                });
+            }
         });
     </script>
 @endsection

@@ -101,7 +101,7 @@
 
             $.validator.addMethod("valueNotEquals", function(value, element, arg) {
                 return arg !== value;
-            }, "Please select a company from the list.");
+            }, "{{__('validation.valueNotEquals', ['attribute' => 'company'])}}");
 
             $.validator.addMethod("filesize", function(value, element, param) {
                 var fileSize = element.files[0].size; // Get the file size in bytes
@@ -146,9 +146,10 @@
                     },
                     mobile: {
                         required: true,
+                        number:true,
                         minlength: 10,
                         maxlength: 10,
-                        digits: true
+                        digits: true,
                     },
                 },
                 messages: {
@@ -171,11 +172,12 @@
                     company_id: {
                         required: "{{ __('validation.required', ['attribute' => 'company']) }}",
                     },
-                    mobile: {
-                        required: "{{ __('validation.required', ['attribute' => 'mobile']) }}",
-                        minlength: "{{ __('validation.min.string', ['attribute' => 'mobile', 'min' => '10']) }}",
-                        maxlength: "{{ __('validation.max.string', ['attribute' => 'mobile', 'max' => '10']) }}",
-                        digits: "Mobile number can only contain numeric digits.",
+                    number: {
+                        required: "{{__('validation.required', ['attribute' => 'number'])}}",
+                        number: "{{__('validation.valid' , ['attribute' => 'number'])}}",
+                        digits: "The number must be a 10 digits",
+                        minlength:  "{{__('validation.min_digits', ['attribute' => 'number', 'min' => '10'])}}",
+                        maxlength: "{{__('validation.max_digits', ['attribute' => 'number', 'max' => '10'])}}",
                     },
                 },
                 submitHandler: function(form) {
@@ -195,7 +197,7 @@
                             }
                             toastr.success(response.success);
                             setTimeout(function() {
-                                window.location.href = response.route;
+                                window.location.href = "{{route('admin.hr.index')}}";
                             }, 2000);
                         },
                         error: function(xhr, status, error) {

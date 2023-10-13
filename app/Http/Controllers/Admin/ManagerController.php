@@ -3,31 +3,26 @@
 namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
-use App\Services\Admin\UserService;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\User\Manager\Store;
+use App\Http\Requests\User\Manager\Update;
 use App\Models\Company;
 use App\Models\User;
+use App\Services\ManagerService;
 use Yajra\DataTables\Facades\DataTables;
 
 
-class ManagerController extends Controller
-{
+class ManagerController extends Controller{
 
-    protected $userService;
+    protected $managerService;
 
-    public function __construct(UserService $userService){
-        $this->userService = $userService;
+    public function __construct(ManagerService $managerService){
+        $this->managerService = $managerService;
     }
 
     public function index(Request $request){
         if ($request->ajax()) {
-            $query = User::with('company')->whereNotNull('parent_id')->whereNotNull('company_id');
-            if ($request->filter) {
-                $query->where('company_id', $request->filter);
-            }
-            if ($request->hr) {
-                $query->where('parent_id', $request->hr);
-            }
+            $query = $this->managerService->collection($companyId = null,$request);
             return DataTables::eloquent($query)
                 ->orderColumn('name', function ($query, $order) {
                     $query->orderBy('id', $order);
@@ -42,8 +37,9 @@ class ManagerController extends Controller
                 })
                 ->addColumn('action', function ($row) {
                     $manager = $row->id;
-                    // $showManager = route('admin.hr.show', ['manager' => $manager]);
-                    $actionBtn = '<a href="#" id="edit' . $row->id . '" data-userId="' . $row->id . '" class="view btn btn-primary btn-sm">View</a>';
+                    $editManager = route('admin.manager.edit', ['manager' => $manager]);
+                    $actionBtn = '<div class="d-flex" style="flex-direction: column;justify-content: initial;align-items: baseline;gap: 10px;"><div><a href=' . $editManager . ' id="edit' . $row->id . '" data-userId="' . $row->id . '" class="edit btn btn-success btn-sm">Edit</a> <button type="submit" data-user-id="' . $row->id . '" class="delete btn btn-danger btn-sm" data-bs-toggle="modal"
+                    data-bs-target="#deleteUser">Delete</button></div></div>';
                     return $actionBtn;
                 })
                 ->rawColumns(['action', 'profile'])
@@ -53,4 +49,33 @@ class ManagerController extends Controller
         $hrs = User::whereNull('parent_id')->whereNotNull('company_id')->get();
         return view('admin.user.index', ['companies' => $company, 'hrs' => $hrs]);
     }
+
+    public function create(Request $request){
+        $companies = Company::where('is_active', config('site.status.active'))->get();
+        $hrs = User::whereNotNull('company_id')->whereNull('parent_id')->get();
+        if($request->ajax()){
+           $hr = User::where('company_id', $request->company)->whereNull('parent_id')->get();
+           return $hr;
+        }
+        return view('admin.user.create', compact('companies', 'hrs'));
+    }
+
+    public function store(Store $request){
+        return $this->managerService->store($request);
+    }
+
+    public function edit($id, Request $request){
+        $user = User::findOrFail($id);
+        $company = Company::where('is_active', config('site.status.active'))->get();
+        return view('admin.user.create', ['companies' => $company, 'user' => $user]);
+    }
+
+    public function update($id, Update $request){
+        return $this->managerService->update($id,$request);
+    }
+
+    public function destroy($id){
+        return $this->managerService->destroy($id);
+    }
+
 }

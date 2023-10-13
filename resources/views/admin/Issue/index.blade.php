@@ -75,9 +75,7 @@
                         <h5 class="modal-title" id="exampleModalLabel">Company Delete</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body">
-                        Do you want to delete this issue!
-                    </div>
+                    <div class="modal-body">{{ __('messages.conformation.delete', ['attribute' => 'issue?']) }}</div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                         <button type="button" id="issuedelete" class="btn btn-danger">Delete</button>
@@ -95,7 +93,6 @@
     <script>
         // Your custom JavaScript file
         $(document).ready(function() {
-
             let priority = '';
             let date = '';
             let company = '';
@@ -171,27 +168,15 @@
 
             function filterUrl() {
                 let filter = "{{ route('admin.issue.index') }}";
-
-                // Define an array to store query parameters
                 const queryParams = [];
 
-                if (company) {
-                    queryParams.push("company_id=" + company.toLowerCase());
-                }
+                if (company) queryParams.push("company_id=" + company.toLowerCase());
+                if (priority) queryParams.push("priority=" + priority.toLowerCase());
+                if (date) queryParams.push("duedate=" + date);
 
-                if (priority) {
-                    queryParams.push("priority=" + priority.toLowerCase());
-                }
-
-                if (date) {
-                    queryParams.push("duedate=" + date);
-                }
-
-                // Append the query parameters to the URL
                 if (queryParams.length > 0) {
                     filter += "?" + queryParams.join("&");
                 }
-
                 history.pushState({}, '', filter);
             }
 
@@ -199,7 +184,6 @@
                 priority = $("#selectPriority").val();
                 date = $("#dueDate").val();
                 company = $("#selectCompany").val();
-
                 filterUrl();
                 $('.table').DataTable().ajax.reload();
             });
@@ -207,15 +191,15 @@
             let issue;
             $(document).on("click", ".delete", function(event) {
                 event.preventDefault();
-                issue = $(this).attr("data-issueid");
+                issue = $(this).attr("data-issue-id");
             });
 
             $(document).on("click", "#issuedelete", function(event) {
                 event.preventDefault();
-                Companydelete(issue)
+                deleteIssue(issue)
             });
 
-            function Companydelete(issue) {
+            function deleteIssue(issue) {
                 $.ajax({
                     url: "{{ route('admin.issue.destroy', ['issue' => 'issue']) }}",
                     data: {

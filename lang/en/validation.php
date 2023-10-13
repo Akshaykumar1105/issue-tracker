@@ -163,6 +163,10 @@ return [
     |
     */
 
+    'valid'  => 'Please enter a valid :attribute.',
+    'lettersonly' => 'Please enter letters only (no special characters or numbers).',
+    'valueNotEquals' => 'Please choose a :attribute from the available options.',
+
     'custom' => [
         'attribute-name' => [
             'rule-name' => 'custom-message',

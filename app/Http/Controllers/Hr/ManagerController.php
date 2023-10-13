@@ -8,8 +8,6 @@ use App\Services\ManagerService;
 use App\Http\Controllers\Controller;
 use Yajra\DataTables\Facades\DataTables;
 use App\Http\Requests\User\Manager\Store;
-use App\Http\Requests\User\ManagerCreate;
-use App\Http\Requests\User\ManagerUpdate;
 use App\Http\Requests\User\Manager\Update;
 
 
@@ -64,12 +62,11 @@ class ManagerController extends Controller{
         return view('hr.manager.create', ['manager' => $manager]);
     }
 
-    public function update(Update $request,int $manager){
-        return $this->managerService->update($request, $manager);
+    public function update(Update $request,int $id){
+        return $this->managerService->update($id, $request);
     }
 
-    public function destroy(Request $request){
-        
-        return $this->managerService->destroy($request);
+    public function destroy($id){
+        return $this->managerService->destroy($id);
     }
 }

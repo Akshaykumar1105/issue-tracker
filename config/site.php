@@ -1,6 +1,8 @@
 <?php
 
 return [
+
+    'name' => 'Issue Tracker',
     'role' => [
         'admin' => 'admin',
         'hr' => 'hr',

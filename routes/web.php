@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Hr\HrController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\User\HomeController;
 use App\Http\Controllers\Hr\ManagerController;
@@ -9,19 +10,18 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\IssueController;
 use App\Http\Controllers\User\ProfileController;
 use App\Http\Controllers\Admin\CompanyController;
+use App\Http\Controllers\CommentUpvoteController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Admin\CompanyStatusController;
-use App\Http\Controllers\Admin\ManagerController as AdminManagerController;
 use App\Http\Controllers\User\ChangePasswordController;
 use App\Http\Controllers\Auth\ForgetPasswordController;
-use App\Http\Controllers\CommentController;
-use App\Http\Controllers\CommentUpvoteController;
 use App\Http\Controllers\Hr\IssueController as HrIssueController;
 use App\Http\Controllers\User\IssueController as UserIssueController;
 use App\Http\Controllers\Hr\DashboardController as HrDashboardController;
-use App\Http\Controllers\Manager\DashboardController as ManagerDashboardController;
+use App\Http\Controllers\Admin\ManagerController as AdminManagerController;
 use App\Http\Controllers\Manager\IssueController as ManagerIssueController;
+use App\Http\Controllers\Manager\DashboardController as ManagerDashboardController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
@@ -37,8 +37,8 @@ Route::post('forgot-password', [ForgetPasswordController::class, 'store'])->name
 Route::get('reset-password/{token}', [ResetPasswordController::class, 'index'])->name('reset-password.index');
 Route::patch('reset-password/update', [ResetPasswordController::class, 'update'])->name('reset-password.update');
 
-Route::get('companies/{company}/create-issue', [UserIssueController::class, 'index'])->name('issue.index');
-Route::post('companies/post-issue', [UserIssueController::class, 'store'])->name('issue.store');
+Route::get('companies/{company}/issue', [UserIssueController::class, 'index'])->name('issue.index');
+Route::post('companies/create-issue', [UserIssueController::class, 'store'])->name('issue.store'); // change link
 
 //hr register route
 Route::prefix('/hr')->group(function () {
@@ -59,15 +59,10 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->grou
     Route::resource('/company', CompanyController::class);
     Route::post('/status', CompanyStatusController::class)->name('company.status');
 
-    // User
-    Route::prefix('/hr')->group(function () {
-        Route::get('', [UserController::class, 'index'])->name('hr.index');
-    });
+    //user
+    Route::resource('/hr', UserController::class);
+    Route::resource('/manager', AdminManagerController::class);
 
-    Route::prefix('/manager')->group(function () {
-        Route::get('', [AdminManagerController::class, 'index'])->name('manager.index');
-    });
-    
     //issue
     Route::resource('/issue', IssueController::class)->only(['index', 'show', 'destroy']);  
 });
@@ -85,11 +80,8 @@ Route::prefix('hr')->name('hr.')->middleware(['auth', 'role:hr'])->group(functio
     // Manager
     Route::resource('manager', ManagerController::class)->except(['show']);
 
-    //pending issue
-
     // Issue
     Route::resource('issue', HrIssueController::class)->except(['show', 'destroy']);
-    
 });
 
 
@@ -105,8 +97,8 @@ Route::prefix('manager')->name('manager.')->middleware(['auth', 'role:manager'])
 
     //issue
     Route::resource('/issue', ManagerIssueController::class);
-
 });
+
 Route::post('/issue/comment/{commentId}/upvotes', [CommentUpvoteController::class, 'store'])->name('comment.upvote.post');
 Route::delete('/issue/comment/{commentId}/upvotes', [CommentUpvoteController::class, 'destroy'])->name('comment.upvote.destroy');
 // Route::resource('/comment-upvotes', CommentUpvoteController::class)->only(['destroy']);

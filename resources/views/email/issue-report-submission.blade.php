@@ -16,13 +16,13 @@
 
         <!-- Content Section -->
         <section>
-            <p>Hello [Recipient's Name],</p>
+            <p>Hello {{$user->name}},</p>
             <p>We hope this message finds you well. We greatly value your feedback and want to make it easy for you to report any issues or problems you may encounter while using our services.</p>
             <p>Here's how you can submit issues:</p>
             <ol>
                 <li>Click on the following link to access our issue submission form:</li>
             </ol>
-            <p><a href="{{ route('issue.index', ['uuid' => $uuid]) }}" class="btn btn-success  ms-3">Submit Issues</a></p>
+            <p><a href="{{ route('issue.index', ['company' => $user->uuid]) }}" class="btn btn-success  ms-3">Submit Issues</a></p>
             <ol start="2">
                 <li>Fill out the form with details about the issue you're experiencing. Please be as specific as possible, including any error messages or screenshots if applicable.</li>
                 <li>Submit the form, and our support team will review your report promptly.</li>

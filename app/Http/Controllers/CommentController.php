@@ -23,16 +23,8 @@ class CommentController extends Controller
         return ['comments' => $comment];
     }
 
-    public function edit($id, Request $request){
-       
-    }
-
     public function update($id, Request $request){
-        $comment = $this->comment->where('id', $id)->first();
-
-        $comment->update([
-            'body' => $request->body
-        ]);
+        return $this->commentService->update($id,$request);
     }
 
     public function destroy($id){

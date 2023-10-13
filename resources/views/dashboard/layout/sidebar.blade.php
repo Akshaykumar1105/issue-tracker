@@ -44,13 +44,13 @@
                         </a>
                         <ul class="nav nav-treeview" style="{{ Request::is('admin/hr*') || Request::is('admin/manager*') ? 'display: block;' : '' }}">
                             <li class="nav-item">
-                                <a href="{{ route('admin.hr.index') }}" style="" class="nav-link {{ Request::is('admin/hr') ? 'active' : '' }}">
+                                <a href="{{ route('admin.hr.index') }}" style="" class="nav-link {{ Request::is('admin/hr*') ? 'active' : '' }}">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>View Hr</p>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="{{ route('admin.manager.index') }}" class="nav-link {{ Request::is('admin/manager') ? 'active' : '' }}">
+                                <a href="{{ route('admin.manager.index') }}" class="nav-link {{ Request::is('admin/manager*') ? 'active' : '' }}">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>View Manager</p>
                                 </a>
@@ -86,19 +86,19 @@
                         </a>
                         <ul class="nav nav-treeview" style="{{ Request::is('hr/issue*') ? 'display: block;' : '' }}">
                             <li class="nav-item">
-                                <a href="{{ route('hr.issue.index', ['listing' => 'pending']) }}" class="nav-link {{ request('listing') === 'pending' ? 'active' : ''}}">
+                                <a href="{{ route('hr.issue.index', ['type' => 'pending']) }}" class="nav-link {{ request('type') === 'pending' ? 'active' : ''}}">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Pending Issue</p>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="{{ route('hr.issue.index', ['listing' => 'review-issue']) }}" class="nav-link {{ request('listing') === 'review-issue' ? 'active' : ''}}">
+                                <a href="{{ route('hr.issue.index', ['type' => 'review-issue']) }}" class="nav-link {{ request('type') === 'review-issue' ? 'active' : ''}}">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Review Issue</p>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="{{ route('hr.issue.index', ['listing' => 'all-issue']) }}" class="nav-link {{ request('listing') === 'all-issue' ? 'active' : ''}}">
+                                <a href="{{ route('hr.issue.index', ['type' => 'all-issue']) }}" class="nav-link {{ request('type') === 'all-issue' ? 'active' : ''}}">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>All Issue</p>
                                 </a>
@@ -115,12 +115,7 @@
                             <p>Dashboard</p>
                         </a>
                     </li>
-                    {{-- <li class="nav-item {{ Request::is('manager/issue*') ? 'menu-open' : '' }}"">
-                        <a href="{{ route('manager.issue.index') }}" class="nav-link">
-                            <i class="nav-icon fas fa-chart-pie"></i>
-                            <p>Issues</p>
-                        </a>
-                    </li> --}}
+
                     <li class="nav-item {{ Request::is('manager/issue*') ? 'manu-open menu-is-opening' : '' }}">
                         <a href="#" class="nav-link ">
                             <i class="nav-icon fas fa-tachometer-alt"></i>
@@ -128,13 +123,13 @@
                         </a>
                         <ul class="nav nav-treeview" style="{{ Request::is('manager/issue*') ? 'display: block;' : '' }}">
                             <li class="nav-item">
-                                <a href="{{ route('manager.issue.index', ['listing' => 'pending']) }}" class="nav-link {{ request('listing') === 'pending' ? 'active' : ''}}">
+                                <a href="{{ route('manager.issue.index', ['type' => 'pending']) }}" class="nav-link {{ request('type') === 'pending' ? 'active' : ''}}">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Pending Issue</p>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="{{ route('manager.issue.index', ['listing' => 'all-issue']) }}" class="nav-link {{ request('listing') === 'all-issue' ? 'active' : ''}}">
+                                <a href="{{ route('manager.issue.index', ['type' => 'all-issue']) }}" class="nav-link {{ request('type') === 'all-issue' ? 'active' : ''}}">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>All Issue</p>
                                 </a>

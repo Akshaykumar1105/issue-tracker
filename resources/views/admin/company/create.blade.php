@@ -114,10 +114,9 @@
                 });
             }
 
-
             $.validator.addMethod("lettersonly", function(value, element) {
                 return this.optional(element) || /^[a-zA-Z\s]+$/i.test(value);
-            }, "Please enter letters only (no special characters or numbers).");
+            }, "{{__('validation.lettersonly')}}");
 
             $("#companyRegister").validate({
                 errorClass: "text-danger font-weight-normal",
@@ -144,22 +143,22 @@
                 },
                 messages: {
                     name: {
-                        required: "Please enter name.",
-                        maxlength: "Name should not exceed 50 characters.",
+                        required: "{{__('validation.required', ['attribute' => 'name'])}}",
+                        maxlength: "{{__('validation.max_digits', ['attribute' => 'name', 'max' => '255'])}}",
                     },
                     email: {
-                        required: "Please enter email.",
-                        email: "Please enter a valid email address.",
+                        required: "{{__('validation.required', ['attribute' => 'email'])}}",
+                        email: "{{__('validation.valid' , ['attribute' => 'email'])}}",
                     },
                     number: {
-                        required: "Please enter mobile number.",
-                        number: "Please enter a valid number.",
-                        digits: "The number must have exactly 10 digits",
-                        minlength: "Phone number must be exactly 10 digits.",
-                        maxlength: "Phone number must be exactly 10 digits.",
+                        required: "{{__('validation.required', ['attribute' => 'number'])}}",
+                        number: "{{__('validation.valid' , ['attribute' => 'number'])}}",
+                        digits: "The number must be a 10 digits",
+                        minlength:  "{{__('validation.min_digits', ['attribute' => 'number', 'min' => '10'])}}",
+                        maxlength: "{{__('validation.max_digits', ['attribute' => 'number', 'max' => '10'])}}",
                     },
                     address: {
-                        required: "Please enter address.",
+                        required: "{{__('validation.required', ['attribute' => 'address'])}}",
                     },
                 },
                 submitHandler: function(form) {

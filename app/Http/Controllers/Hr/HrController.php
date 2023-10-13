@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Hr;
 
 use App\Models\Company;
 use Illuminate\Http\Request;
-use App\Services\UserService;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\Hr\Store;
 use App\Services\HrService;

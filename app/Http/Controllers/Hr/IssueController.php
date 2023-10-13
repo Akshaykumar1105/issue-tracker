@@ -40,8 +40,7 @@ class IssueController extends Controller{
     }
 
     public function edit(Issue $issue){
-        $manager = $this->issueService->edit($issue);
-            
+        $manager = $this->issueService->edit($issue);      
         return view('hr.issue.create', ['issue' => $issue, 'managers' => $manager]);
     }
 

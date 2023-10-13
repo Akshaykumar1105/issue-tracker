@@ -143,8 +143,8 @@
                 },
                 messages: {
                     email: {
-                        required: "Please enter your email.",
-                        email: "Please enter a valid email address.",
+                        required: "{{__('validation.required', ['attribute' => 'email'])}}",
+                        email: "{{__('validation.valid' , ['attribute' => 'email'])}}",
                     },
                 },
                 submitHandler: function(form) {

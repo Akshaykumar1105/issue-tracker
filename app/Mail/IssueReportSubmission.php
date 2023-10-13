@@ -13,13 +13,13 @@ class IssueReportSubmission extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $companyUuid;
+    private $user;
     /**
      * Create a new message instance.
      */
-    public function __construct($companyUuid)
+    public function __construct($user)
     {
-        $this->companyUuid = $companyUuid;
+        $this->user = $user;
     }
 
     /**
@@ -38,7 +38,7 @@ class IssueReportSubmission extends Mailable
     public function content(): Content{
         return new Content(
             view: 'email.issue-report-submission',
-            with: ['uuid' => $this->companyUuid]
+            with: ['user' => $this->user]
         );
     }
 
