@@ -32,7 +32,7 @@
                 <div class="col-md-12 mt-3">
 
                     <div class="form-group">
-                        <label class="form-label fw-bold" for="name">Company Name<span
+                        <label class="form-label fw-bold" for="name">Name<span
                                 class="text-danger ms-1">*</span></label>
                         <input type="text" id="name" name="name" class="form-control"
                             value="{{ isset($company) ? $company->name : '' }}" placeholder="Bolton and Green Trading" />
@@ -151,11 +151,11 @@
                         email: "{{__('validation.valid' , ['attribute' => 'email'])}}",
                     },
                     number: {
-                        required: "{{__('validation.required', ['attribute' => 'number'])}}",
-                        number: "{{__('validation.valid' , ['attribute' => 'number'])}}",
+                        required: "{{__('validation.required', ['attribute' => 'mobile'])}}",
+                        number: "{{__('validation.valid' , ['attribute' => 'mobile'])}}",
                         digits: "The number must be a 10 digits",
-                        minlength:  "{{__('validation.min_digits', ['attribute' => 'number', 'min' => '10'])}}",
-                        maxlength: "{{__('validation.max_digits', ['attribute' => 'number', 'max' => '10'])}}",
+                        minlength:  "{{__('validation.min_digits', ['attribute' => 'mobile', 'min' => '10'])}}",
+                        maxlength: "{{__('validation.max_digits', ['attribute' => 'mobile', 'max' => '10'])}}",
                     },
                     address: {
                         required: "{{__('validation.required', ['attribute' => 'address'])}}",

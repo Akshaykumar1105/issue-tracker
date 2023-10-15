@@ -70,7 +70,7 @@ class HrService
     }
 
     public function collection($companyId = null, $request){
-        if ($request->listing == config('site.role.hr')) {
+        if (auth()->user()->hasRole('hr') == config('site.role.hr')) {
             if ($companyId) {
                 $query = User::with('company')->whereNull('parent_id')->where('company_id', $companyId);
             } else {
@@ -78,6 +78,15 @@ class HrService
             }
             if ($request->filter) {
                 $query->where('company_id',  $request->filter);
+            }
+            return $query;
+        }
+        else{
+            $query = User::with(['company', 'media'])->whereNull('parent_id');
+            if ($request->filter) {
+                $query->where('company_id', $request->filter);
+            } else {
+                $query->whereNotNull('company_id');
             }
             return $query;
         }

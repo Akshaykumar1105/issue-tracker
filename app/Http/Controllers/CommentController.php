@@ -28,8 +28,7 @@ class CommentController extends Controller
     }
 
     public function destroy($id){
-        $comment = $this->comment->where('id', $id)->first();
-        $comment->delete();
+        $this->commentService->destroy($id);
         return [
             'success' => __('entity.entityDeleted', ['entity' => 'Comment']),
         ];

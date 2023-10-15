@@ -34,7 +34,7 @@ class CompanyController extends Controller
                     $edit = route('admin.company.edit', ['company' => $row->id]);
                     $hr = route('admin.hr.index', ['company_id' => $row->id]);
                     $manager = route('admin.manager.index', ['company_id' => $row->id]);
-                    $actionBtn = '<div class="d-flex" style="flex-direction: column;justify-content: initial;align-items: baseline;gap: 10px;"><div><a href=' . $edit . ' id="edit' . $row->id . '" data-userId="' . $row->id . '" class="edit btn btn-success btn-sm">Edit</a> <button type="submit" data-userId="' . $row->id . '" class="delete btn btn-danger btn-sm" data-bs-toggle="modal"
+                    $actionBtn = '<div class="d-flex" style="flex-direction: column;justify-content: initial;align-items: baseline;gap: 10px;"><div><a href=' . $edit . ' id="edit' . $row->id . '" data-userId="' . $row->id . '" class="edit btn btn-success btn-sm">Edit</a> <button type="submit" data-user-id="' . $row->id . '" class="delete btn btn-danger btn-sm" data-bs-toggle="modal"
                 data-bs-target="#deleteCompany">Delete</button></div> <div><a href=' . $hr . ' id="viewHr' . $row->id . '" data-userId="' . $row->id . '" class="hr btn btn-primary btn-sm">View Hr</a> <a href=' . $manager . ' type="submit" data-userId="' . $row->id . '"  class="manager btn btn-primary btn-sm">View Manager</a></div></div>';
                     return $actionBtn;
                 })
@@ -61,7 +61,7 @@ class CompanyController extends Controller
         return $this->companyService->update($request, $company);
     }
 
-    public function destroy(){
-        return  $this->companyService->destroy();
+    public function destroy($id){
+        return  $this->companyService->destroy($id);
     }
 }

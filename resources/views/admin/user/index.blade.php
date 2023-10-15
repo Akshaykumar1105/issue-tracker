@@ -212,29 +212,29 @@
                 pageLength: 10,
             });
 
-            let user;
+            let userId;
             $(document).on("click", ".delete", function(event) {
                 event.preventDefault();
-                user = $(this).attr("data-user-id");
+                userId = $(this).attr("data-user-id");
             });
 
 
             $(document).on("click", "#deleteUser", function(event) {
                 event.preventDefault();
-                deleteUser(user)
+                deleteUser(userId)
             });
 
-            function deleteUser(user) {
+            function deleteUser(userId) {
                 let deleteUser;
                 if (currentRoute == 'admin.manager.index') {
-                    deleteUser = "{{ route('admin.manager.destroy', ['manager' => ':id']) }}".replace(':id', user);
+                    deleteUser = "{{ route('admin.manager.destroy', ['manager' => ':id']) }}".replace(':id', userId);
                 } else {
-                    deleteUser = "{{ route('admin.hr.destroy', ['hr' => ':id']) }}".replace(':id', user);
+                    deleteUser = "{{ route('admin.hr.destroy', ['hr' => ':id']) }}".replace(':id', userId);
                 }
                 $.ajax({
                     url: deleteUser,
                     data: {
-                        "id": user,
+                        "id": userId,
                         "_token": "{{ csrf_token() }}"
                     },
                     type: "DELETE",

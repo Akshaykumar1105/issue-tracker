@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="{{ asset('asset/css/dropify.min.css') }}">
 @endsection
 @section('content')
-<x-loader />
+    <x-loader />
     <section class="content">
         <div class="container-fluid">
             <div class="row">
@@ -17,12 +17,19 @@
                     <!-- general form elements -->
                     <div class="card card-primary">
                         <div class="card-header">
-                            @if (isset($user))
-                                <h3 class="card-title">{{ __('messages.manager.edit') }}</h3>
+                            @if (Request::is('admin/manager/*'))
+                                @if (isset($user))
+                                    <h3 class="card-title">{{ __('messages.manager.edit') }}</h3>
+                                @else
+                                    <h3 class="card-title">{{ __('messages.manager.register') }}</h3>
+                                @endif
                             @else
-                                <h3 class="card-title">{{ __('messages.manager.register') }}</h3>
+                                @if (isset($user))
+                                    <h3 class="card-title">Edit Hr</h3>
+                                @else
+                                    <h3 class="card-title">Create Hr</h3>
+                                @endif
                             @endif
-
                         </div>
                         <!-- /.card-header -->
                         <!-- form start -->

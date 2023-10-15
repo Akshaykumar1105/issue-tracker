@@ -164,9 +164,6 @@
                     {
                         "data": "status",
                         render: function(data, type, row) {
-                            // console.log(data);
-                            console.log(row);
-
                             // Define an array of status options with their values and labels
                             const statusOptions = [{
                                     value: 'default',
@@ -198,20 +195,16 @@
                                 },
                             ];
 
-                            // Initialize the options HTML
                             let optionsHtml = '';
 
-                            // Loop through the status options and build the HTML
                             for (const option of statusOptions) {
                                 const selected = data === option.value ? 'selected' : '';
                                 optionsHtml +=
                                     `<option value="${option.value}" data-status="${option.value}" ${selected}>${option.label}</option>`;
                             }
 
-                            // Create the select element with the generated options
                             const selectHtml =
                                 `<select name="status" data-status="${row.id}" id="status" class="custom-select custom-select-sm form-control form-control-sm">${optionsHtml}</select>`;
-
                             return selectHtml;
                         },
                     },
@@ -220,14 +213,14 @@
                         orderable: false
                     },
                 ],
-                lengthMenu: [10, 25, 50, 100], // Define your page limit options
+                lengthMenu: [10, 25, 50, 100],
                 pageLength: 10,
                 order: [
                     [1, 'desc']
                 ],
             });
 
-            function filterUrl() {
+            function filter() {
                 let filter = "{{ route('hr.issue.index') }}";
                 let type = "{{ request('type') }}";
 
@@ -244,16 +237,14 @@
                 if (date) {
                     filter += "&duedate=" + date;
                 }
-                // Update the browser's URL without reloading the page
                 history.pushState({}, '', filter);
             }
-
 
             $(document).on('change', "#selectPriority, #dueDate", function() {
                 priority = $("#selectPriority").val();
                 date = $("#dueDate").val();
 
-                filterUrl();
+                filter();
                 $('.table').DataTable().ajax.reload();
             });
 
@@ -263,8 +254,7 @@
                 // console.log(id);
                 var csrfToken = $('meta[name="csrf-token"]').attr('content');
                 $.ajax({
-                    url: "{{ route('hr.issue.update', ['issue' => ':id']) }}".replace(':id',
-                        issueId),
+                    url: "{{ route('hr.issue.update', ['issue' => ':id']) }}".replace(':id',issueId),
                     type: 'patch',
                     data: {
                         status: status,
@@ -277,12 +267,10 @@
                         }
                         toastr.success(response.success);
                         $('.table').DataTable().ajax.reload();
-
                     },
                     error: function(xhr, status, error) {
                         var response = JSON.parse(xhr.responseText);
                         var message = response.message;
-                        console.log(message)
                         toastr.options = {
                             closeButton: true,
                             progressBar: true,

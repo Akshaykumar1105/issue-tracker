@@ -200,8 +200,6 @@
                         },
                         error: function(xhr, status, error) {
                             $(".loader-container").fadeOut();
-                            // Handle error response
-                            // console.log("Form submission error");
                             var response = JSON.parse(xhr.responseText);
                             var message = response.message;
                             console.log(message)
@@ -210,7 +208,6 @@
                                 progressBar: true,
                             }
                             toastr.error(message);
-
                         },
                     })
                 },

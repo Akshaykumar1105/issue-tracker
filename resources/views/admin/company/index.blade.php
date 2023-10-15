@@ -120,22 +120,23 @@
                 pageLength: 10,
             });
 
-            let company;
+            let companyId;
             $(document).on("click", ".delete", function(event) {
                 event.preventDefault();
-                company = $(this).attr("data-user-id");
+                companyId = $(this).attr("data-user-id");
+                console.log(companyId);
             });
 
             $(document).on("click", "#companyDelete", function(event) {
                 event.preventDefault();
-                deleteCompany(company)
+                deleteCompany(companyId)
             });
 
-            function deleteCompany(company) {
+            function deleteCompany(companyId) {
                 $.ajax({
-                    url: "{{ route('admin.company.destroy', ['company' => "company"]) }}",
+                    url: "{{ route('admin.company.destroy', ['company' => ':id']) }}".replace(':id', companyId),
                     data: {
-                        "id": company,
+                        "id": companyId,
                         "_token": "{{ csrf_token() }}"
                     },
                     type: "DELETE",
@@ -163,7 +164,6 @@
                     type: "POST",
                     success: function(response) {
                         var message = response.success;
-                        console.log(message)
                         toastr.options = {
                             closeButton: true,
                             progressBar: true,

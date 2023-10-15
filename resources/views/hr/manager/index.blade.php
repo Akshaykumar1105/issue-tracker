@@ -124,22 +124,22 @@
             });
 
 
-            let id; 
+            let userid; 
             $(document).on("click", ".delete", function(event) {
                 event.preventDefault();
-                id = $(this).attr("data-userId");
+                userid = $(this).attr("data-userId");
             });
 
             $(document).on("click", "#deleteManager", function(event) {
                 event.preventDefault();
-                deleteManager(id)
+                deleteManager(userid)
             });
 
-            function deleteManager(id) {
+            function deleteManager(userid) {
                 $.ajax({
-                    url: "{{ route('hr.manager.destroy', ['manager' => ':id']) }}".replace(':id', id),
+                    url: "{{ route('hr.manager.destroy', ['manager' => ':id']) }}".replace(':id', userid),
                     data: {
-                        "id": id,
+                        "id": userid,
                         "_token": "{{ csrf_token() }}"
                     },
                     type: "DELETE",

@@ -5,13 +5,9 @@
 
 @section('style')
     <link href="{{ asset('asset/css/datatables.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('asset/css/datepicker.min.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
         integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
-
-    <!-- Include Bootstrap CSS and JavaScript -->
-
     <style>
         .slow .toggle-group {
             transition: left 0.7s;
@@ -341,7 +337,7 @@
                                 <div class="col-md-4 form-group">
                                     <label class="d-block font-weight-bold ">Due Date<span
                                             class="text-danger ms-1">*</span></label>
-                                    <input id="due_date" data-date-format="yyyy-mm-dd" name="due_date"
+                                    <input id="due_date" type="date" data-date-format="yyyy-mm-dd" name="due_date"
                                         class="datepicker d-block form-control" data-provide="datepicker"
                                         value="{{ $issue->due_date }}" placeholder="Select due date">
                                 </div>
@@ -379,16 +375,13 @@
                                     <button type="submit" class="btn btn-primary me-3">Submit</button>
                                     <a href="{{ route('hr.issue.index', ['listing' => 'all-issue']) }}"
                                         class="btn btn-outline-secondary">Back</a>
-
                                 </div>
                             </form>
                         </div>
                     </div>
                 </div>
             </div>
-
         </div>
-
     </section>
     <div id="commentBox"></div>
 
@@ -412,11 +405,9 @@
 @section('script')
     <script src="{{ asset('asset/js/jquery-datatables.min.js') }}"></script>
     <script src="{{ asset('asset/js/datatable.min.js') }}"></script>
-    <script src="{{ asset('asset/js/datepicker.min.js') }}"></script>
     <script>
         // Your custom JavaScript file
         $(document).ready(function() {
-            $('.datepicker').datepicker({});
             var csrfToken = $('meta[name="csrf-token"]').attr('content');
 
             function commentBox() {
@@ -505,7 +496,6 @@
                             $("#deleteComment").modal("toggle");
                             deleteComment.parents(".right-msg").hide();
                             var message = response.success;
-                            console.log(message);
                             toastr.options = {
                                 closeButton: true,
                                 progressBar: true,
@@ -514,9 +504,6 @@
                         }
                     });
                 }
-
-
-
             }
             commentBox();
 
@@ -532,8 +519,6 @@
                 var voteCount = likeButton.closest('.rating').next().children();
                 var currentVoteCount = parseInt(voteCount.text());
                 if (userId == true) {
-                    // var voteCount = likeButton.closest('.rating').next().children();
-                    // var currentVoteCount = parseInt(voteCount.text());
                     $.ajax({
                         url: "{{ route('comment.upvote.destroy', ['commentId' => ':id']) }}"
                             .replace(':id', commentId),
@@ -553,7 +538,6 @@
                             }
                             voteCount.text(newVoteCount);
                             likeButton.data('user', false);
-                            console.log(likeButton.data('user'));
                         },
                         error: function(xhr, textStatus, errorThrown) {
                             console.error('An error occurred while removing the upvote.');
@@ -576,7 +560,6 @@
                             var newVoteCount = currentVoteCount + 1;
                             voteCount.text(newVoteCount);
                             likeButton.data('user', true);
-                            console.log(likeButton.data('user'));
                         },
                         error: function(xhr, textStatus, errorThrown) {
                             console.error('An error occurred while upvoting.');
@@ -584,7 +567,6 @@
                     });
                 }
             });
-
 
             $.validator.addMethod("valueNotEquals", function(value, element, arg) {
                 return arg !== value;
@@ -644,8 +626,6 @@
                             }, 2000);
                         },
                         error: function(xhr, status, error) {
-                            // Handle error response
-                            // console.log("Form submission error");
                             var response = JSON.parse(xhr.responseText);
                             var message = response.message;
                             console.log(message)

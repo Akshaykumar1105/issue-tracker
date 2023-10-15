@@ -34,7 +34,6 @@ class IssueController extends Controller
                     $actionBtn = '<a href=' . $editRoute . ' data-issueId="' . $row->id . '" class="view btn btn-primary btn-sm">View</a>';
                     return $actionBtn;
                 })
-
                 ->rawColumns(['status', 'action'])
                 ->make(true);
         }

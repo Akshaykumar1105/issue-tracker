@@ -64,7 +64,7 @@ class ManagerController extends Controller{
         return $this->managerService->store($request);
     }
 
-    public function edit($id, Request $request){
+    public function edit($id){
         $user = User::findOrFail($id);
         $company = Company::where('is_active', config('site.status.active'))->get();
         return view('admin.user.create', ['companies' => $company, 'user' => $user]);

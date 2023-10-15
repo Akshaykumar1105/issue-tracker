@@ -188,22 +188,22 @@
                 $('.table').DataTable().ajax.reload();
             });
 
-            let issue;
+            let issueId;
             $(document).on("click", ".delete", function(event) {
                 event.preventDefault();
-                issue = $(this).attr("data-issue-id");
+                issueId = $(this).attr("data-issue-id");
             });
 
             $(document).on("click", "#issuedelete", function(event) {
                 event.preventDefault();
-                deleteIssue(issue)
+                deleteIssue(issueId)
             });
 
-            function deleteIssue(issue) {
+            function deleteIssue(issueId) {
                 $.ajax({
-                    url: "{{ route('admin.issue.destroy', ['issue' => 'issue']) }}",
+                    url: "{{ route('admin.issue.destroy', ['issue' => ':id']) }}".replace(":id",issueId),
                     data: {
-                        "id": issue,
+                        "id": issueId,
                         "_token": "{{ csrf_token() }}"
                     },
                     type: "DELETE",

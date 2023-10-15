@@ -44,7 +44,7 @@ class IssueController extends Controller{
         return view('admin.issue.show', ['issue' => $issue, 'route' => route('admin.issue.index')]);
     }
 
-    public function destroy(Request $request){
-        return $this->issueService->destroy($request);
+    public function destroy($id){
+        return $this->issueService->destroy($id);
     }
 }

@@ -64,8 +64,7 @@ class CompanyService
         ];
     }
 
-    public function destroy(){
-        $id = request()->id;
+    public function destroy($id){
         $this->companyModel->where('id', $id)->delete();
         return [
             'success' => __('entity.entityDeleted', ['entity' => 'Company']),

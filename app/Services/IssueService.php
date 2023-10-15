@@ -84,8 +84,8 @@ class IssueService
     }
 
 
-    public function destroy($request){
-        Issue::find($request->id)->delete();
+    public function destroy($id){
+        Issue::find($id)->delete();
         return  ['success' => __('entity.entityDeleted', ['entity' => 'Company']),];
     }
 

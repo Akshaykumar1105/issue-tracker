@@ -99,8 +99,86 @@
                     </div>
                 @endif
             </div>
+
+
+
             <!-- /.row -->
         </div><!-- /.container-fluid -->
+
+        @role('admin')
+            <div style="width: 500px; height:500px;">
+                <canvas id="myChart"></canvas>
+            </div>
+
+            <div>
+                <canvas id="userChart" width="400" height="200"></canvas>
+
+            </div>
+
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+            <script>
+                const ctx = document.getElementById('myChart');
+
+                const issueStatusData = @json($issueStatusData);
+
+                const labels = issueStatusData.map(item => item.status);
+                const data = issueStatusData.map(item => item.count);
+
+
+                new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Issue Status',
+                            data: data,
+                            backgroundColor: [
+                                'red', 'blue', 'yellow', 'green', 'purple'
+                            ],
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            </script>
+
+
+            <script>
+                const userChart = document.getElementById('userChart').getContext('2d');
+                new Chart(userChart, {
+                    type: 'bar',
+                    data: {
+                        labels: @json($hrData->pluck('month')),
+                        datasets: [{
+                            label: 'HR Users',
+                            data: @json($hrData->pluck('count')),
+                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 1
+                        }, {
+                            label: 'Manager Users',
+                            data: @json($managerData->pluck('count')),
+                            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                            borderColor: 'rgba(255, 99, 132, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            </script>
+        @endrole
     </section>
 
     <!-- /.content -->

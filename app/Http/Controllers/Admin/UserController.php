@@ -23,12 +23,7 @@ class UserController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $query = User::with(['company', 'media'])->whereNull('parent_id');
-            if ($request->filter) {
-                $query->where('company_id', $request->filter);
-            } else {
-                $query->whereNotNull('company_id');
-            }
+            $query = $this->hrService->collection($companyId = null, $request);
             return DataTables::eloquent($query)
                 ->orderColumn('name', function ($query, $order) {
                     $query->orderBy('id', $order);
@@ -44,7 +39,7 @@ class UserController extends Controller
 
                 ->addColumn('action', function ($row) {
                     $user = $row->id;
-                    $showManager = route('admin.manager.index', ['hr_id' => $user]);
+                    $showManager = route('admin.manager.index', ['company_id' => $row->company_id, 'hr_id' => $user]);
                     $editHr = route('admin.hr.edit', ['hr' => $user]);
                     $actionBtn = '<div class="d-flex" style="flex-direction: column;justify-content: initial;align-items: baseline;gap: 10px;"><div><a href=' . $editHr . ' id="edit' . $row->id . '" data-user-id="' . $row->id . '" class="edit btn btn-success btn-sm">Edit</a> <button type="submit" data-userId="' . $row->id . '" class="delete btn btn-danger btn-sm" data-bs-toggle="modal"
                     data-bs-target="#deleteUser">Delete</button></div><a href="' . $showManager . '" id="edit' . $row->id . '" data-userId="' . $row->id . '" class="view btn btn-primary btn-sm">View Manager</a></div>';

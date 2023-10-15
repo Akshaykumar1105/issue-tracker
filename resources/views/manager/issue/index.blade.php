@@ -162,7 +162,7 @@
                 ],
             });
 
-            function filterUrl() {
+            function filter() {
                 let filter = "{{ route('manager.issue.index') }}";
                 let type = "{{ request('type') }}";
 
@@ -185,19 +185,18 @@
             $(document).on('change', "#selectPriority", function() {
                 priority = $(this).val();
                 $('.table').DataTable().ajax.reload();
-                filterUrl();
+                filter();
             });
 
             $(document).on('change', "#dueDate", function() {
                 date = $(this).val();
                 $('.table').DataTable().ajax.reload();
-                filterUrl();
+                filter();
             });
 
             $(document).on('change', '#status', function() {
                 status = $(this).val();
                 let issueId = $(this).attr('data-status');
-                // console.log(id);
                 var csrfToken = $('meta[name="csrf-token"]').attr('content');
                 $.ajax({
                     url: "{{ route('manager.issue.update', ['issue' => ':id']) }}".replace(':id',
@@ -222,7 +221,6 @@
                     error: function(xhr, status, error) {
                         var response = JSON.parse(xhr.responseText);
                         var message = response.message;
-                        console.log(message)
                         toastr.options = {
                             closeButton: true,
                             progressBar: true,
