@@ -28,7 +28,7 @@ class IssueSolve implements ShouldQueue
      * Execute the job.
      */
     public function handle(): void{
-        $token = new MailIssueSolve($this->issueSolve['issue']);
-        Mail::to($this->issueSolve['email'])->send($token);
+        $uuid = new MailIssueSolve($this->issueSolve['issue']);
+        Mail::to($this->issueSolve['email'])->send($uuid);
     }
 }

@@ -84,7 +84,7 @@ return [
     ],
 
     'footer' => 'Copyright © 2023-2025 Issue Tracker All rights reserved.',
-    'version' => '<b>Version</b> 1.0.0',
+    'version' => 'Version 1.0.0',
 
     'service' => [
         'title' => 'Our online and offline services',

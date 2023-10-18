@@ -1,4 +1,4 @@
-@extends('user.layout.layout')
+@extends('front.layout.layout')
 @section('style')
     <!-- toastr css -->
     <link rel="stylesheet" href="{{ asset('asset/css/toastr.css') }}">

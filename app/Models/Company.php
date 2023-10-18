@@ -17,6 +17,7 @@ class Company extends Model
         'name',
         'is_active',
         'email',
+        'city_id',
         'slug',
         'number',
         'address',
@@ -43,5 +44,9 @@ class Company extends Model
 
     public function issues(){
         return $this->hasMany(Issue::class);
+    }
+
+    public function city(){
+        return $this->belongsTo(City::class);
     }
 }

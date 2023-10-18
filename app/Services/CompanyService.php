@@ -2,15 +2,15 @@
 
 namespace App\Services;
 
-use App\Jobs\IssueReportSubmission as JobsIssueReportSubmission;
-use App\Mail\IssueReportSubmission;
-use App\Models\CommentUpvotes;
-use App\Models\Company;
 use App\Models\User;
+use App\Models\Company;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Mail;
 use PhpParser\Node\Expr\New_;
+use App\Models\CommentUpvotes;
+use App\Mail\IssueReportSubmission;
+use Illuminate\Support\Facades\Mail;
 use Yajra\DataTables\Facades\DataTables;
+use App\Jobs\IssueReportSubmission as JobsIssueReportSubmission;
 
 class CompanyService
 {
@@ -20,18 +20,18 @@ class CompanyService
     protected $hrService;
 
 
-    public function __construct(ManagerService $managerService, HrService $hrService){
+    public function __construct(){
         $this->companyModel = new Company();
-        $this->managerService = $managerService;
-        $this->hrService = $hrService;
+        $this->managerService = new ManagerService();
+        $this->hrService = new HrService;
     }
 
     public function index(){
-        return Company::where('is_active', config('site.status.active'))->get();
+        return $this->companyModel::where('is_active', config('site.status.active'))->get();
     }
 
     public function collection($companyId, $request){
-        $query = Company::select('id', 'name', 'email', 'number', 'address', 'is_active', 'created_at');
+        $query = $this->companyModel::with('city')->select('id', 'name', 'email', 'city_id', 'number', 'address', 'is_active', 'created_at');
 
         if ($request->listing == config('site.role.hr')) {
             $query =  $this->hrService->collection($companyId, $request);
@@ -43,12 +43,9 @@ class CompanyService
 
     public function store($request){
         $this->companyModel->fill($request->all())->save();
-        $company = Company::where('email', $request->email)->first();
+        $company = $this->companyModel::where('email', $request->email)->first();
         $email = $company->email;
-        $companyUuid = $company->uuid;
-        // dd($email);
         JobsIssueReportSubmission::dispatchSync($email);
-        // Mail::to($email)->send(new IssueReportSubmission($companyUuid));
         return [
             'success' => __('entity.entityCreated', ['entity' => 'Company']),
             'route' => route('admin.company.index')

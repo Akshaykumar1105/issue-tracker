@@ -23,7 +23,7 @@ class HomeController extends Controller{
            return  $this->issueService->index($request);
         }
         $company = Company::where('is_active', '1')->get();
-        return view('user.home', ['companies' => $company, 'hrs' => $user ?? null]);
+        return view('front.home', ['companies' => $company, 'hrs' => $user ?? null]);
     }
 
     public function store(Store $request){

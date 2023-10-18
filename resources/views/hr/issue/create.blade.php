@@ -373,7 +373,7 @@
                                 {{-- <button type="submit" class="btn btn-primary ms-2 mb-2">Submit</button> --}}
                                 <div class="col-md-4">
                                     <button type="submit" class="btn btn-primary me-3">Submit</button>
-                                    <a href="{{ route('hr.issue.index', ['listing' => 'all-issue']) }}"
+                                    <a href="{{ route('hr.issue.index', ['type' => 'all-issue']) }}"
                                         class="btn btn-outline-secondary">Back</a>
                                 </div>
                             </form>
@@ -406,7 +406,6 @@
     <script src="{{ asset('asset/js/jquery-datatables.min.js') }}"></script>
     <script src="{{ asset('asset/js/datatable.min.js') }}"></script>
     <script>
-        // Your custom JavaScript file
         $(document).ready(function() {
             var csrfToken = $('meta[name="csrf-token"]').attr('content');
 

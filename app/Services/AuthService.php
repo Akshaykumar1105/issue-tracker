@@ -2,13 +2,13 @@
 
 namespace App\Services;
 
-use App\Jobs\ConfirmPassword;
-use App\Jobs\ResetPassword;
 use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Company;
+use App\Jobs\ResetPassword;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Jobs\ConfirmPassword;
 use App\Mail\ResetPasswordEmail;
 use App\Models\PasswordResetToken;
 use App\Mail\ConfirmPasswordEmail;
@@ -30,7 +30,6 @@ class AuthService
             ]);
         }
 
-      
         $user = auth()->user();
         $company = Company::find($user->company_id);
         // dd($company->is_active == config('site.status.active')); 

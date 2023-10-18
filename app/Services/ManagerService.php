@@ -3,11 +3,11 @@
 namespace App\Services;
 
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\ManagerCredentialsEmail;
 use App\Notifications\ManagerCredential;
-use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 use Plank\Mediable\Facades\MediaUploader;
 
@@ -15,8 +15,7 @@ class ManagerService
 {
 
     protected $user;
-    public function __construct()
-    {
+    public function __construct(){
         $this->user = new User();
     }
 

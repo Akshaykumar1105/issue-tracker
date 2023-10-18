@@ -27,6 +27,10 @@ class Issue extends Model
     public function user(){
         return $this->belongsTo(User::class, 'manager_id');
     }
+
+    public function hr(){
+        return $this->belongsTo(User::class, 'hr_id');
+    }
     
     public function company(){
         return $this->belongsTo(Company::class);

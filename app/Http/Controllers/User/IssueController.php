@@ -29,7 +29,7 @@ class IssueController extends Controller
             ->whereNull('parent_id')
             ->get();
 
-        return view('user.issue.create', compact('companyObj', 'hrs'));
+        return view('front.issue.create', compact('companyObj', 'hrs'));
     }
 
     public function store(Store $request)

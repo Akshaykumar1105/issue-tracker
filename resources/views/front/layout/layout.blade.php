@@ -14,16 +14,16 @@
   <meta name="theme-name" content="wallet" />
 
 	<!-- # Google Fonts -->
-	@include('user.layout.style.style')
+	@include('front.layout.style.style')
     @yield('style')
 </head>
 
 <body>
-    @include('user.layout.header')
+    @include('front.layout.header')
     @yield('content')
 
 
-    @include('user.layout.footer')
-    @include('user.layout.script.script')
+    @include('front.layout.footer')
+    @include('front.layout.script.script')
     @yield('script')
 </body>

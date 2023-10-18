@@ -11,7 +11,7 @@ use App\Http\Controllers\Controller;
 use Yajra\DataTables\Facades\DataTables;
 use App\Http\Requests\Admin\Company\Store;
 use App\Http\Requests\Admin\Company\Update;
-
+use App\Models\City;
 
 class CompanyController extends Controller
 {
@@ -35,7 +35,7 @@ class CompanyController extends Controller
                     $hr = route('admin.hr.index', ['company_id' => $row->id]);
                     $manager = route('admin.manager.index', ['company_id' => $row->id]);
                     $actionBtn = '<div class="d-flex" style="flex-direction: column;justify-content: initial;align-items: baseline;gap: 10px;"><div><a href=' . $edit . ' id="edit' . $row->id . '" data-userId="' . $row->id . '" class="edit btn btn-success btn-sm">Edit</a> <button type="submit" data-user-id="' . $row->id . '" class="delete btn btn-danger btn-sm" data-bs-toggle="modal"
-                data-bs-target="#deleteCompany">Delete</button></div> <div><a href=' . $hr . ' id="viewHr' . $row->id . '" data-userId="' . $row->id . '" class="hr btn btn-primary btn-sm">View Hr</a> <a href=' . $manager . ' type="submit" data-userId="' . $row->id . '"  class="manager btn btn-primary btn-sm">View Manager</a></div></div>';
+                data-bs-target="#deleteCompany">Delete</button></div> <div class="" style="display: contents;"><a href=' . $hr . ' id="viewHr' . $row->id . '" data-userId="' . $row->id . '" class="hr btn btn-primary btn-sm">View Hr</a> <a href=' . $manager . ' type="submit" data-userId="' . $row->id . '"  class="manager btn btn-primary btn-sm">View Manager</a></div></div>';
                     return $actionBtn;
                 })
                 ->addIndexColumn()
@@ -46,7 +46,8 @@ class CompanyController extends Controller
     }
 
     public function create(){
-        return view('admin.company.create');
+        $city = City::get();
+        return view('admin.company.create', ['cities' => $city]);
     }
 
     public function store(Store $request){
@@ -54,7 +55,8 @@ class CompanyController extends Controller
     }
 
     public function edit(Company $company){
-        return view('admin.company.create', ['company' =>  $company]);
+        $city = City::get();
+        return view('admin.company.create', ['company' =>  $company, 'cities' => $city]);
     }
 
     public function update(Update $request, Company $company){

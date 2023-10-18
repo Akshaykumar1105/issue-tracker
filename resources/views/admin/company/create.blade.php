@@ -32,8 +32,7 @@
                 <div class="col-md-12 mt-3">
 
                     <div class="form-group">
-                        <label class="form-label fw-bold" for="name">Name<span
-                                class="text-danger ms-1">*</span></label>
+                        <label class="form-label fw-bold" for="name">Name<span class="text-danger ms-1">*</span></label>
                         <input type="text" id="name" name="name" class="form-control"
                             value="{{ isset($company) ? $company->name : '' }}" placeholder="Bolton and Green Trading" />
                     </div>
@@ -65,6 +64,20 @@
                         <input type="text" class="form-control " id="address" name="address"
                             value="{{ isset($company) ? $company->address : '' }}"
                             placeholder="Enter your company address." />
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="address" class="form-label fw-bold">City<span class="text-danger ms-1">*</span></label>
+                        <select name="city_id" class="form-control" style="appearance: auto">
+                            <option value="default">Select City</option>
+                            @foreach ($cities as $city)
+                                <option value="{{ $city->id }}"
+                                    {{ isset($company) && $company->city_id == $city->id ? 'selected' : '' }}>
+                                    {{ $city->name }}</option>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
 
@@ -115,8 +128,12 @@
             }
 
             $.validator.addMethod("lettersonly", function(value, element) {
-                return this.optional(element) || /^[a-zA-Z\s]+$/i.test(value);
-            }, "{{__('validation.lettersonly')}}");
+                return this.optional(element) || /^[a-zA-Z0-9]+( [a-zA-Z0-9]+)*$/.test(value);
+            }, "Letters and numbers only with a single space between words.");
+
+            $.validator.addMethod("valueNotEquals", function(value, element, arg) {
+                return arg !== value;
+            }, "{{ __('validation.valueNotEquals', ['attribute' => 'Comapny']) }}");
 
             $("#companyRegister").validate({
                 errorClass: "text-danger font-weight-normal",
@@ -124,7 +141,7 @@
                     name: {
                         required: true,
                         maxlength: 255,
-                        lettersonly: true
+                        lettersonly: true,
                     },
                     email: {
                         required: true,
@@ -135,30 +152,34 @@
                         number: true,
                         minlength: 10,
                         maxlength: 10,
-                        digits:true
+                        digits: true
                     },
                     address: {
                         required: true,
+                    },
+                    city_id: {
+                        required: true,
+                        valueNotEquals: true
                     }
                 },
                 messages: {
                     name: {
-                        required: "{{__('validation.required', ['attribute' => 'name'])}}",
-                        maxlength: "{{__('validation.max_digits', ['attribute' => 'name', 'max' => '255'])}}",
+                        required: "{{ __('validation.required', ['attribute' => 'name']) }}",
+                        maxlength: "{{ __('validation.max_digits', ['attribute' => 'name', 'max' => '255']) }}",
                     },
                     email: {
-                        required: "{{__('validation.required', ['attribute' => 'email'])}}",
-                        email: "{{__('validation.valid' , ['attribute' => 'email'])}}",
+                        required: "{{ __('validation.required', ['attribute' => 'email']) }}",
+                        email: "{{ __('validation.valid', ['attribute' => 'email']) }}",
                     },
                     number: {
-                        required: "{{__('validation.required', ['attribute' => 'mobile'])}}",
-                        number: "{{__('validation.valid' , ['attribute' => 'mobile'])}}",
+                        required: "{{ __('validation.required', ['attribute' => 'mobile']) }}",
+                        number: "{{ __('validation.valid', ['attribute' => 'mobile']) }}",
                         digits: "The number must be a 10 digits",
-                        minlength:  "{{__('validation.min_digits', ['attribute' => 'mobile', 'min' => '10'])}}",
-                        maxlength: "{{__('validation.max_digits', ['attribute' => 'mobile', 'max' => '10'])}}",
+                        minlength: "{{ __('validation.min_digits', ['attribute' => 'mobile', 'min' => '10']) }}",
+                        maxlength: "{{ __('validation.max_digits', ['attribute' => 'mobile', 'max' => '10']) }}",
                     },
                     address: {
-                        required: "{{__('validation.required', ['attribute' => 'address'])}}",
+                        required: "{{ __('validation.required', ['attribute' => 'address']) }}",
                     },
                 },
                 submitHandler: function(form) {

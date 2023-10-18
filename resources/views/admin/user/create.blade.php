@@ -198,11 +198,17 @@
 
             $.validator.addMethod("valueNotEquals", function(value, element, arg) {
                 return arg !== value;
-            }, "{{ __('validation.valueNotEquals', ['attribute' => 'Comapny']) }}");
+            }, "{{ __('validation.valueNotEquals', ['attribute' => 'Company']) }}");
 
             $.validator.addMethod("lettersonly", function(value, element) {
-                return this.optional(element) || /^[a-zA-Z\s]+$/i.test(value);
-            }, "{{ __('validation.lettersonly') }}");
+                if (/^\s+|\s+$/.test(value)) {
+                    return false;
+                }
+                if (/ {2,}/.test(value)) {
+                    return false;
+                }
+                return /^[a-zA-Z\s]+$/i.test(value);
+            }, "Please enter letters without extra spaces.");
 
             $.validator.addMethod("pattern", function(value, element) {
                     return /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/.test(

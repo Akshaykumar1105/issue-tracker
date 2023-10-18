@@ -30,8 +30,8 @@ class ConfirmPassword implements ShouldQueue
      */
     public function handle(): void
     {
-        $user = User::where('email', $this->email)->first();
         try {
+            $user = User::where('email', $this->email)->first();
             if ($user) {
                 $user->notify(new NotificationsConfirmPassword($user->email));
             } else {

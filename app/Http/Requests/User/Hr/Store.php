@@ -22,7 +22,7 @@ class Store extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|max:50',
+            'name' => 'required|max:50|regex:/^[a-zA-Z]+(\s[a-zA-Z]+)?$/',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:8|regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\x])(?=.*[!$#%]).*$/',
             'password_confirmation' => 'required|same:password',

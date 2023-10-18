@@ -22,7 +22,7 @@ class Update extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|max:50',
+            'name' => 'required|max:50|regex:/^[a-zA-Z]+(\s[a-zA-Z]+)?$/',
             'email' => 'required|email|unique:users,email,'.$this->hr.',id',
             'mobile' => 'required|digits:10',
         ];

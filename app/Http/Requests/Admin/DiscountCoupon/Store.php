@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Admin\Company;
+namespace App\Http\Requests\Admin\DiscountCoupon;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -22,11 +22,12 @@ class Store extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|min:6|max:255',
-            'email' => 'required|email|unique:companies,email',
-            'number' => 'required|min:10|digits:10',
-            'address' => 'required',
-            'city_id' => 'required|not_in:default'
+            'code' => 'required|unique:discount_coupons,code',
+            'discount' => 'required|numeric|min:0',
+            'discount_type' => 'required|in:FLAT,VARIABLE|max:'.(request()->discount_type == 'FLAT' ? '2000' : '100'),
+            'active_at' => 'nullable|date',
+            'expire_at' => 'nullable|date',
+            'is_active' => 'required|in:0,1',
         ];
     }
 }

@@ -81,6 +81,7 @@
 @section('script')
     <script src="{{ asset('asset/js/jquery-datatables.min.js') }}"></script>
     <script src="{{ asset('asset/js/datatable.min.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 
     <script>
         // Your custom JavaScript file
@@ -145,8 +146,7 @@
                     {
                         "data": "due_date",
                         render: function(data, type, row) {
-                            console.log(data);
-                            var date = data == null ? 'Not Select' : data;
+                            var date = data == null ? 'Not select due date' : moment(data).format('MMMM D, YYYY');
                             return '<div class="form-check form-switch p-1">' + date +
                                 '</div>';
                         },

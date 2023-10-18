@@ -61,7 +61,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    
+
                 </tbody>
             </table>
         </div>
@@ -132,22 +132,40 @@
                     {
                         "data": "status",
                         render: function(data, type, row) {
-                            const statusOptions = [
-                                { value: 'OPEN', label: 'Open' },
-                                { value: 'IN_PROGRESS', label: 'In Progress' },
-                                { value: 'ON_HOLD', label: 'On Hold' },
-                                { value: 'SEND_FOR_REVIEW', label: 'Send For Review' }
-                            ];
-                            let optionsHtml = '';
-                            for (const option of statusOptions) {
-                                const selected = data === option.value ? 'selected' : '';
-                                optionsHtml +=
-                                    `<option value="${option.value}" data-status="${option.value}" ${selected}>${option.label}</option>`;
+                            if (data === 'COMPLETED' || data === 'SEND_FOR_REVIEW') {
+                                data = data.replace(/_/g, ' ').replace(/\w\S*/g, function(txt) {
+                                    return txt.charAt(0).toUpperCase() + txt.substr(1)
+                                        .toLowerCase();
+                                });
+                                return `<div>${data}</div>`;
+                            } else {
+                                const statusOptions = [{
+                                        value: 'OPEN',
+                                        label: 'Open'
+                                    },
+                                    {
+                                        value: 'IN_PROGRESS',
+                                        label: 'In Progress'
+                                    },
+                                    {
+                                        value: 'ON_HOLD',
+                                        label: 'On Hold'
+                                    },
+                                    {
+                                        value: 'SEND_FOR_REVIEW',
+                                        label: 'Send For Review'
+                                    }
+                                ];
+                                let optionsHtml = '';
+                                for (const option of statusOptions) {
+                                    const selected = data === option.value ? 'selected' : '';
+                                    optionsHtml +=
+                                        `<option value="${option.value}" data-status="${option.value}" ${selected}>${option.label}</option>`;
+                                }
+                                const selectHtml =
+                                    `<select name="status" data-status="${row.id}" id="status" class="custom-select custom-select-sm form-control form-control-sm">${optionsHtml}</select>`;
+                                return selectHtml;
                             }
-                            const selectHtml =
-                                `<select name="status" data-status="${row.id}" id="status" class="custom-select custom-select-sm form-control form-control-sm">${optionsHtml}</select>`;
-
-                            return selectHtml;
                         },
                     },
                     {

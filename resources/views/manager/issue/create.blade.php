@@ -258,7 +258,6 @@
         .options li:hover {
             background-color: #e0e0e0;
         }
-
     </style>
     {{-- <link href="https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap4.min.css" rel="stylesheet"> --}}
 @endsection
@@ -294,42 +293,53 @@
                                 </div>
 
                                 <div class="col-md-12 d-flex ">
-
                                     <div class="col-md-6 p-0">
                                         <label for="email" class="form-label fw-bold">Priority</label>
-                                        <p>{{ $issue->priority }}</p>
+                                        <p>{{ ucwords(strtolower($issue->priority)) }}</p>
                                     </div>
 
                                     <div class="col-md-6 p-0">
                                         <label class="d-block font-weight-bold">Due Date</label>
                                         <p>{{ $issue->due_date }}</p>
                                     </div>
-
                                 </div>
 
                                 <div class="col-md-3 form-group">
                                     <label for="email" class="form-label fw-bold">Status<span
                                             class="text-danger ms-1">*</span></label>
-                                    <select name="status" class="d-block form-control" style="appearance: revert;">
-                                        <option value="default">Select Status</option>
-                                        <option data-status="OPEN" value="OPEN"
-                                            {{ $issue->status == 'OPEN' ? 'selected' : '' }}>Open</option>
-                                        <option vlaue="IN_PROGRESS" data-status="IN_PROGRESS"
-                                            {{ $issue->status == 'IN_PROGRESS' ? 'selected' : '' }}>In Progress</option>
-                                        <option value="ON_HOLD" data-status="ON_HOLD"
-                                            {{ $issue->status == 'ON_HOLD' ? 'selected' : '' }}>On Hold</option>
-                                        <option value="SEND_FOR_REVIEW" data-status="SEND_FOR_REVIEW"
-                                            {{ $issue->status == 'SEND_FOR_REVIEW' ? 'selected' : '' }}>Send For Review
-                                        </option>
-                                    </select>
+                                    @if ($issue->status == 'COMPLETED' || $issue->status == 'SEND_FOR_REVIEW')
+                                        <div>{{ str_replace('_', ' ', ucwords(strtolower($issue->status))) }}</div>
+                                    @else
+                                        <select name="status" class="d-block form-control" style="appearance: revert;">
+                                            <option value="default">Select Status</option>
+                                            <option data-status="OPEN" value="OPEN"
+                                                {{ $issue->status == 'OPEN' ? 'selected' : '' }}>Open</option>
+                                            <option vlaue="IN_PROGRESS" data-status="IN_PROGRESS"
+                                                {{ $issue->status == 'IN_PROGRESS' ? 'selected' : '' }}>In Progress
+                                            </option>
+                                            <option value="ON_HOLD" data-status="ON_HOLD"
+                                                {{ $issue->status == 'ON_HOLD' ? 'selected' : '' }}>On Hold</option>
+                                            <option value="SEND_FOR_REVIEW" data-status="SEND_FOR_REVIEW"
+                                                {{ $issue->status == 'SEND_FOR_REVIEW' ? 'selected' : '' }}>Send For Review
+                                            </option>
+                                        </select>
+                                    @endif
                                 </div>
+                                @if($issue->status == 'COMPLETED' || $issue->status == 'SEND_FOR_REVIEW')
+                                @else
                                 <div class="col-md-4 form-group">
                                     <label class="d-block font-weight-bold ">Comment</label>
                                     <input id="body" name="body" class="d-block form-control"
                                         placeholder="Enter your comment">
                                 </div>
-                                <div class="ps-2">
+                                @endif
+                                @if($issue->status == 'COMPLETED' || $issue->status == 'SEND_FOR_REVIEW')
+                                @else
+                                <div class="col-md-4 form-group">
                                     <button type="submit" class="btn btn-primary">Submit</button>
+                                </div>
+                                @endif
+                                <div class="ps-2">
                                     <a href="{{ route('manager.issue.index') }}" class="btn btn-outline-secondary">Back</a>
                                 </div>
                             </form>
@@ -352,7 +362,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    {{__('messages.conformation.delete', ['attribute' => 'comment?'])}}
+                    {{ __('messages.conformation.delete', ['attribute' => 'comment?']) }}
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -433,7 +443,6 @@
                         });
                     },
                     error: function(xhr, textStatus, errorThrown) {
-                        // Handle errors here
                         console.error('Error: ' + textStatus);
                         alert('An error occurred while loading comments.');
                     }
@@ -494,18 +503,15 @@
                 }
             });
 
-
             $(document).on("click", ".like", function() {
                 event.preventDefault();
                 var likeButton = $(this);
-                // $(this).toggleClass('active');
                 $(this).addClass('active');
                 let upvote = $(this).data('upvote');
                 let userId = $(this).data('user');
                 let commentId = $(this).data('commentid');
                 let authId = $(this).data('authid');
 
-                // Get the CSRF token from the meta tag
                 var csrfToken = $('meta[name="csrf-token"]').attr('content');
                 var voteCountElement = likeButton.closest('.rating').next().children();
                 var currentVoteCount = parseInt(voteCountElement.text());
@@ -521,16 +527,11 @@
                             _token: csrfToken,
                         },
                         success: function(response) {
-                            // Handle success (e.g., update the total vote count)
                             console.log('Upvote removed successfully.');
                             likeButton.removeClass('active');
 
-                            // Find the vote count element and update its content
-                            var voteCountElement = likeButton.closest('.rating')
-                                .next()
-                                .children();
-                            var currentVoteCount = parseInt(voteCountElement
-                                .text());
+                            var voteCountElement = likeButton.closest('.rating').next().children();
+                            var currentVoteCount = parseInt(voteCountElement.text());
                             var newVoteCount = currentVoteCount - 1;
 
                             if (newVoteCount == 1) {
@@ -538,18 +539,14 @@
                             }
                             voteCountElement.text(newVoteCount);
                             likeButton.data('user', false);
-                            console.log(likeButton.data('user'));
                         },
                         error: function(xhr, textStatus, errorThrown) {
-                            // Handle errors (e.g., display an error message)
                             console.error('Error: ' + textStatus);
-                            // Optionally, you can display an error message to the user
                             alert('An error occurred while removing the upvote.');
                         }
                     });
 
                 } else {
-                    // If the user hasn't upvoted, send a POST request to add the upvote
                     $.ajax({
                         url: "{{ route('comment.upvote.post', ['commentId' => ':id']) }}"
                             .replace(':id', commentId),
@@ -559,11 +556,8 @@
                             _token: csrfToken,
                         },
                         success: function(response) {
-                            // Handle success (e.g., update the total vote count)
                             console.log('Upvoted successfully.');
                             likeButton.addClass('active');
-
-                            // Find the vote count element and update its content
 
                             var newVoteCount = currentVoteCount + 1;
                             voteCountElement.text(newVoteCount);
@@ -571,9 +565,7 @@
                             console.log(likeButton.data('user'));
                         },
                         error: function(xhr, textStatus, errorThrown) {
-                            // Handle errors (e.g., display an error message)
                             console.error('Error: ' + textStatus);
-                            // Optionally, you can display an error message to the user
                             alert('An error occurred while upvoting.');
                         }
                     });
@@ -583,38 +575,24 @@
 
             $.validator.addMethod("valueNotEquals", function(value, element, arg) {
                 return arg !== value;
-            }, "{{__('validation.valueNotEquals', ['attribute' => 'issue status'])}}");
+            }, "{{ __('validation.valueNotEquals', ['attribute' => 'issue status']) }}");
 
             $("#issueEdit").validate({
                 errorElement: "span",
                 errorClass: "text-danger fw-normal",
                 rules: {
-                    priority: {
-                        required: true // Priority radio button is required
-                    },
                     status: {
-                        required: true,
-                        valueNotEquals: "default" // Status dropdown is required
-                    },
-                    assignManager: {
                         required: true,
                         valueNotEquals: "default"
                     },
                     date: {
-                        required: true // Validate that the date is in a valid format
+                        required: true
                     },
                 },
                 messages: {
-                    priority: {
-                        required: "{{__('validation.required', ['attribute' => 'priority'])}}",
-                    },
                     status: {
-                        required: required: "{{__('validation.required', ['attribute' => 'status'])}}",,
-                        valueNotEquals: "{{__('validation.valueNotEquals', ['attribute' => 'issue status'])}}",
-                    },
-                    assignManager: {
-                        required: required: "{{__('validation.required', ['attribute' => 'manager'])}}",
-                        valueNotEquals: "{{__('validation.valueNotEquals', ['attribute' => 'manager'])}}",
+                        required: "{{ __('validation.required', ['attribute' => 'status']) }}",
+                        valueNotEquals: "{{ __('validation.valueNotEquals', ['attribute' => 'issue status']) }}",
                     },
                     date: {
                         date: "Please enter a valid date"
@@ -625,7 +603,6 @@
                         "status");
                     console.log(selectedStatus);
                     let formData = $(form).serialize() + "&status=" + selectedStatus;
-                    // console.log(formData);
                     $.ajax({
                         url: $(form).attr("action"),
                         type: $(form).attr("method"),

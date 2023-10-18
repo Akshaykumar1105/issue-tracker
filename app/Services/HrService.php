@@ -15,13 +15,6 @@ class HrService
         $this->user = new User();
     }
 
-    public function index(){
-        if (!auth()->user()->hasRole(config('site.role.admin'))) {
-            return redirect()->route('home');
-        }
-        return Company::where('is_active', 1)->get();
-    }
-
     public function store($request){
         $this->user->fill($request->all())->save();
         $this->user->assignRole('hr');

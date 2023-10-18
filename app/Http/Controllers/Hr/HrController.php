@@ -16,9 +16,12 @@ class HrController extends Controller
         $this->userService = $userService;
     }
     
-    public function index(){
-        $company = $this->userService->index();
-        return view('user.hr.create', ['companies' => $company]);
+    public function create(){
+        if (!auth()->user()->hasRole(config('site.role.admin'))) {
+            return redirect()->route('home');
+        }
+        $company = Company::where('is_active', 1)->get();
+        return view('front.hr.create', ['companies' => $company]);
     }
 
     public function store(Store $request){

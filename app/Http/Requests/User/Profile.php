@@ -22,7 +22,7 @@ class Profile extends FormRequest
     {
         $id = auth()->user()->id;   
         return [
-            'name' => 'required|max:255',
+            'name' => 'required|max:255|regex:/^[a-zA-Z]+(\s[a-zA-Z]+)?$/',
             'email' => 'required|email|unique:users,email,'.$id,
             'mobile' => 'required|digits:10',
         ];

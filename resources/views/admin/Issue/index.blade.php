@@ -55,9 +55,11 @@
                         <th>{{ __('messages.table.id') }}</th>
                         <th style="width: 200px">{{ __('messages.table.title') }}</th>
                         <th>{{ __('messages.table.company') }}</th>
+                        <th>Hr</th>
                         <th>{{ __('messages.table.priority') }}</th>
+                        <th>Status</th>
                         <th>{{ __('messages.table.due_date') }}</th>
-                        <th>{{ __('messages.table.action') }}</th>
+                        <th style="width: 100px;">{{ __('messages.table.action') }}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -90,8 +92,8 @@
 @section('script')
     <script src="{{ asset('asset/js/jquery-datatables.min.js') }}"></script>
     <script src="{{ asset('asset/js/datatable.min.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
     <script>
-        // Your custom JavaScript file
         $(document).ready(function() {
             let priority = '';
             let date = '';
@@ -103,7 +105,6 @@
                     url: "{{ route('admin.issue.index') }}",
                     dataType: "JSON",
                     data: function(d) {
-                        // Assign the value of the 'priority' variable to the 'filter' parameter
                         d.filter = priority;
                         d.duedate = date;
                         d.table = 'admin';
@@ -125,21 +126,24 @@
                         "data": "company.name",
                     },
                     {
+                        "data": "hr.name",
+                    },
+                    {
                         "data": "priority",
                         render: function(data, type, row) {
                             var colorClass = '';
                             switch (data) {
                                 case 'LOW':
                                     colorClass =
-                                        'badge bg-success'; // CSS class for low priority (green color)
+                                        'badge bg-success';
                                     break;
                                 case 'MEDIUM':
                                     colorClass =
-                                        'badge bg-yellow'; // CSS class for medium priority (yellow color)
+                                        'badge bg-yellow';
                                     break;
                                 case 'HIGH':
                                     colorClass =
-                                        'badge bg-red'; // CSS class for high priority (red color)
+                                        'badge bg-red';
                                     break;
                                 default:
                                     colorClass = ''; // Default class
@@ -149,10 +153,22 @@
                         }
                     },
                     {
+                        "data": "status",
+                        render: function(data, type, row) {
+                            data = data.replace(/_/g, ' ').replace(/\w\S*/g, function(txt) {
+                                return txt.charAt(0).toUpperCase() + txt.substr(1)
+                                    .toLowerCase();
+                            });
+                            return `<div>${data}</div>`;
+                        },
+                    },
+                    {
                         "data": "due_date",
                         render: function(data, type, row) {
-                            var date = data == null ? 'Not select due date' : data;
-                            return '<div class="form-check form-switch p-1">' + date + '</div>';
+                            var date = data == null ? 'Not select due date' : moment(data).format(
+                                'MMMM D, YYYY');
+                            return '<div class="form-check form-switch p-1">' + date +
+                                '</div>';
                         },
                     },
                     {
@@ -201,7 +217,7 @@
 
             function deleteIssue(issueId) {
                 $.ajax({
-                    url: "{{ route('admin.issue.destroy', ['issue' => ':id']) }}".replace(":id",issueId),
+                    url: "{{ route('admin.issue.destroy', ['issue' => ':id']) }}".replace(":id", issueId),
                     data: {
                         "id": issueId,
                         "_token": "{{ csrf_token() }}"

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\User\Manager;
+namespace App\Http\Requests\Admin\DiscountCoupon;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -22,10 +22,12 @@ class Update extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|max:255|regex:/^[a-zA-Z]+(\s[a-zA-Z]+)?$/',
-            'email' => 'required|email|unique:users,email,'.$this->manager,
-            'mobile' => 'required|digits:10',
-            'profile_img' => 'nullable|mimes:jpeg,png,jpg,gif|max:4096'
+            'code' => 'required|unique:discount_coupons,code,'.$this->discount_coupon.',id',
+            'discount' => 'required|numeric|min:0|max:'.(request()->discount_type == 'FLAT' ? '2000' : '100'),
+            'discount_type' => 'required|in:FLAT,VARIABLE',
+            'active_at' => 'nullable|date',
+            'expire_at' => 'nullable|date',
+            'is_active' => 'required|in:0,1',
         ];
     }
 }

@@ -7,34 +7,26 @@ use App\Models\Issue;
 use App\Models\Company;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\DB;
-use Spatie\Permission\Models\Role;
+use App\Services\DashboardService;
 
 class DashboardController extends Controller
 {
-    public function __invoke()
+    protected $dashboardService;
+    public function __construct(DashboardService $dashboardService){
+     $this->dashboardService = $dashboardService;   
+    }
+
+    public function index(){
+        $dashboardData = $this->dashboardService->index();
+        return view('dashboard.dashboard', $dashboardData);
+    }
+
+    public function issueChart(Request $request)
     {
-        $user = User::whereNotNull(['company_id'])->count();
-        $issue = Issue::count();
-        $company = Company::count();
-        $issueStatusData = Issue::select('status')
-            ->selectRaw('count(*) as count')
-            ->groupBy('status')
-            ->get();
-
-        $hrData = User::whereNull('parent_id')->whereNotNull('company_id')
-            ->selectRaw('DATE_FORMAT(created_at, "%Y-%m") as month')
-            ->selectRaw('COUNT(*) as count')
-            ->groupBy('month')
-            ->orderBy('month')
-            ->get();
-
-        $managerData = User::whereNotNull('parent_id')
-            ->selectRaw('DATE_FORMAT(created_at, "%Y-%m") as month')
-            ->selectRaw('COUNT(*) as count')
-            ->groupBy('month')
-            ->orderBy('month')
-            ->get();
-        return view('dashboard.dashboard', compact('user', 'issue', 'company', 'issueStatusData', 'hrData', 'managerData'));
+        if ($request->ajax()) {
+            $companyId = $request->companyId;
+            $issueStatusData = $this->dashboardService->getIssueStatusData($companyId);
+            return $issueStatusData;
+        }
     }
 }

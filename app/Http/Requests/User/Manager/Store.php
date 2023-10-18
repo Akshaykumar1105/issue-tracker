@@ -22,7 +22,7 @@ class Store extends FormRequest
     public function rules(): array
     {
         $rules =  [
-            'name' => 'required|max:255',
+            'name' => 'required|max:255|regex:/^[a-zA-Z]+(\s[a-zA-Z]+)?$/',
             'email' => 'required|email|unique:users',
             'password' => 'required|min:8|regex:/^(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*])(?=.*[0-9]).{8,}$/',
             'password_confirmation' => 'required|same:password',

@@ -45,7 +45,7 @@ class IssueReportSubmission implements ShouldQueue
                 // dd($user);
                 $user->notify(new NotificationsIssueReportSubmission($user));
             } else {
-                dd(3);
+                // dd(3);
             }
     }
 }

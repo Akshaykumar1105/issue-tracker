@@ -17,7 +17,9 @@ use App\Http\Controllers\Admin\CompanyStatusController;
 use App\Http\Controllers\User\ChangePasswordController;
 use App\Http\Controllers\Auth\ForgetPasswordController;
 use App\Http\Controllers\Hr\IssueController as HrIssueController;
+use App\Http\Controllers\Admin\DiscountCoupon\DiscountCouponStatus;
 use App\Http\Controllers\User\IssueController as UserIssueController;
+use App\Http\Controllers\Admin\DiscountCoupon\DiscountCouponController;
 use App\Http\Controllers\Hr\DashboardController as HrDashboardController;
 use App\Http\Controllers\Admin\ManagerController as AdminManagerController;
 use App\Http\Controllers\Manager\IssueController as ManagerIssueController;
@@ -42,12 +44,13 @@ Route::post('companies/create-issue', [UserIssueController::class, 'store'])->na
 
 //hr register route
 Route::prefix('/hr')->group(function () {
-    Route::get('/register', [HrController::class, 'index'])->name('hr.register.index');
+    Route::get('/register', [HrController::class, 'create'])->name('hr.register.create');
     Route::post('/register', [HrController::class, 'store'])->name('hr.register.store');
 });
 
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->group(function () {
-    Route::get('/dashboard', DashboardController::class)->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard/issue/chart', [DashboardController::class, 'issueChart'])->name('dashboard.issue.chart');
 
     // Admin Profile
     Route::resource('/profile', ProfileController::class)->only(['index', 'update']);
@@ -64,7 +67,11 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->grou
     Route::resource('/manager', AdminManagerController::class);
 
     //issue
-    Route::resource('/issue', IssueController::class)->only(['index', 'show', 'destroy']);  
+    Route::resource('/issue', IssueController::class)->only(['index', 'show', 'destroy']);
+    
+    Route::resource('/discount-coupon', DiscountCouponController::class)->except(['show']);
+    Route::post('/discount-coupon/status', DiscountCouponStatus::class)->name('discount-coupon.status');
+
 });
 
 Route::prefix('hr')->name('hr.')->middleware(['auth', 'role:hr'])->group(function () {

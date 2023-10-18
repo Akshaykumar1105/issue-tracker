@@ -2,26 +2,25 @@
 
 namespace App\Services;
 
-use App\Jobs\IssueSolve as JobsIssueSolve;
-use App\Jobs\ReviewIssue;
-use App\Mail\IssueSolve;
-use App\Models\Comment;
-use App\Models\Company;
 use App\Models\User;
 use App\Models\Issue;
+use App\Models\Comment;
+use App\Models\Company;
+use App\Mail\IssueSolve;
+use App\Jobs\ReviewIssue;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Mail;
+use App\Jobs\IssueSolve as JobsIssueSolve;
 
-class IssueService
-{
+class IssueService{
 
     protected $issue;
     protected $commentService; 
 
-    public function __construct(CommentService $commentService)
+    public function __construct()
     {
         $this->issue = new Issue; 
-        $this->commentService = $commentService;
+        $this->commentService = new CommentService();
     }
 
     public function index($request){
@@ -57,7 +56,7 @@ class IssueService
         $issue = Issue::find($id);
         if ($request->status == 'COMPLETED') {
             $email = $issue->email;
-            JobsIssueSolve::dispatch([
+            JobsIssueSolve::dispatchSync([
                 'email' => $email,
                 'issue' => $issue,
             ]);
@@ -65,7 +64,7 @@ class IssueService
 
         if ($request->status == 'SEND_FOR_REVIEW') {
             $email = $issue->email;
-            ReviewIssue::dispatch([
+            ReviewIssue::dispatchSync([
                 'email' => $email,
                 'issue' => $issue,
             ]);
@@ -90,14 +89,15 @@ class IssueService
     }
 
     public function collection($query, $request){
+        $query = Issue::with('company');
         switch ($request->table) {
             case config('site.table.admin'):
-                $query = Issue::with('company');
+                $query->with(['user','hr']);
                 break;
     
             case config('site.table.hr'):
                 $id = auth()->user()->id;
-                $query = Issue::with('user')->where('hr_id', $id);
+                $query->with('user')->where('hr_id', $id);
     
                 if ($request->type == 'pending') {
                     $query->whereNull(['due_date', 'manager_id']);
@@ -108,10 +108,10 @@ class IssueService
     
             case config('site.table.manager'):
                 $companyId = auth()->user()->id;
-                $query = Issue::where('manager_id', $companyId);
+                $query->where('manager_id', $companyId);
     
                 if ($request->type == 'pending') {
-                    $query->where('status', '<>', 'SEND_FOR_REVIEW');
+                    $query->where('status', '<>', 'SEND_FOR_REVIEW')->where('status', '<>', 'COMPLETED');
                 }
                 break;
         }
@@ -124,7 +124,6 @@ class IssueService
             $query->where('priority', $request->filter);
         }
         if ($request->duedate) {
-
             $query->where('due_date', $request->duedate);
         }
         if ($request->company) {

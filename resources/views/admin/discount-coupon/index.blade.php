@@ -14,9 +14,9 @@
 @endsection
 @section('content')
     <section class="content" style="margin: 0 auto; max-width: 100%">
-        <h1>{{__('messages.company.title')}}</h1>
+        <h1>Discount Coupon</h1>
         <div class="" style="margin: 0 auto; float: right;">
-            <a class="btn btn-primary" href="{{ route('admin.company.create') }}">{{__('messages.company.register')}}</a>
+            <a class="btn btn-primary" href="{{ route('admin.discount-coupon.create') }}">Create Discount Coupon</a>
         </div>
 
         <div class=""
@@ -28,12 +28,12 @@
                     <tr>
                         <th >{{ __('messages.table.id') }}</th>
                         <th >{{ __('messages.table.status') }}</th>
-                        <th >{{ __('messages.table.name') }}</th>
-                        <th >{{ __('messages.table.email') }}</th>
-                        <th style="width: 150px;box-sizing: border-box;" >{{ __('messages.table.number') }}</th>
-                        <th style="width: 250px;box-sizing: border-box;" >{{ __('messages.table.address') }}</th>
-                        <th>City</th>
-                        <th style="width: 210px;box-sizing: border-box;">{{ __('messages.table.action') }}</th>
+                        <th >Code</th>
+                        <th>Discount Type</th>
+                        <th >Discount</th>
+                        <th style="" >Start Date</th>
+                        <th style="" >End Date</th>
+                        <th style="width: 150px;box-sizing: border-box;">{{ __('messages.table.action') }}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -43,7 +43,7 @@
         </div>
 
         <!-- Modal -->
-        <div class="modal fade" id="deleteCompany" tabindex="-1" aria-hidden="true">
+        <div class="modal fade" id="deleteCouponModel" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -51,11 +51,11 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        {{__('messages.conformation.delete', ['attribute' => 'company?'])}}
+                        {{__('messages.conformation.delete', ['attribute' => 'Discount Coupon?'])}}
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" id="companyDelete" class="btn btn-danger">Delete</button>
+                        <button type="button" id="deleteCoupon" class="btn btn-danger">Delete</button>
                     </div>
                 </div>
             </div>
@@ -67,16 +67,15 @@
 @section('script')
     <script src="{{ asset('asset/js/jquery-datatables.min.js') }}"></script>
     <script src="{{ asset('asset/js/datatable.min.js') }}"></script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
     <script>
-        // Your custom JavaScript file
         $(document).ready(function() {
 
             $('.table').DataTable({
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    url: "{{ route('admin.company.index') }}",
+                    url: "{{ route('admin.discount-coupon.index') }}",
                     dataType: "JSON",
                 },
                 columns: [{
@@ -90,26 +89,37 @@
                         render: function(data, type, row) {
                             var checked = data == 1 ? 'checked' : '';
                             return '<div class="form-check form-switch p-1"><input ' + checked +
-                                ' data-user-id=' + row.id + ' name="status" value="' + data +
+                                ' data-coupon-id=' + row.id + ' name="status" value="' + data +
                                 '" class="status form-check-input m-0" type="checkbox" role="switch" /></div>';
                         },
                         searchable: false,
                         orderable: false,
                     },
                     {
-                        "data": "name",
+                        "data": "code",
                     },
                     {
-                        "data": "email",
+                        "data": "discount",
                     },
                     {
-                        "data": "number",
+                        "data": "discount_type",
+                        'name' : "discount_type"
                     },
                     {
-                        "data": "address",
+                        "data": "active_at",
+                        render: function(data, type, row) {
+                            var date = data == null ? 'Not select due date' : moment(data).format('MMMM D, YYYY');
+                            return '<div class="form-check form-switch p-1">' + date +
+                                '</div>';
+                        },
                     },
                     {
-                        "data": "city.name"
+                        "data": "expire_at",
+                        render: function(data, type, row) {
+                            var date = data == null ? 'Not select due date' : moment(data).format('MMMM D, YYYY');
+                            return '<div class="form-check form-switch p-1">' + date +
+                                '</div>';
+                        },
                     },
                     {
                         "data": "action",
@@ -124,28 +134,28 @@
                 pageLength: 10,
             });
 
-            let companyId;
+            let couponId;
             $(document).on("click", ".delete", function(event) {
                 event.preventDefault();
-                companyId = $(this).attr("data-user-id");
-                console.log(companyId);
+                couponId = $(this).attr("data-user-id");
+                console.log(couponId);
             });
 
-            $(document).on("click", "#companyDelete", function(event) {
+            $(document).on("click", "#deleteCoupon", function(event) {
                 event.preventDefault();
-                deleteCompany(companyId)
+                deleteCompany(couponId)
             });
 
-            function deleteCompany(companyId) {
+            function deleteCompany(couponId) {
                 $.ajax({
-                    url: "{{ route('admin.company.destroy', ['company' => ':id']) }}".replace(':id', companyId),
+                    url: "{{ route('admin.discount-coupon.destroy', ['discount_coupon' => ':id']) }}".replace(':id', couponId),
                     data: {
-                        "id": companyId,
+                        "id": couponId,
                         "_token": "{{ csrf_token() }}"
                     },
                     type: "DELETE",
                     success: function(response) {
-                        $("#deleteCompany").modal("toggle");
+                        $("#deleteCouponModel").modal("toggle");
                         const  message = response.success;
                         toastr.options = {
                             closeButton: true,
@@ -157,12 +167,12 @@
                 });
             }
 
-            function changeStatus(status, userId) {
+            function changeStatus(status, couponId) {
                 $.ajax({
-                    url: "{{ route('admin.company.status') }}",
+                    url: "{{ route('admin.discount-coupon.status') }}",
                     data: {
                         "status": status,
-                        "userId": userId,
+                        "couponId": couponId,
                         "_token": "{{ csrf_token() }}"
                     },
                     type: "POST",
@@ -181,8 +191,8 @@
             $(document).on("change", ".status", function(event) {
                 event.preventDefault();
                 let status = $(this).val();
-                let userId = $(this).attr('data-user-id');
-                changeStatus(status, userId)
+                let couponId = $(this).attr('data-coupon-id');
+                changeStatus(status, couponId)
             });
         });
     </script>

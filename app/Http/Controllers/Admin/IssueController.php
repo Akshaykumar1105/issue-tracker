@@ -18,7 +18,7 @@ class IssueController extends Controller{
 
     public function __construct(IssueService $issueService, CompanyService $companyService){
         $this->issueService = $issueService;
-        $this->companyService = $companyService;
+        $this->companyService = new CompanyService();
     }
 
     public function index(Request $request){
