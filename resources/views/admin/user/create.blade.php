@@ -1,8 +1,4 @@
-@extends('dashboard.layout.dashboard_layout')
-@section('meta')
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-@endsection
-
+@extends('dashboard.layout.master')
 @section('style')
     <link href="{{ asset('asset/css/datatables.min.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('asset/css/dropify.min.css') }}">
@@ -73,7 +69,7 @@
                                 <label for="company_id" class="form-label">Company</label>
                                 <select class="form-control" value="{{ old('company_id') }}" name="company_id"
                                     id='company_id' style="width: 300px;appearance: revert;padding-right: 65px;">
-                                    <option value="default">Select Company</option>
+                                    <option value="">Select Company</option>
                                     @foreach ($companies as $company)
                                         <option value="{{ $company->id }}"
                                             {{ isset($user) && $user->company_id == $company->id ? 'selected' : '' }}>
@@ -124,8 +120,6 @@
                             </div>
 
                         </div>
-                        <!-- /.card-body -->
-
                         <div class="card-footer">
                             <button type="submit"
                                 class="btn btn-primary">{{ isset($user) ? 'Update' : 'Submit' }}</button>
@@ -141,12 +135,8 @@
                         </div>
                         </form>
                     </div>
-                    <!-- /.card -->
-
                 </div>
-                <!-- /.card-body -->
             </div>
-            <!-- /.card -->
         </div>
 
 
@@ -196,9 +186,10 @@
                 })
             }
 
-            $.validator.addMethod("valueNotEquals", function(value, element, arg) {
-                return arg !== value;
-            }, "{{ __('validation.valueNotEquals', ['attribute' => 'Company']) }}");
+
+            $.validator.addMethod("validNumber", function(value, element) {
+                return !/0{10}/.test(value);
+            }, "{{ __('validation.valid', ['attribute' => 'mobile']) }}");
 
             $.validator.addMethod("lettersonly", function(value, element) {
                 if (/^\s+|\s+$/.test(value)) {
@@ -211,11 +202,8 @@
             }, "Please enter letters without extra spaces.");
 
             $.validator.addMethod("pattern", function(value, element) {
-                    return /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/.test(
-                        value);
-                },
-                "Password must include at least one uppercase letter, one lowercase letter, one digit, and one special character."
-            );
+                return /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/.test(value);
+            },"Password must include at least one uppercase letter, one lowercase letter, one digit, and one special character.");
 
             $("#createUser").validate({
                 errorClass: "text-danger fw-normal",
@@ -240,18 +228,17 @@
                     },
                     company_id: {
                         required: true,
-                        valueNotEquals: "default"
                     },
                     hr_id: {
                         required: true,
-                        valueNotEquals: "defaultHr"
                     },
                     mobile: {
                         required: true,
                         number: true,
+                        validNumber:true,
+                        digits: true,
                         minlength: 10,
-                        maxlength: 10,
-                        digits: true
+                        maxlength: 10
                     },
 
                 },
@@ -272,9 +259,6 @@
                     password_confirmation: {
                         required: "Please confirm your password.",
                         equalTo: "Passwords do not match.",
-                    },
-                    company_id: {
-                        required: true,
                     },
                     number: {
                         required: "{{ __('validation.required', ['attribute' => 'number']) }}",
@@ -309,7 +293,6 @@
                             $(".loader-container").fadeOut();
                             var response = JSON.parse(xhr.responseText);
                             var message = response.message;
-                            console.log(message)
                             toastr.options = {
                                 closeButton: true,
                                 progressBar: true,

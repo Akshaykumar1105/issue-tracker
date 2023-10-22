@@ -18,7 +18,7 @@ class ResetPasswordEmail extends Mailable
      */
     public function __construct(protected $token)
     {
-        //
+        $this->token = $token;
     }
 
     /**

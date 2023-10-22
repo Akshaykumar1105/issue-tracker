@@ -7,10 +7,11 @@ use App\Models\Company;
 use App\Services\HrService;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\User\Hr\Store;
 use App\Http\Requests\User\Hr\Update;
 use Yajra\DataTables\Facades\DataTables;
 
-class UserController extends Controller
+class HrController extends Controller
 {
 
     protected $hrService;
@@ -41,30 +42,30 @@ class UserController extends Controller
                     $user = $row->id;
                     $showManager = route('admin.manager.index', ['company_id' => $row->company_id, 'hr_id' => $user]);
                     $editHr = route('admin.hr.edit', ['hr' => $user]);
-                    $actionBtn = '<div class="d-flex" style="flex-direction: column;justify-content: initial;align-items: baseline;gap: 10px;"><div><a href=' . $editHr . ' id="edit' . $row->id . '" data-user-id="' . $row->id . '" class="edit btn btn-success btn-sm">Edit</a> <button type="submit" data-userId="' . $row->id . '" class="delete btn btn-danger btn-sm" data-bs-toggle="modal"
-                    data-bs-target="#deleteUser">Delete</button></div><a href="' . $showManager . '" id="edit' . $row->id . '" data-userId="' . $row->id . '" class="view btn btn-primary btn-sm">View Manager</a></div>';
+                    $actionBtn = '<div class="d-flex" style="flex-direction: column;justify-content: initial;align-items: baseline;gap: 10px;"><div><a href=' . $editHr . ' id="edit' . $row->id . '" data-user-id="' . $row->id . '" class="edit btn btn-success btn-sm"><i class="fas fa-pencil-alt" style="margin: 0 5px 0 0"></i>Edit</a> <button type="submit" data-userId="' . $row->id . '" class="delete btn btn-danger btn-sm" data-bs-toggle="modal"
+                    data-bs-target="#deleteUser"><i class="fas fa-trash" style="margin: 0 5px 0 0;"></i>Delete</button></div><a href="' . $showManager . '" id="edit' . $row->id . '" data-userId="' . $row->id . '" class="view btn btn-primary btn-sm"><i class="fa-solid fa-eye" style="margin:0 5px 0 0"></i>View Manager</a></div>';
                     return $actionBtn;
                 })
                 ->rawColumns(['action', 'profile'])
                 ->make(true);
         }
-        $company = Company::where('is_active', config('site.status.active'))->get();
-        return view('admin.user.index', ['companies' => $company]);
+        $companies = Company::where('is_active', config('site.status.active'))->get();
+        return view('admin.user.index', ['companies' => $companies]);
     }
 
     public function create(){
-        $company = Company::where('is_active', config('site.status.active'))->get();
-        return view('admin.user.create', ['companies' => $company]);
+        $companies = Company::where('is_active', config('site.status.active'))->get();
+        return view('admin.user.create', ['companies' => $companies]);
     }
 
-    public function store(Request $request){
+    public function store(Store $request){
         return $this->hrService->store($request);
     }
 
     public function edit($id, Request $request){
         $user = User::findOrFail($id);
-        $company = Company::where('is_active', config('site.status.active'))->get();
-        return view('admin.user.create', ['companies' => $company, 'user' => $user]);
+        $companies = Company::where('is_active', config('site.status.active'))->get();
+        return view('admin.user.create', ['companies' => $companies, 'user' => $user]);
     }
 
     public function update($id, Update $request){

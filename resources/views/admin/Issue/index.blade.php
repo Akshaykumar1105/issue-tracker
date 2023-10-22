@@ -1,8 +1,4 @@
-@extends('dashboard.layout.dashboard_layout')
-@section('meta')
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-@endsection
-
+@extends('dashboard.layout.master')
 @section('style')
     {{-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" /> --}}
     <link href="{{ asset('asset/css/datatables.min.css') }}" rel="stylesheet">
@@ -59,7 +55,7 @@
                         <th>{{ __('messages.table.priority') }}</th>
                         <th>Status</th>
                         <th>{{ __('messages.table.due_date') }}</th>
-                        <th style="width: 100px;">{{ __('messages.table.action') }}</th>
+                        <th style="width: 150px;">{{ __('messages.table.action') }}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -165,8 +161,7 @@
                     {
                         "data": "due_date",
                         render: function(data, type, row) {
-                            var date = data == null ? 'Not select due date' : moment(data).format(
-                                'MMMM D, YYYY');
+                            var date = data == null ? 'Not select due date' : moment(data).format("{{config('site.date')}}");
                             return '<div class="form-check form-switch p-1">' + date +
                                 '</div>';
                         },

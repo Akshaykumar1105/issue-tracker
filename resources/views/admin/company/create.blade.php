@@ -1,4 +1,4 @@
-@extends('dashboard.layout.dashboard_layout')
+@extends('dashboard.layout.master')
 
 @section('style')
     <link rel="stylesheet" href="{{ asset('asset/css/loader.css') }}">
@@ -71,7 +71,7 @@
                     <div class="form-group">
                         <label for="address" class="form-label fw-bold">City<span class="text-danger ms-1">*</span></label>
                         <select name="city_id" class="form-control" style="appearance: auto">
-                            <option value="default">Select City</option>
+                            <option value="">Select City</option>
                             @foreach ($cities as $city)
                                 <option value="{{ $city->id }}"
                                     {{ isset($company) && $company->city_id == $city->id ? 'selected' : '' }}>
@@ -131,9 +131,9 @@
                 return this.optional(element) || /^[a-zA-Z0-9]+( [a-zA-Z0-9]+)*$/.test(value);
             }, "Letters and numbers only with a single space between words.");
 
-            $.validator.addMethod("valueNotEquals", function(value, element, arg) {
-                return arg !== value;
-            }, "{{ __('validation.valueNotEquals', ['attribute' => 'Comapny']) }}");
+            $.validator.addMethod("validNumber", function(value, element) {
+                return !/0{10}/.test(value);
+            }, "{{ __('validation.valid', ['attribute' => 'mobile']) }}");
 
             $("#companyRegister").validate({
                 errorClass: "text-danger font-weight-normal",
@@ -150,16 +150,16 @@
                     number: {
                         required: true,
                         number: true,
+                        validNumber: true,
+                        digits: true,
                         minlength: 10,
                         maxlength: 10,
-                        digits: true
                     },
                     address: {
                         required: true,
                     },
                     city_id: {
                         required: true,
-                        valueNotEquals: true
                     }
                 },
                 messages: {

@@ -80,7 +80,7 @@
                         Reset Password Link
                     </button>
 
-                    <p class="text-center">Not registered yet? <a href="{{ route('hr.register.index') }}"
+                    <p class="text-center">Not registered yet? <a href="{{ route('hr.register.create') }}"
                             class="text-primary font-weight-bold">Register now</a></p>
                 </form>
             </div>

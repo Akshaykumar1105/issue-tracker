@@ -1,22 +1,21 @@
 <?php
 
-namespace App\Http\Controllers\Admin\DiscountCoupon;
+namespace App\Http\Controllers\Admin;
 
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use App\Models\DiscountCoupons;
 use App\Http\Controllers\Controller;
 use Yajra\DataTables\Facades\DataTables;
 use App\Http\Requests\Admin\DiscountCoupon\Store;
 use App\Http\Requests\Admin\DiscountCoupon\Update;
-use App\Services\DiscountCouponService;
+use App\Services\CouponService;
 
-class DiscountCouponController extends Controller
+class CouponController extends Controller
 {
 
     protected $discountCouponService;
 
-    public function __construct(DiscountCouponService $discountCouponService){
+    public function __construct(CouponService $discountCouponService){
         $this->discountCouponService = $discountCouponService;
     }
 
@@ -29,8 +28,8 @@ class DiscountCouponController extends Controller
                 })
                 ->addColumn('action', function ($row) {
                     $edit = route('admin.discount-coupon.edit', ['discount_coupon' => $row->id]);
-                    $actionBtn = '<div class="d-flex" style="flex-direction: column;justify-content: initial;align-items: baseline;gap: 10px;"><div><a href=' . $edit . ' id="edit' . $row->id . '" data-userId="' . $row->id . '" class="edit btn btn-success btn-sm">Edit</a> <button type="submit" data-user-id="' . $row->id . '" class="delete btn btn-danger btn-sm" data-bs-toggle="modal"
-                data-bs-target="#deleteCouponModel">Delete</button></div></div>';
+                    $actionBtn = '<div class="d-flex" style="flex-direction: column;justify-content: initial;align-items: baseline;gap: 10px;"><div><a href=' . $edit . ' id="edit' . $row->id . '" data-userId="' . $row->id . '" class="edit btn btn-success btn-sm"><i class="fas fa-pencil-alt" style="margin: 0 5px 0 0"></i>Edit</a> <button type="submit" data-user-id="' . $row->id . '" class="delete btn btn-danger btn-sm" data-bs-toggle="modal"
+                data-bs-target="#deleteCouponModel"><i class="fas fa-trash" style="margin: 0 5px 0 0;"></i>Delete</button></div></div>';
                     return $actionBtn;
                 })
                 ->addIndexColumn()

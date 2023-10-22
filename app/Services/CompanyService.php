@@ -2,14 +2,8 @@
 
 namespace App\Services;
 
-use App\Models\User;
 use App\Models\Company;
 use Illuminate\Http\Request;
-use PhpParser\Node\Expr\New_;
-use App\Models\CommentUpvotes;
-use App\Mail\IssueReportSubmission;
-use Illuminate\Support\Facades\Mail;
-use Yajra\DataTables\Facades\DataTables;
 use App\Jobs\IssueReportSubmission as JobsIssueReportSubmission;
 
 class CompanyService
@@ -18,7 +12,6 @@ class CompanyService
     protected $companyModel;
     protected $managerService;
     protected $hrService;
-
 
     public function __construct(){
         $this->companyModel = new Company();

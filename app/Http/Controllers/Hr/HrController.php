@@ -17,7 +17,7 @@ class HrController extends Controller
     }
     
     public function create(){
-        if (!auth()->user()->hasRole(config('site.role.admin'))) {
+        if (auth()->user()) {
             return redirect()->route('home');
         }
         $company = Company::where('is_active', 1)->get();

@@ -31,7 +31,7 @@ class IssueController extends Controller
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
                     $editRoute = route('manager.issue.edit', ['issue' => $row->id]);
-                    $actionBtn = '<a href=' . $editRoute . ' data-issueId="' . $row->id . '" class="view btn btn-primary btn-sm">View</a>';
+                    $actionBtn = '<a href=' . $editRoute . ' class="view btn btn-success btn-sm"><i class="fas fa-pencil-alt" style="margin: 0 5px 0 0"></i>Edit</a>';
                     return $actionBtn;
                 })
                 ->rawColumns(['status', 'action'])

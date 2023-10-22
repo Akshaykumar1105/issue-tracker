@@ -32,7 +32,6 @@ class AuthService
 
         $user = auth()->user();
         $company = Company::find($user->company_id);
-        // dd($company->is_active == config('site.status.active')); 
 
         if ($user->hasRole(config('site.role.admin'))) {
             return  [
@@ -70,7 +69,6 @@ class AuthService
         ];
     }
 
-
     public function forgetPassword($request){
         $token = Str::random(64);
         $validation = $request->only('email');
@@ -81,11 +79,10 @@ class AuthService
                 'token' => $token,
                 'created_at' => Carbon::now()
             ]);
-            ResetPassword::dispatch([
+            ResetPassword::dispatchSync([
                 'email' => $request->email,
                 'token' => $token,
-            ])->delay(now()->addMinutes(1));
-            // Mail::to($request->email)->send(new ResetPasswordEmail($token));
+            ]);
             return['message' => __('messages.email.reset-email')];
         } else {
             return ['message' => __('messages.email.email-fail')];
@@ -119,7 +116,7 @@ class AuthService
     public function changePassword($request){
         if (!Hash::check($request->old_password, auth()->user()->password)) {
             return response()->json([
-                'error' =>  __('messages.password.not_macth')
+                'error' =>  __('messages.password.not_match')
             ],401);
         }
         User::where('id', auth()->user()->id)->update([

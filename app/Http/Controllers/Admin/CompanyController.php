@@ -2,16 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\City;
 use App\Models\Company;
-use App\Services\HrService;
 use Illuminate\Http\Request;
 use App\Services\CompanyService;
-use App\Services\ManagerService;
 use App\Http\Controllers\Controller;
 use Yajra\DataTables\Facades\DataTables;
 use App\Http\Requests\Admin\Company\Store;
 use App\Http\Requests\Admin\Company\Update;
-use App\Models\City;
 
 class CompanyController extends Controller
 {
@@ -34,8 +32,10 @@ class CompanyController extends Controller
                     $edit = route('admin.company.edit', ['company' => $row->id]);
                     $hr = route('admin.hr.index', ['company_id' => $row->id]);
                     $manager = route('admin.manager.index', ['company_id' => $row->id]);
-                    $actionBtn = '<div class="d-flex" style="flex-direction: column;justify-content: initial;align-items: baseline;gap: 10px;"><div><a href=' . $edit . ' id="edit' . $row->id . '" data-userId="' . $row->id . '" class="edit btn btn-success btn-sm">Edit</a> <button type="submit" data-user-id="' . $row->id . '" class="delete btn btn-danger btn-sm" data-bs-toggle="modal"
-                data-bs-target="#deleteCompany">Delete</button></div> <div class="" style="display: contents;"><a href=' . $hr . ' id="viewHr' . $row->id . '" data-userId="' . $row->id . '" class="hr btn btn-primary btn-sm">View Hr</a> <a href=' . $manager . ' type="submit" data-userId="' . $row->id . '"  class="manager btn btn-primary btn-sm">View Manager</a></div></div>';
+                    $actionBtn = '<div class="d-flex" style="flex-direction: column;justify-content: initial;align-items: baseline;gap: 10px;"><div><a href=' . $edit . ' id="edit' . $row->id . '" data-user-id="' . $row->id . '" class="edit btn btn-success btn-sm"><i class="fas fa-pencil-alt" style="margin: 0 5px 0 0">
+                    </i>Edit</a> <button type="submit" data-user-id="' . $row->id . '" class="delete btn btn-danger btn-sm" data-bs-toggle="modal"
+                data-bs-target="#deleteCompany"> <i class="fas fa-trash" style="margin: 0 5px 0 0;">
+                </i>Delete</button></div> <a href=' . $hr . ' id="viewHr' . $row->id . '" data-user-id="' . $row->id . '" class="hr btn btn-primary btn-sm"> <i class="fa-solid fa-eye" style="margin:0 5px 0 0"></i>View Hr</a> <a href=' . $manager . ' type="submit" data-user-id="' . $row->id . '"  class="manager btn btn-primary btn-sm"><i class="fa-solid fa-eye" style="margin:0 5px 0 0"></i>View Manager</a></div>';
                     return $actionBtn;
                 })
                 ->addIndexColumn()
@@ -46,8 +46,8 @@ class CompanyController extends Controller
     }
 
     public function create(){
-        $city = City::get();
-        return view('admin.company.create', ['cities' => $city]);
+        $cities = City::get();
+        return view('admin.company.create', ['cities' => $cities]);
     }
 
     public function store(Store $request){
@@ -55,8 +55,8 @@ class CompanyController extends Controller
     }
 
     public function edit(Company $company){
-        $city = City::get();
-        return view('admin.company.create', ['company' =>  $company, 'cities' => $city]);
+        $cities = City::get();
+        return view('admin.company.create', ['company' =>  $company, 'cities' => $cities]);
     }
 
     public function update(Update $request, Company $company){

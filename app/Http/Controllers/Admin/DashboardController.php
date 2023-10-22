@@ -18,11 +18,10 @@ class DashboardController extends Controller
 
     public function index(){
         $dashboardData = $this->dashboardService->index();
-        return view('dashboard.dashboard', $dashboardData);
+        return view('admin.dashboard.index', $dashboardData);
     }
 
-    public function issueChart(Request $request)
-    {
+    public function issueChart(Request $request){
         if ($request->ajax()) {
             $companyId = $request->companyId;
             $issueStatusData = $this->dashboardService->getIssueStatusData($companyId);

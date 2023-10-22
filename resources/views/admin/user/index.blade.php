@@ -1,8 +1,4 @@
-@extends('dashboard.layout.dashboard_layout')
-@section('meta')
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-@endsection
-
+@extends('dashboard.layout.master')
 @section('style')
     <link href="{{ asset('asset/css/datatables.min.css') }}" rel="stylesheet">
     <style>
@@ -227,7 +223,8 @@
             function deleteUser(userId) {
                 let deleteUser;
                 if (currentRoute == 'admin.manager.index') {
-                    deleteUser = "{{ route('admin.manager.destroy', ['manager' => ':id']) }}".replace(':id', userId);
+                    deleteUser = "{{ route('admin.manager.destroy', ['manager' => ':id']) }}".replace(':id',
+                        userId);
                 } else {
                     deleteUser = "{{ route('admin.hr.destroy', ['hr' => ':id']) }}".replace(':id', userId);
                 }

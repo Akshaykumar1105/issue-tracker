@@ -58,6 +58,11 @@ return [
         'address' => 'Address',
         'company' => "Company",
         'hr' => 'Hr',
+        'code' => 'Code',
+        'discount-type' => 'Discount Type',
+        'discount' => 'Discount',
+        'active-date' => 'Active Date',
+        'expire-date' => 'Expire Date'
     ],
 
     'status' => [

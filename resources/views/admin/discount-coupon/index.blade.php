@@ -1,16 +1,6 @@
-@extends('dashboard.layout.dashboard_layout')
-@section('meta')
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-@endsection
-
+@extends('dashboard.layout.master')
 @section('style')
     <link href="{{ asset('asset/css/datatables.min.css') }}" rel="stylesheet">
-    <style>
-        .slow .toggle-group {
-            transition: left 0.7s;
-            -webkit-transition: left 0.7s;
-        }
-    </style>
 @endsection
 @section('content')
     <section class="content" style="margin: 0 auto; max-width: 100%">
@@ -26,14 +16,14 @@
             <table class="table" id="companyData" style="width: 100%">
                 <thead>
                     <tr>
-                        <th >{{ __('messages.table.id') }}</th>
-                        <th >{{ __('messages.table.status') }}</th>
-                        <th >Code</th>
-                        <th>Discount Type</th>
-                        <th >Discount</th>
-                        <th style="" >Start Date</th>
-                        <th style="" >End Date</th>
-                        <th style="width: 150px;box-sizing: border-box;">{{ __('messages.table.action') }}</th>
+                        <th>{{ __('messages.table.id') }}</th>
+                        <th>{{ __('messages.table.status') }}</th>
+                        <th>{{ __('messages.table.code') }}Code</th>
+                        <th>{{ __('messages.table.discount') }}</th>
+                        <th>{{ __('messages.table.discount-type') }}</th>
+                        <th>{{ __('messages.table.active-date') }}</th>
+                        <th>{{ __('messages.table.expire-date') }}</th>
+                        <th style="width: 150px;">{{ __('messages.table.action') }}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -108,7 +98,7 @@
                     {
                         "data": "active_at",
                         render: function(data, type, row) {
-                            var date = data == null ? 'Not select due date' : moment(data).format('MMMM D, YYYY');
+                            var date = data == null ? 'Not select due date' : moment(data).format("{{config('site.date')}}");
                             return '<div class="form-check form-switch p-1">' + date +
                                 '</div>';
                         },
@@ -116,7 +106,7 @@
                     {
                         "data": "expire_at",
                         render: function(data, type, row) {
-                            var date = data == null ? 'Not select due date' : moment(data).format('MMMM D, YYYY');
+                            var date = data == null ? 'Not select due date' : moment(data).format("{{config('site.date')}}");
                             return '<div class="form-check form-switch p-1">' + date +
                                 '</div>';
                         },
@@ -138,7 +128,6 @@
             $(document).on("click", ".delete", function(event) {
                 event.preventDefault();
                 couponId = $(this).attr("data-user-id");
-                console.log(couponId);
             });
 
             $(document).on("click", "#deleteCoupon", function(event) {

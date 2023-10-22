@@ -1,8 +1,4 @@
-@extends('dashboard.layout.dashboard_layout')
-@section('meta')
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-@endsection
-
+@extends('dashboard.layout.master')
 @section('style')
     {{-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" /> --}}
     <link href="{{ asset('asset/css/datatables.min.css') }}" rel="stylesheet">

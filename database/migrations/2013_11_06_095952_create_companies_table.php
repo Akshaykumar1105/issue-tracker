@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id();
             $table->uuid();
             $table->boolean('status')->default('1');
-            $table->string('slug');
+            $table->unsignedBigInteger('city_id')->nullable();
+            $table->foreign('city_id')->references('id')->on('cities')->onDelete('cascade');
             $table->string('name');
             $table->string('email');
             $table->string('number');

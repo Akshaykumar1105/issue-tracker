@@ -38,8 +38,8 @@ class ManagerController extends Controller{
                 ->addColumn('action', function ($row) {
                     $manager = $row->id;
                     $editManager = route('admin.manager.edit', ['manager' => $manager]);
-                    $actionBtn = '<div class="d-flex" style="flex-direction: column;justify-content: initial;align-items: baseline;gap: 10px;"><div><a href=' . $editManager . ' id="edit' . $row->id . '" data-userId="' . $row->id . '" class="edit btn btn-success btn-sm">Edit</a> <button type="submit" data-user-id="' . $row->id . '" class="delete btn btn-danger btn-sm" data-bs-toggle="modal"
-                    data-bs-target="#deleteUser">Delete</button></div></div>';
+                    $actionBtn = '<div class="d-flex" style="flex-direction: column;justify-content: initial;align-items: baseline;gap: 10px;"><div><a href=' . $editManager . ' id="edit' . $row->id . '" data-userId="' . $row->id . '" class="edit btn btn-success btn-sm"><i class="fas fa-pencil-alt" style="margin: 0 5px 0 0"></i>Edit</a> <button type="submit" data-user-id="' . $row->id . '" class="delete btn btn-danger btn-sm" data-bs-toggle="modal"
+                    data-bs-target="#deleteUser"><i class="fas fa-trash" style="margin: 0 5px 0 0;"></i>Delete</button></div></div>';
                     return $actionBtn;
                 })
                 ->rawColumns(['action', 'profile'])
@@ -66,8 +66,8 @@ class ManagerController extends Controller{
 
     public function edit($id){
         $user = User::findOrFail($id);
-        $company = Company::where('is_active', config('site.status.active'))->get();
-        return view('admin.user.create', ['companies' => $company, 'user' => $user]);
+        $companies = Company::where('is_active', config('site.status.active'))->get();
+        return view('admin.user.create', ['companies' => $companies, 'user' => $user]);
     }
 
     public function update($id, Update $request){

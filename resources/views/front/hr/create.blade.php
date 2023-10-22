@@ -48,15 +48,14 @@
                 <label for="password_confirmation" class="form-label label-filed">Confirm Password</label>
                 <input type="password" value="{{ old('password_confirmation') }}" class="form-control shadow-none"
                     name="password_confirmation" id="password_confirmation">
-
             </div>
 
             <div class="d-flex justify-space-between" style="gap: 10px;">
                 <div class="form-group mb-4">
-                    <label for="company_id" class="form-label">Company</label>
+                    <label for="company_id" class="form-label label-filed">Company</label>
                     <select class="form-control" value="{{ old('company_id') }}" name="company_id" id='company_id'
-                        style="width: 300px;appearance: revert;padding-right: 65px;">
-                        <option value="default">Select Company</option>
+                        style="width: 330px;appearance: revert;padding-right: 65px;">
+                        <option value="">Select Company</option>
                         @foreach ($companies as $company)
                             <option value="{{ $company->id }}">{{ $company->name }}</option>
                         @endforeach
@@ -64,7 +63,7 @@
 
                 </div>
                 <div class="form-group mb-4 " style="flex-grow: 1;">
-                    <label for="mobile" class="form-label">Mobile</label>
+                    <label for="mobile" class="form-label label-filed">Mobile</label>
                     <input type="number" value="{{ old('mobile') }}" class="form-control shadow-none" name="mobile"
                         id="mobile">
                 </div>
@@ -115,6 +114,10 @@
                 "Password must include at least one uppercase letter, one lowercase letter, one digit, and one special character."
             );
 
+            $.validator.addMethod("validNumber", function(value, element) {
+                return !/0{10}/.test(value);
+            }, "{{ __('validation.valid', ['attribute' => 'mobile']) }}");
+
             $.validator.addMethod("lettersonly", function(value, element) {
                 return this.optional(element) || /^[a-zA-Z\s]+$/i.test(value);
             }, "Please enter letters only (no special characters or numbers).");
@@ -138,18 +141,18 @@
                     },
                     password_confirmation: {
                         required: true,
-                        equalTo: "#password" // Confirm password must match password
+                        equalTo: "#password"
                     },
                     company_id: {
                         required: true,
-                        valueNotEquals: "default"
                     },
                     mobile: {
                         required: true,
                         number:true,
+                        validNumber:true,
+                        digits: true,
                         minlength: 10,
                         maxlength: 10,
-                        digits: true,
                     },
                 },
                 messages: {
@@ -187,7 +190,7 @@
                         url: $(form).attr("action"),
                         type: $(form).attr("method"),
                         data: formData,
-                        processData: false, // Important: Don't process the data
+                        processData: false,
                         contentType: false,
                         success: function(response) {
                             $(".loader-container").fadeOut();

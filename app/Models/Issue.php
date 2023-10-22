@@ -5,10 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Notifications\Notifiable;
 
 class Issue extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, Notifiable;
 
     protected $fillable = [
         'title',
@@ -24,7 +25,7 @@ class Issue extends Model
         'manager_id'
     ];
 
-    public function user(){
+    public function manager(){
         return $this->belongsTo(User::class, 'manager_id');
     }
 

@@ -1,4 +1,4 @@
-@extends('dashboard.layout.dashboard_layout')
+@extends('dashboard.layout.master')
 
 @section('style')
     <link rel="stylesheet" href="{{ asset('asset/css/loader.css') }}">

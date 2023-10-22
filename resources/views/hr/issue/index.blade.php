@@ -1,8 +1,4 @@
-@extends('dashboard.layout.dashboard_layout')
-@section('meta')
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-@endsection
-
+@extends('dashboard.layout.master')
 @section('style')
     <link href="{{ asset('asset/css/datatables.min.css') }}" rel="stylesheet">
     <link href="{{ asset('asset/css/datepicker.min.css') }}" rel="stylesheet">
@@ -24,9 +20,11 @@
             object-position: center right;
         }
     </style>
-    {{-- <link href="https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap4.min.css" rel="stylesheet"> --}}
+    <link rel="stylesheet" href="{{ asset('asset/css/loader.css') }}">
 @endsection
 @section('content')
+<x-loader />
+
     <section class="content" style="margin: 0 auto; max-width: 100%">
         <h1>Issues</h1>
 
@@ -84,7 +82,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 
     <script>
-        // Your custom JavaScript file
         $(document).ready(function() {
 
             let priority = '';
@@ -102,14 +99,13 @@
                     url: "{{ route('hr.issue.index') }}",
                     dataType: "JSON",
                     data: function(d) {
-                        // Assign the value of the 'priority' variable to the 'filter' parameter
                         d.type = "{{ request('type') }}";
                         d.filter = priority;
                         d.duedate = date;
                         d.table = table;
                         d.status = status;
                     },
-                }, // Route to your DataTablesController@index
+                }, 
                 columns: [{
                         'data': 'DT_RowIndex',
                         'name': 'DT_RowIndex',
@@ -126,18 +122,18 @@
                             switch (data) {
                                 case 'LOW':
                                     colorClass =
-                                        'badge bg-success'; // CSS class for low priority (green color)
+                                        'badge bg-success';
                                     break;
                                 case 'MEDIUM':
                                     colorClass =
-                                        'badge bg-yellow'; // CSS class for medium priority (yellow color)
+                                        'badge bg-yellow';
                                     break;
                                 case 'HIGH':
                                     colorClass =
-                                        'badge bg-red'; // CSS class for high priority (red color)
+                                        'badge bg-red';
                                     break;
                                 default:
-                                    colorClass = ''; // Default class
+                                    colorClass = '';
                             }
                             return '<div style="width:70px" class="' + colorClass +
                                 ' bg-opacity-75">' + data + '</div>';
@@ -146,7 +142,7 @@
                     {
                         "data": "due_date",
                         render: function(data, type, row) {
-                            var date = data == null ? 'Not select due date' : moment(data).format('MMMM D, YYYY');
+                            var date = data == null ? 'Not select due date' : moment(data).format("{{config('site.date')}}");
                             return '<div class="form-check form-switch p-1">' + date +
                                 '</div>';
                         },
@@ -154,7 +150,6 @@
                     {
                         "data": "user.name",
                         render: function(data, type, row) {
-                            console.log(data);
                             var manager = data == null ? 'Not Assign' : data;
                             return '<div class="form-check form-switch p-1">' + manager +
                                 '</div>';
@@ -164,7 +159,6 @@
                     {
                         "data": "status",
                         render: function(data, type, row) {
-                            // Define an array of status options with their values and labels
                             const statusOptions = [{
                                     value: 'default',
                                     label: 'Select Status'
@@ -249,9 +243,9 @@
             });
 
             $(document).on('change', '#status', function() {
+                $(".loader-container").fadeIn();
                 status = $(this).val();
                 let issueId = $(this).attr('data-status');
-                // console.log(id);
                 var csrfToken = $('meta[name="csrf-token"]').attr('content');
                 $.ajax({
                     url: "{{ route('hr.issue.update', ['issue' => ':id']) }}".replace(':id',issueId),
@@ -261,6 +255,7 @@
                         _token: csrfToken,
                     },
                     success: function(response) {
+                    $(".loader-container").fadeOut();
                         toastr.options = {
                             closeButton: true,
                             progressBar: true,
@@ -269,6 +264,7 @@
                         $('.table').DataTable().ajax.reload();
                     },
                     error: function(xhr, status, error) {
+                        $(".loader-container").fadeOut();
                         var response = JSON.parse(xhr.responseText);
                         var message = response.message;
                         toastr.options = {

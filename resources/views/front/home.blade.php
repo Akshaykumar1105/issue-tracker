@@ -893,16 +893,10 @@
                             }
                             toastr.success(response.success);
                             $("#applyLoan").modal("toggle");
-                            // setTimeout(function() {
-                            //     window.location.href = response.route;
-                            // }, 2000);
                         },
                         error: function(xhr, status, error) {
-                            // Handle error response
-                            // console.log("Form submission error");
                             var response = JSON.parse(xhr.responseText);
                             var message = response.message;
-                            console.log(message)
                             toastr.options = {
                                 closeButton: true,
                                 progressBar: true,

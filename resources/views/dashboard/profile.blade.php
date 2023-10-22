@@ -1,4 +1,4 @@
-@extends('dashboard.layout.dashboard_layout')
+@extends('dashboard.layout.master')
 @section('style')
     <link rel="stylesheet" href="{{ asset('asset/css/dropify.min.css') }}">
     <style>
@@ -79,6 +79,18 @@
                                 <!-- /.card-body -->
                                 <div class="card-footer">
                                     <button type="submit" class="btn btn-primary">Update</button>
+                                    @php
+                                        $user = auth()->user();
+                                        if ($user->hasRole('hr')) {
+                                            $link = route('hr.dashboard');
+                                        } elseif ($user->hasRole('manager')) {
+                                            $link = route('manager.dashboard');
+                                        } else {
+                                            $link = route('admin.dashboard');
+                                        }
+                                    @endphp
+                                    <a href="{{$link}}" type="submit" class="btn btn btn-outline-secondary">Back</a>
+
                                 </div>
                             </form>
                         </div>
@@ -147,20 +159,6 @@
             $(document).on('click', '#profiletab', function(e) {
                 $(this).addClass('active');
             })
-            // Show the first tab by default
-            // $('.tabs-stage div').hide();
-            // $('.tabs-stage div:first').show();
-            // $('.tabs-nav li:first').addClass('tab-active');
-
-            // // Change tab class and display content
-            // $('.tabs-nav a').on('click', function(event) {
-            //     event.preventDefault();
-            //     $('.tabs-nav li').removeClass('tab-active');
-            //     $(this).parent().addClass('tab-active');
-            //     $('.tabs-stage div').hide();
-            //     $($(this).attr('href')).show();
-            // });
-
 
             $('.dropify').dropify();
             $(document).on('click', '#logout', function() {
@@ -176,7 +174,7 @@
                 rules: {
                     name: {
                         required: true,
-                        lettersonly:true
+                        lettersonly: true
                     },
                     email: {
                         required: true,
@@ -184,7 +182,7 @@
                     },
                     mobile: {
                         required: true,
-                        number:true,
+                        number: true,
                         minlength: 10,
                         maxlength: 10,
                         digits: true,
@@ -192,19 +190,19 @@
                 },
                 messages: {
                     name: {
-                        required: "{{__('validation.required', ['attribute' => 'name'])}}",
-                        maxlength: "{{__('validation.max_digits', ['attribute' => 'name', 'max' => '255'])}}",
+                        required: "{{ __('validation.required', ['attribute' => 'name']) }}",
+                        maxlength: "{{ __('validation.max_digits', ['attribute' => 'name', 'max' => '255']) }}",
                     },
                     email: {
-                        required: "{{__('validation.required', ['attribute' => 'email'])}}",
-                        email: "{{__('validation.valid' , ['attribute' => 'email'])}}",
+                        required: "{{ __('validation.required', ['attribute' => 'email']) }}",
+                        email: "{{ __('validation.valid', ['attribute' => 'email']) }}",
                     },
                     mobile: {
-                        required: "{{__('validation.required', ['attribute' => 'number'])}}",
-                        number: "{{__('validation.valid' , ['attribute' => 'number'])}}",
+                        required: "{{ __('validation.required', ['attribute' => 'number']) }}",
+                        number: "{{ __('validation.valid', ['attribute' => 'number']) }}",
                         digits: "The number must be a 10 digits",
-                        minlength:  "{{__('validation.min_digits', ['attribute' => 'number', 'min' => '10'])}}",
-                        maxlength: "{{__('validation.max_digits', ['attribute' => 'number', 'max' => '10'])}}",
+                        minlength: "{{ __('validation.min_digits', ['attribute' => 'number', 'min' => '10']) }}",
+                        maxlength: "{{ __('validation.max_digits', ['attribute' => 'number', 'max' => '10']) }}",
                     },
                 },
                 submitHandler: function(form) {
@@ -258,7 +256,7 @@
                     return /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/.test(value);
                 },
                 "Password must include at least one uppercase letter, one lowercase letter, one digit, and one special character."
-                );
+            );
 
             $("#changePassword").validate({
                 errorElement: "span",
@@ -299,7 +297,6 @@
                         type: $(form).attr("method"),
                         data: $(form).serialize(),
                         success: function(response) {
-                            console.log(response.success);
                             toastr.options = {
                                 closeButton: true,
                                 progressBar: true,

@@ -48,23 +48,4 @@ class CommentService{
         $comment = $this->comment->where('id', $id)->first();
         $comment->delete();
     }
-
-    public function storeUpvote($commentId){
-        $upvote = CommentUpvotes::where('user_id', auth()->id())
-            ->where('comment_id', $commentId)
-            ->first();
-
-        if (!$upvote) {
-            CommentUpvotes::create([
-                'user_id' => auth()->id(),
-                'comment_id' => $commentId,
-            ]);
-        }
-    }
-
-    public function destroyUpvote($commentId){
-        return CommentUpvotes::where('user_id', auth()->id())
-            ->where('comment_id', $commentId)
-            ->delete();
-    }
 }

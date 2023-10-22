@@ -31,21 +31,10 @@ class IssueReportSubmission implements ShouldQueue
      */
     public function handle(): void
     {
-        // try {
-        //     $user = Company::where('email', $this->email)->first();
-        //     if ($user) {
-        //         $user->notify(new NotificationsIssueReportSubmission($user));
-        //     } else {
-        //     }
-        // } catch (\Exception $e) {
-        //     Log::error("Error processing ConfirmPassword job: " . $e->getMessage());
-        // }
         $user = Company::where('email', $this->email)->first();
-            if ($user) {
-                // dd($user);
-                $user->notify(new NotificationsIssueReportSubmission($user));
-            } else {
-                // dd(3);
-            }
+        if ($user) {
+            $user->notify(new NotificationsIssueReportSubmission($user));
+        } else {
+        }
     }
 }

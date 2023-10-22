@@ -1,8 +1,4 @@
-@extends('dashboard.layout.dashboard_layout')
-@section('meta')
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-@endsection
-
+@extends('dashboard.layout.master')
 @section('style')
     <link rel="stylesheet" href="{{ asset('asset/css/dropify.min.css') }}">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" />
@@ -122,6 +118,10 @@
                 "Password must include at least one uppercase letter, one lowercase letter, one digit, and one special character."
             );
 
+            $.validator.addMethod("validNumber", function(value, element) {
+                return !/0{10}/.test(value);
+            }, "{{ __('validation.valid', ['attribute' => 'mobile']) }}");
+
             $("#managerCreate").validate({
                 errorClass: "text-danger fw-normal",
                 rules: {
@@ -146,9 +146,10 @@
                     mobile: {
                         required: true,
                         number: true,
+                        validNumber:true,
+                        digits: true,
                         minlength: 10,
                         maxlength: 10,
-                        digits: true
                     },
 
                 },
@@ -185,7 +186,7 @@
                         url: $(form).attr("action"),
                         type: $(form).attr("method"),
                         data: formData,
-                        processData: false, // Important: Don't process the data
+                        processData: false,
                         contentType: false,
                         success: function(response) {
                             $(".loader-container").fadeOut();
@@ -202,7 +203,6 @@
                             $(".loader-container").fadeOut();
                             var response = JSON.parse(xhr.responseText);
                             var message = response.message;
-                            console.log(message)
                             toastr.options = {
                                 closeButton: true,
                                 progressBar: true,

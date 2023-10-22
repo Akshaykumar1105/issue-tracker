@@ -4,7 +4,7 @@ namespace App\Services;
 use App\Models\DiscountCoupons;
 use Carbon\Carbon;
 
-class DiscountCouponService {
+class CouponService {
 
     protected $discountCouponObj;
 
@@ -35,7 +35,7 @@ class DiscountCouponService {
         if($coupon){
             return  [
                 'success' => __('entity.entityCreated', ['entity' => 'Discount Coupon']),
-                'route' => "route('admin.discount-coupon.index')"
+                'route' => route('admin.discount-coupon.index')
             ];
         }
     }
@@ -69,7 +69,6 @@ class DiscountCouponService {
 
     public function destory($id){
         $coupon = DiscountCoupons::find($id)->delete();
-
         if($coupon){
             return [
                 'success' => __('entity.entityDeleted', ['entity' => 'Discount Coupon']),

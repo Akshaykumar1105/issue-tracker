@@ -22,7 +22,7 @@ class HomeController extends Controller{
         if($request->ajax()){
            return  $this->issueService->index($request);
         }
-        $company = Company::where('is_active', '1')->get();
+        $company = Company::where('is_active', config('site.status.active'))->get();
         return view('front.home', ['companies' => $company, 'hrs' => $user ?? null]);
     }
 

@@ -2,13 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Issue;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use App\Models\Company;
-use App\Models\User;
-use App\Services\CompanyService;
 use App\Services\IssueService;
+use App\Services\CompanyService;
+use App\Http\Controllers\Controller;
 use Yajra\DataTables\Facades\DataTables;
 
 class IssueController extends Controller{
@@ -29,14 +26,14 @@ class IssueController extends Controller{
                     $query->orderBy('id', $order);
                 })
                 ->addColumn('action', function ($row) {
-                    $editRoute = route('admin.issue.show', ['issue' => $row->id]);
-                    $actionBtn = '<a href=' . $editRoute . ' data-issue-id="' . $row->id . '" class="view btn btn-primary btn-sm">View</a> <a href="delete" data-issue-id="' . $row->id . '"  class="delete  btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteIssue">Delete</a>';
+                    $showRoute = route('admin.issue.show', ['issue' => $row->id]);
+                    $actionBtn = '<a href=' . $showRoute . ' data-issue-id="' . $row->id . '" class="view btn btn-primary btn-sm"><i class="fa-solid fa-eye" style="margin:0 5px 0 0"></i>View</a> <a href="delete" data-issue-id="' . $row->id . '"  class="delete  btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteIssue"><i class="fas fa-trash" style="margin: 0 5px 0 0;"></i>Delete</a>';
                     return $actionBtn;
                 })
                 ->make(true);
         }
-        $company = $this->companyService->index();
-        return view('admin.Issue.index', ['companies' => $company]);
+        $companies = $this->companyService->index();
+        return view('admin.Issue.index', ['companies' => $companies]);
     }
 
     public function show($id){

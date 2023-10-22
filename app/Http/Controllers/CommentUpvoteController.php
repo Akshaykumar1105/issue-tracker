@@ -5,22 +5,23 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\CommentUpvotes;
 use App\Services\CommentService;
+use App\Services\CommentUpVoteService;
 use Illuminate\Http\Request;
 
 class CommentUpvoteController extends Controller{
 
-    protected $commentService;
+    protected $commentUpVoteService;
 
-    public function __construct(CommentService $commentService)
+    public function __construct(CommentUpVoteService $commentUpVoteService)
     {
-        $this->commentService = $commentService;
+        $this->commentUpVoteService = $commentUpVoteService;
     }
 
     public function store($commentId, Request $request){
-        return $this->commentService->storeUpvote($commentId);
+        return $this->commentUpVoteService->store($commentId);
     }
 
     public function destroy($commentId){
-        return $this->commentService->destroyUpvote($commentId);
+        return $this->commentUpVoteService->destroy($commentId);
     }
 }

@@ -135,7 +135,6 @@
                         error: function(xhr, status, error) {
                             var response = JSON.parse(xhr.responseText);
                             var message = response.message;
-                            console.log(message)
                             toastr.options = {
                                 closeButton: true,
                                 progressBar: true,

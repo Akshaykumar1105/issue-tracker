@@ -39,8 +39,8 @@ class ManagerController extends Controller{
                     return $actionBtn;
                 }
                 else{
-                    $actionBtn = '<a href=' . $editRoute . ' id="edit' . $row->id . '" data-userId="' . $row->id . '" class="edit btn btn-success btn-sm">Edit</a> <button type="submit" data-userId="' . $row->id . '" class="delete btn btn-danger btn-sm" data-bs-toggle="modal"
-                    data-bs-target="#deleteManager">Delete</button>';
+                    $actionBtn = '<a href=' . $editRoute . ' id="edit"' . $row->id . ' class="edit btn btn-success btn-sm"><i class="fas fa-pencil-alt" style="margin: 0 5px 0 0"></i>Edit</a> <button type="submit" data-user-id="' . $row->id . '" class="delete btn btn-danger btn-sm" data-bs-toggle="modal"
+                    data-bs-target="#deleteManager"><i class="fas fa-trash" style="margin: 0 5px 0 0;"></i>Delete</button>';
                     return $actionBtn;
                 }
             })

@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Jobs\AssignManager;
 use App\Models\User;
 use App\Models\Issue;
 use App\Models\Comment;
@@ -11,15 +12,17 @@ use App\Jobs\ReviewIssue;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Mail;
 use App\Jobs\IssueSolve as JobsIssueSolve;
+use App\Jobs\IssueStatusChanged;
+use App\Jobs\SendIssueCreatorNotification;
 
-class IssueService{
+class IssueService
+{
 
     protected $issue;
-    protected $commentService; 
+    protected $commentService;
 
-    public function __construct()
-    {
-        $this->issue = new Issue; 
+    public function __construct(){
+        $this->issue = new Issue;
         $this->commentService = new CommentService();
     }
 
@@ -40,7 +43,7 @@ class IssueService{
     }
 
     public function show($id){
-        return Issue::with('user')->findOrFail($id);
+        return Issue::with(['user', 'company', 'hr'])->findOrFail($id);
     }
 
     public function edit($issue){
@@ -54,17 +57,11 @@ class IssueService{
 
     public function update($id, $request){
         $issue = Issue::find($id);
+        $requestManagerId = (int) $request->manager_id;
+
         if ($request->status == 'COMPLETED') {
             $email = $issue->email;
             JobsIssueSolve::dispatchSync([
-                'email' => $email,
-                'issue' => $issue,
-            ]);
-        }
-
-        if ($request->status == 'SEND_FOR_REVIEW') {
-            $email = $issue->email;
-            ReviewIssue::dispatchSync([
                 'email' => $email,
                 'issue' => $issue,
             ]);
@@ -74,7 +71,27 @@ class IssueService{
             Issue::find($id)->fill($request->except('status'))->save();
             return ['error' => 'You do not have the required role to set the status to "Open."'];
         }
-        Issue::find($id)->fill($request->all())->save();
+        $issue->fill($request->all())->save();
+
+        if ($issue->manager_id !== $requestManagerId) {
+            $user = User::find($issue->manager_id);
+            AssignManager::dispatchSync($user->email, $issue);
+            SendIssueCreatorNotification::dispatchSync($issue->email, $user);
+        }
+
+        if (auth()->user()->hasRole(config('site.role.hr'))) {
+            if ($request->status == $issue->status) {
+                if ($issue->status !== 'SEND_FOR_REVIEW') {
+                    $user = $issue->user;
+                    IssueStatusChanged::dispatchSync($issue, $user);
+                }
+            }
+        } else if (auth()->user()->hasRole(config('site.role.manager'))) {
+            if ($request->status == $issue->status) {
+                $user = $issue->hr;
+                IssueStatusChanged::dispatchSync($issue, $user);
+            }
+        }
 
         if ($request->body) {
             $this->commentService->store($request, $id);
@@ -92,24 +109,24 @@ class IssueService{
         $query = Issue::with('company');
         switch ($request->table) {
             case config('site.table.admin'):
-                $query->with(['user','hr']);
+                $query->with(['manager', 'hr']);
                 break;
-    
+
             case config('site.table.hr'):
                 $id = auth()->user()->id;
-                $query->with('user')->where('hr_id', $id);
-    
+                $query->with('manager')->where('hr_id', $id);
+
                 if ($request->type == 'pending') {
                     $query->whereNull(['due_date', 'manager_id']);
                 } elseif ($request->type == 'review-issue') {
                     $query->where('status', 'SEND_FOR_REVIEW');
                 }
                 break;
-    
+
             case config('site.table.manager'):
                 $companyId = auth()->user()->id;
                 $query->where('manager_id', $companyId);
-    
+
                 if ($request->type == 'pending') {
                     $query->where('status', '<>', 'SEND_FOR_REVIEW')->where('status', '<>', 'COMPLETED');
                 }
@@ -119,7 +136,8 @@ class IssueService{
         return $query;
     }
 
-    public function filters($request, $query){
+    public function filters($request, $query)
+    {
         if ($request->filter) {
             $query->where('priority', $request->filter);
         }

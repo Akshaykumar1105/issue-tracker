@@ -1,8 +1,4 @@
-@extends('dashboard.layout.dashboard_layout')
-@section('meta')
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-@endsection
-
+@extends('dashboard.layout.master')
 @section('style')
     <link href="{{ asset('asset/css/datatables.min.css') }}" rel="stylesheet">
     <style>
@@ -45,7 +41,7 @@
                         <th scope="col">{{ __('messages.table.name') }}</th>
                         <th scope="col">{{ __('messages.table.email') }}</th>
                         <th scope="col">{{ __('messages.table.number') }}</th>
-                        <th>{{ __('messages.table.action') }}</th>
+                        <th style="width: 150px">{{ __('messages.table.action') }}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -127,7 +123,7 @@
             let userid; 
             $(document).on("click", ".delete", function(event) {
                 event.preventDefault();
-                userid = $(this).attr("data-userId");
+                userid = $(this).attr("data-user-id");
             });
 
             $(document).on("click", "#deleteManager", function(event) {
@@ -146,7 +142,6 @@
                     success: function(response) {
                         $("#deleteManager").modal("toggle");
                         var message = response.success;
-                        console.log(message)
                         toastr.options = {
                             closeButton: true,
                             progressBar: true,

@@ -1,12 +1,7 @@
-@extends('dashboard.layout.dashboard_layout')
-@section('meta')
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-@endsection
-
+@extends('dashboard.layout.master')
 @section('style')
     <link href="{{ asset('asset/css/datatables.min.css') }}" rel="stylesheet">
     <link href="{{ asset('asset/css/datepicker.min.css') }}" rel="stylesheet">
-
     <style>
         .slow .toggle-group {
             transition: left 0.7s;
@@ -25,9 +20,10 @@
             object-position: center right;
         }
     </style>
-    {{-- <link href="https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap4.min.css" rel="stylesheet"> --}}
+    <link rel="stylesheet" href="{{ asset('asset/css/loader.css') }}">
 @endsection
 @section('content')
+    <x-loader />
     <section class="content" style="margin: 0 auto; max-width: 100%">
         <h1>Issues</h1>
         <div
@@ -73,6 +69,7 @@
     <script src="{{ asset('asset/js/jquery-datatables.min.js') }}"></script>
     <script src="{{ asset('asset/js/datatable.min.js') }}"></script>
     <script src="{{ asset('asset/js/datepicker.min.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 
     <script>
         $(document).ready(function() {
@@ -101,7 +98,6 @@
                     {
                         'data': 'title',
                     },
-
                     {
                         "data": "priority",
                         render: function(data, type, row) {
@@ -109,52 +105,47 @@
                             switch (data) {
                                 case 'LOW':
                                     colorClass =
-                                        'badge bg-success'; // CSS class for low priority (green color)
+                                        'badge bg-success';
                                     break;
                                 case 'MEDIUM':
                                     colorClass =
-                                        'badge bg-yellow'; // CSS class for medium priority (yellow color)
+                                        'badge bg-yellow';
                                     break;
                                 case 'HIGH':
                                     colorClass =
-                                        'badge bg-red'; // CSS class for high priority (red color)
+                                        'badge bg-red';
                                     break;
                                 default:
-                                    colorClass = ''; // Default class
+                                    colorClass = '';
                             }
                             return '<div style="width:70px" class="' + colorClass +
                                 ' bg-opacity-75">' + data + '</div>';
                         }
                     },
                     {
-                        "data": "due_date"
+                        "data": "due_date",
+                        render: function(data, type, row) {
+                            var date = data == null ? 'Not select due date' : moment(data).format(
+                                "{{config('site.date')}}");
+                            return '<div class="form-check form-switch p-1">' + date +
+                                '</div>';
+                        },
                     },
                     {
                         "data": "status",
                         render: function(data, type, row) {
                             if (data === 'COMPLETED' || data === 'SEND_FOR_REVIEW') {
-                                data = data.replace(/_/g, ' ').replace(/\w\S*/g, function(txt) {
+                                status = data.replace(/_/g, ' ').replace(/\w\S*/g, function(txt) {
                                     return txt.charAt(0).toUpperCase() + txt.substr(1)
                                         .toLowerCase();
                                 });
-                                return `<div>${data}</div>`;
+                                return `<div style="font-size: 15px;" class="badge fw-normal ${ data == 'COMPLETED' ? 'bg-success' : 'bg-yellow'}">${status}</div>`;
                             } else {
-                                const statusOptions = [{
-                                        value: 'OPEN',
-                                        label: 'Open'
-                                    },
-                                    {
-                                        value: 'IN_PROGRESS',
-                                        label: 'In Progress'
-                                    },
-                                    {
-                                        value: 'ON_HOLD',
-                                        label: 'On Hold'
-                                    },
-                                    {
-                                        value: 'SEND_FOR_REVIEW',
-                                        label: 'Send For Review'
-                                    }
+                                const statusOptions = [
+                                    {value: 'OPEN',label: 'Open'},
+                                    {value: 'IN_PROGRESS',label: 'In Progress'},
+                                    {value: 'ON_HOLD',label: 'On Hold'},
+                                    {value: 'SEND_FOR_REVIEW',label: 'Send For Review'}
                                 ];
                                 let optionsHtml = '';
                                 for (const option of statusOptions) {
@@ -173,7 +164,7 @@
                         orderable: false
                     },
                 ],
-                lengthMenu: [10, 25, 50, 100], // Define your page limit options
+                lengthMenu: [10, 25, 50, 100],
                 pageLength: 10,
                 order: [
                     [1, 'desc']
@@ -213,6 +204,7 @@
             });
 
             $(document).on('change', '#status', function() {
+                $(".loader-container").fadeIn();
                 status = $(this).val();
                 let issueId = $(this).attr('data-status');
                 var csrfToken = $('meta[name="csrf-token"]').attr('content');
@@ -225,6 +217,7 @@
                         _token: csrfToken,
                     },
                     success: function(response) {
+                        $(".loader-container").fadeOut();
                         toastr.options = {
                             closeButton: true,
                             progressBar: true,
@@ -237,6 +230,7 @@
                         $('.table').DataTable().ajax.reload();
                     },
                     error: function(xhr, status, error) {
+                        $(".loader-container").fadeOut();
                         var response = JSON.parse(xhr.responseText);
                         var message = response.message;
                         toastr.options = {

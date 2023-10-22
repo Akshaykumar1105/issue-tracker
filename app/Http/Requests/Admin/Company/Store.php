@@ -26,7 +26,7 @@ class Store extends FormRequest
             'email' => 'required|email|unique:companies,email',
             'number' => 'required|min:10|digits:10',
             'address' => 'required',
-            'city_id' => 'required|not_in:default'
+            'city_id' => 'required'
         ];
     }
 }

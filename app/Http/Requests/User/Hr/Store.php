@@ -24,10 +24,11 @@ class Store extends FormRequest
         return [
             'name' => 'required|max:50|regex:/^[a-zA-Z]+(\s[a-zA-Z]+)?$/',
             'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:8|regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\x])(?=.*[!$#%]).*$/',
+            'password' => 'required|min:8|regex:/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%])/',
             'password_confirmation' => 'required|same:password',
-            'company_id' => 'required|not_in:default',
+            'company_id' => 'required',
             'mobile' => 'required|digits:10',
+            
         ];
     }
 

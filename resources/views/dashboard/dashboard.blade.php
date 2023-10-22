@@ -1,4 +1,4 @@
-@extends('dashboard.layout.dashboard_layout')
+@extends('dashboard.layout.master')
 @section('content')
     <!-- Content Header (Page header) -->
     <div class="content-header">
@@ -82,6 +82,30 @@
                         </div>
                     </div>
                 @endif
+
+                @role('manager')
+                    @if (isset($issue))
+                        <div class="col-lg-3 col-6">
+                            <!-- small box -->
+                            <div class="small-box bg-warning">
+                                <div class="inner">
+                                    <h3>{{ $issue }}</h3>
+                                    <p>Total Issues</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="ion ion-person-add"></i>
+                                </div>
+                                @if (auth()->user()->hasRole('hr'))
+                                    <a href="{{ route('hr.issue.index') }}" class="small-box-footer">More info <i
+                                            class="fas fa-arrow-circle-right"></i></a>
+                                @else
+                                    <a href="{{ route('admin.issue.index') }}" class="small-box-footer">More info <i
+                                            class="fas fa-arrow-circle-right"></i></a>
+                                @endif
+                            </div>
+                        </div>
+                    @endif
+                @endrole
 
                 @if (isset($data['company']))
                     <div class="col-lg-3 col-6">

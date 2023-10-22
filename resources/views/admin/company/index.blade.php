@@ -1,8 +1,4 @@
-@extends('dashboard.layout.dashboard_layout')
-@section('meta')
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-@endsection
-
+@extends('dashboard.layout.master')
 @section('style')
     <link href="{{ asset('asset/css/datatables.min.css') }}" rel="stylesheet">
     <style>
@@ -29,11 +25,11 @@
                         <th >{{ __('messages.table.id') }}</th>
                         <th >{{ __('messages.table.status') }}</th>
                         <th >{{ __('messages.table.name') }}</th>
-                        <th >{{ __('messages.table.email') }}</th>
-                        <th style="width: 150px;box-sizing: border-box;" >{{ __('messages.table.number') }}</th>
-                        <th style="width: 250px;box-sizing: border-box;" >{{ __('messages.table.address') }}</th>
+                        <th  style="width: 150px; box-sizing: border-box;">{{ __('messages.table.email') }}</th>
+                        <th >{{ __('messages.table.number') }}</th>
+                        <th style="width: 200px; box-sizing: border-box;">{{ __('messages.table.address') }}</th>
                         <th>City</th>
-                        <th style="width: 210px;box-sizing: border-box;">{{ __('messages.table.action') }}</th>
+                        <th style="width: 250px; box-sizing: border-box;">{{ __('messages.table.action') }}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -128,7 +124,6 @@
             $(document).on("click", ".delete", function(event) {
                 event.preventDefault();
                 companyId = $(this).attr("data-user-id");
-                console.log(companyId);
             });
 
             $(document).on("click", "#companyDelete", function(event) {

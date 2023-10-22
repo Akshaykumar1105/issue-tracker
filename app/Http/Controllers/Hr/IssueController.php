@@ -29,10 +29,9 @@ class IssueController extends Controller{
             ->addIndexColumn()
             ->addColumn('action', function ($row) {
                 $editRoute = route('hr.issue.edit', ['issue' => $row->id]);
-                $actionBtn = '<a href=' . $editRoute . ' data-issueId="' . $row->id . '" class="view btn btn-primary btn-sm">View</a>';
+                $actionBtn = '<a href=' . $editRoute . ' class="view btn btn-success btn-sm"><i class="fas fa-pencil-alt" style="margin: 0 5px 0 0"></i>Edit</a>';
                 return $actionBtn;
             })
-            
             ->rawColumns(['status', 'action'])
             ->make(true);
         }
@@ -40,8 +39,8 @@ class IssueController extends Controller{
     }
 
     public function edit(Issue $issue){
-        $manager = $this->issueService->edit($issue);      
-        return view('hr.issue.create', ['issue' => $issue, 'managers' => $manager]);
+        $managers = $this->issueService->edit($issue);      
+        return view('hr.issue.create', ['issue' => $issue, 'managers' => $managers]);
     }
 
     public function update(Request $request, $id){

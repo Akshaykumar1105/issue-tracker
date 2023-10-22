@@ -29,7 +29,7 @@ class IssueSolve extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Issue Solve',
+            subject: 'Issue Solved',
         );
     }
 

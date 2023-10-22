@@ -139,7 +139,6 @@
                         data: $(form).serialize(),
                         success: function(response) {
                             $(".loader-container").fadeOut();
-                            console.log(response.success);
                             toastr.options = {
                                 closeButton: true,
                                 progressBar: true,

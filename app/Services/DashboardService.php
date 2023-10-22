@@ -10,17 +10,17 @@ class DashboardService {
         $allMonths = range(1, 12);
 
         $data = [
-            'user' => User::whereNotNull('company_id')->count(),
-            'issue' => Issue::count(),
-            'company' => Company::where('is_active', config('site.status.active'))->get(),
-            'hrData' => User::whereNull('parent_id')
+            'userCount' => User::whereNotNull('company_id')->count(),
+            'issueCount' => Issue::count(),
+            'companies' => Company::where('is_active', config('site.status.active'))->get(),
+            'hrCount' => User::whereNull('parent_id')
                 ->whereNotNull('company_id')
                 ->selectRaw('MONTH(created_at) as month')
                 ->selectRaw('COUNT(*) as count')
                 ->groupBy('month')
                 ->orderBy('month')
                 ->get(),
-            'managerData' => User::whereNotNull('parent_id')
+            'managerCount' => User::whereNotNull('parent_id')
                 ->selectRaw('MONTH(created_at) as month')
                 ->selectRaw('COUNT(*) as count')
                 ->groupBy('month')
@@ -49,22 +49,22 @@ class DashboardService {
     {
         $resultData = [
             'user' => array_fill_keys($allMonths, 0),
-            'hrData' => array_fill_keys($allMonths, 0),
-            'managerData' => array_fill_keys($allMonths, 0),
+            'hrCount' => array_fill_keys($allMonths, 0),
+            'managerCount' => array_fill_keys($allMonths, 0),
         ];
 
-        foreach ($data['hrData'] as $user) {
-            if (!isset($resultData['hrData'][$user->month])) {
-                $resultData['hrData'][$user->month] = array_fill_keys($allMonths, 0);
+        foreach ($data['hrCount'] as $user) {
+            if (!isset($resultData['hrCount'][$user->month])) {
+                $resultData['hrCount'][$user->month] = array_fill_keys($allMonths, 0);
             }
-            $resultData['hrData'][$user->month] = $user->count;
+            $resultData['hrCount'][$user->month] = $user->count;
         }
 
-        foreach ($data['managerData'] as $user) {
-            if (!isset($resultData['managerData'][$user->month])) {
-                $resultData['managerData'][$user->month] = array_fill_keys($allMonths, 0);
+        foreach ($data['managerCount'] as $user) {
+            if (!isset($resultData['managerCount'][$user->month])) {
+                $resultData['managerCount'][$user->month] = array_fill_keys($allMonths, 0);
             }
-            $resultData['managerData'][$user->month] = $user->count;
+            $resultData['managerCount'][$user->month] = $user->count;
         }
 
         return $resultData;
