@@ -25,6 +25,7 @@ class Profile extends FormRequest
             'name' => 'required|max:255|regex:/^[a-zA-Z]+(\s[a-zA-Z]+)?$/',
             'email' => 'required|email|unique:users,email,'.$id,
             'mobile' => 'required|digits:10',
+            'avatar' => 'mimes:jpeg,png,jpg,gif|max:4096'
         ];
     }
 }

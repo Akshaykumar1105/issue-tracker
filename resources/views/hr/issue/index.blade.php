@@ -148,7 +148,7 @@
                         },
                     },
                     {
-                        "data": "user.name",
+                        "data": "manager.name",
                         render: function(data, type, row) {
                             var manager = data == null ? 'Not Assign' : data;
                             return '<div class="form-check form-switch p-1">' + manager +

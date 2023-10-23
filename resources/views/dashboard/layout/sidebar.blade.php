@@ -20,7 +20,7 @@
                     <div class="image">
                         <div style=" padding: 20px;
                         background-size: cover; background-image: url('@if (isset(auth()->user()->getMedia('user')->first()->filename)) {{ asset('storage/user/' .auth()->user()->getMedia('user')->first()->filename .'.' .auth()->user()->getMedia('user')->first()->extension) }}');"
-                            @else{{ asset('/asset/dist/img/AdminLTELogo.png') }} @endif
+                            @else{{ asset('storage/user/user.png') }}');" @endif
                             class="img-circle
                             elevation-2" alt="User Image"></div>
                     </div>
@@ -30,7 +30,7 @@
                     </div>
                 </div>
                 <ul class="dropdown-menu dropdown-menu-light" aria-labelledby="profileDropdown">
-                    <li><a class="dropdown-item "
+                    <li><a class="dropdown-item {{ in_array(Route::currentRouteName(), ['admin.profile.index', 'hr.profile.index', 'manager.profile.index']) ? 'active' : '' }}"
                             href="@if (auth()->user()->hasRole('admin')) {{ route('admin.profile.index') }} @elseif(auth()->user()->hasRole('hr')) {{ route('hr.profile.index') }}@elseif(auth()->user()->hasRole('manager')) {{ route('manager.profile.index') }} @endif">My
                             Profile</a>
                     </li>
@@ -76,7 +76,8 @@
                         </a>
 
                     </li>
-                    <li class="nav-item {{ Route::currentRouteName() == 'admin.company.index' ? 'menu-open' : '' }}">
+                    <li
+                        class="nav-item {{ in_array(Route::currentRouteName(), ['admin.company.index', 'admin.company.edit']) ? 'menu-open' : '' }}">
                         <a href="{{ route('admin.company.index') }}" class="nav-link ">
                             <i class="fas fa-building"></i>
                             <p>{{ __('messages.admin.company') }}</p>
@@ -84,7 +85,7 @@
                     </li>
 
                     <li
-                        class="nav-item {{ Route::currentRouteName() == 'admin.manager.index' || Route::currentRouteName() == 'admin.manager.edit' || Route::currentRouteName() == 'admin.hr.index' || Route::currentRouteName() == 'admin.hr.edit' ? 'menu-is-opening menu-open' : '' }}">
+                        class="nav-item {{ in_array(Route::currentRouteName(), ['admin.manager.index', 'admin.hr.index', 'admin.hr.edit', 'admin.manager.edit']) ? 'menu-is-opening menu-open' : '' }}">
                         <a href="#" class="nav-link ">
                             <i class="fas fa-users"></i>
                             <p>
@@ -93,17 +94,17 @@
                             </p>
                         </a>
                         <ul class="nav nav-treeview"
-                            style="{{ Route::currentRouteName() == 'admin.hr.index' || Route::currentRouteName() == 'admin.manager.index' ? 'display: block;' : '' }}">
+                            style="{{ in_array(Route::currentRouteName(), ['admin.hr.index', 'admin.hr.edit', 'admin.manager.index', 'admin.manager.edit']) ? 'display: block;' : '' }}">
                             <li class="nav-item">
                                 <a href="{{ route('admin.hr.index') }}" style=""
-                                    class="nav-link {{ Route::currentRouteName() == 'admin.hr.index' || Route::currentRouteName() == 'admin.hr.edit' || Route::currentRouteName() == 'admin.managerindex' || Route::currentRouteName() == 'admin.manager.edit' ? 'active' : '' }}">
+                                    class="nav-link {{ in_array(Route::currentRouteName(), ['admin.hr.index', 'admin.hr.edit']) ? 'active' : '' }}">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>View Hr</p>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a href="{{ route('admin.manager.index') }}"
-                                    class="nav-link {{ Route::currentRouteName() == 'admin.manager.index' || Route::currentRouteName() == 'admin.manager.edit' ? 'active' : '' }}">
+                                    class="nav-link {{ in_array(Route::currentRouteName(), ['admin.manager.index', 'admin.manager.edit']) ? 'active' : '' }}">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>View Manager</p>
                                 </a>
@@ -111,7 +112,7 @@
                         </ul>
                     </li>
                     <li
-                        class="nav-item {{ Route::currentRouteName() == 'admin.issue.index' || Route::currentRouteName() == 'admin.issue.show' ? 'menu-open ' : '' }}">
+                        class="nav-item {{ in_array(Route::currentRouteName(), ['admin.issue.index', 'admin.issue.show']) ? 'menu-open ' : '' }}">
                         <a href="{{ route('admin.issue.index') }}" class="nav-link">
                             <i class="fas fa-bug"></i>
                             <p>{{ __('messages.admin.issue') }}</p>
@@ -119,7 +120,7 @@
                     </li>
 
                     <li
-                        class="nav-item {{ Route::currentRouteName() == 'admin.discount-coupon.index' || Route::currentRouteName() == 'admin.discount-coupon.edit' ? 'menu-open ' : '' }}">
+                        class="nav-item {{ in_array(Route::currentRouteName(), ['admin.discount-coupon.index', 'admin.discount-coupon.edit']) ? 'menu-open ' : '' }}">
                         <a href="{{ route('admin.discount-coupon.index') }}" class="nav-link">
                             <i class="fas fa-tags"></i>
                             <p>Discount Coupon</p>
@@ -128,13 +129,15 @@
                 @endrole
 
                 @role('hr')
-                    <li class="nav-item {{ Route::currentRouteName() == 'hr.dashboard*' ? 'menu-open' : '' }}">
+                    <li
+                        class="nav-item {{ in_array(Route::currentRouteName(), ['hr.dashboard.index']) ? 'menu-open' : '' }}">
                         <a href="{{ route('hr.dashboard') }}" class="nav-link">
                             <i class="nav-icon fas fa-chart-pie"></i>
                             <p>Dashboard</p>
                         </a>
                     </li>
-                    <li class="nav-item {{ Route::currentRouteName() == 'hr.manager*' ? 'menu-open' : '' }}">
+                    <li
+                        class="nav-item {{ in_array(Route::currentRouteName(), ['hr.manager.index', 'hr.manager.edit']) ? 'menu-open' : '' }}">
                         <a href="{{ route('hr.manager.index') }}" class="nav-link">
                             <i class="fas fa-user-tie"></i>
                             <p>Managers</p>
@@ -142,13 +145,13 @@
                     </li>
 
                     <li
-                        class="nav-item {{ Route::currentRouteName() == 'hr.issue*' ? 'menu-is-opening  manu-open' : '' }}">
+                        class="nav-item {{ in_array(Route::currentRouteName(), ['hr.issue.index', 'hr.issue.edit']) ? 'menu-is-opening  manu-open' : '' }}">
                         <a href="#" class="nav-link ">
                             <i class="fas fa-bug"></i>
                             <p>Issues<i class="right fas fa-angle-left"></i></p>
                         </a>
                         <ul class="nav nav-treeview"
-                            style="{{ Route::currentRouteName() == 'hr.issue*' ? 'display: block;' : '' }}">
+                            style="{{ in_array(Route::currentRouteName(), ['hr.issue.index', 'hr.issue.edit']) ? 'display: block;' : '' }}">
                             <li class="nav-item">
                                 <a href="{{ route('hr.issue.index', ['type' => 'pending']) }}"
                                     class="nav-link {{ request('type') === 'pending' ? 'active' : '' }}">
@@ -166,16 +169,16 @@
                             <li class="nav-item">
                                 <a href="{{ route('hr.issue.index', ['type' => 'all-issue']) }}"
                                     class="nav-link {{ request('type') === 'all-issue' ? 'active' : '' }}">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>All Issue</p>
-                                </a>
+                                     <i class="far fa-circle nav-icon"></i>
+                                     <p>All Issue</p>
+                                 </a>
                             </li>
                         </ul>
                     </li>
                 @endrole
 
                 @role('manager')
-                    <li class="nav-item {{ Route::currentRouteName() == 'manager.dashboard*' ? 'menu-open' : '' }}">
+                    <li class="nav-item {{ Route::currentRouteName() == 'manager.dashboard.index' ? 'menu-open' : '' }}">
                         <a href="{{ route('manager.dashboard') }}" class="nav-link">
                             <i class="nav-icon fas fa-chart-pie"></i>
                             <p>Dashboard</p>
@@ -189,17 +192,17 @@
                             <p>Issues<i class="right fas fa-angle-left"></i></p>
                         </a>
                         <ul class="nav nav-treeview"
-                            style="{{ Route::currentRouteName() == 'manager.issue.index' || Route::currentRouteName() == 'manager.issue.edit' ? 'display: block;' : '' }}">
+                            style="{{ in_array(Route::currentRouteName(), ['manager.issue.index', 'manager.issue.edit']) ? 'display: block;' : '' }}">
                             <li class="nav-item">
                                 <a href="{{ route('manager.issue.index', ['type' => 'pending']) }}"
-                                    class="nav-link {{ url()->previous() === route('manager.issue.index', ['type' => 'pending']) ? 'active' : '' }} {{ route('manager.issue.index') == Route::currentRouteName() ? 'active' : '' }}">
+                                    class="nav-link {{ request('type') === 'pending' ? 'active' : '' }}">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Pending Issue</p>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a href="{{ route('manager.issue.index', ['type' => 'all-issue']) }}"
-                                    class="nav-link {{ url()->previous() === route('manager.issue.index', ['type' => 'all-issue']) || route('manager.issue.index') == Route::currentRouteName() ? 'active' : '' }}">
+                                    class="nav-link {{ Route::currentRouteName() == 'manager.issue.edit' ? 'active' : '' }} {{  request('type') === 'all-issue' ? 'active' : '' }}">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>All Issue</p>
                                 </a>
@@ -207,12 +210,9 @@
                         </ul>
                     </li>
                 @endrole
-
             </ul>
         </nav>
-        <!-- /.sidebar-menu -->
     </div>
-    <!-- /.sidebar -->
 </aside>
 <div class="modal fade" id="logoutModel" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">

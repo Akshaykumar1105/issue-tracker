@@ -33,11 +33,11 @@ class IssueStatusChanged implements ShouldQueue
     {
         try {
             if ($this->issue) {
-                if($this->issue->user){
+                if($this->issue->manager){
                     $this->user->notify(new NotificationsIssueStatusChanged($this->issue, $this->user));
                 }
             } else {
-                Log::warning("User with email {$this->issue->user->email} not found.");
+                Log::warning("User with email {$this->issue->manager->email} not found.");
             }
         } catch (\Exception $e) {
             Log::error("Error processing Issue status changed job: " . $e->getMessage());

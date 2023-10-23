@@ -16,7 +16,7 @@
                         @else
                             Create
                         @endif
-                        Discount coupon
+                        Coupon
                     </h3>
                 </div>
                 @if (isset($coupon))

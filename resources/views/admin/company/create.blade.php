@@ -7,7 +7,7 @@
 @section('content')
     <x-loader />
     <section class="content">
-        <div class="col-md-10 mx-auto pt-3">
+        <div class="col-md-12 mx-auto pt-3">
             <div class="card card-primary">
                 <div class="card-header">
                     <h3 class="card-title">

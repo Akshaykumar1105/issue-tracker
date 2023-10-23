@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Admin\DiscountCoupon;
+namespace App\Http\Requests\Admin\Coupon;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class Store extends FormRequest
+class Update extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,7 +22,7 @@ class Store extends FormRequest
     public function rules(): array
     {
         return [
-            'code' => 'required|unique:discount_coupons,code',
+            'code' => 'required|unique:discount_coupons,code,'.$this->discount_coupon.',id',
             'discount' => 'required|numeric|min:0|max:'.(request()->discount_type == 'FLAT' ? '2000' : '100'),
             'discount_type' => 'required|in:FLAT,VARIABLE',
             'active_at' => 'nullable|date',

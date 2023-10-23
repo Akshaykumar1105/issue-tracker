@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Carbon\Carbon;
 use Illuminate\Http\Request;
+use App\Services\CouponService;
 use App\Http\Controllers\Controller;
 use Yajra\DataTables\Facades\DataTables;
-use App\Http\Requests\Admin\DiscountCoupon\Store;
-use App\Http\Requests\Admin\DiscountCoupon\Update;
-use App\Services\CouponService;
+use App\Http\Requests\Admin\Coupon\Store;
+use App\Http\Requests\Admin\Coupon\Update;
 
 class CouponController extends Controller
 {
@@ -36,11 +35,11 @@ class CouponController extends Controller
                 ->rawColumns(['action', 'status'])
                 ->make(true);
         }
-        return view('admin.discount-coupon.index');
+        return view('admin.coupon.index');
     }
 
     public function create(){
-        return view('admin.discount-coupon.create');
+        return view('admin.coupon.create');
     }
 
     public function store(Store $request){

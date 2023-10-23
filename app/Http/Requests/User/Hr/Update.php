@@ -25,6 +25,8 @@ class Update extends FormRequest
             'name' => 'required|max:50|regex:/^[a-zA-Z]+(\s[a-zA-Z]+)?$/',
             'email' => 'required|email|unique:users,email,'.$this->hr.',id',
             'mobile' => 'required|digits:10',
+            'company_id' => 'required|exists:companies,id',
+            'avatar' => 'mimes:jpeg,png,jpg,gif|max:4096'
         ];
     }
 }

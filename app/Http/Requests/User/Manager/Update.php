@@ -25,7 +25,7 @@ class Update extends FormRequest
             'name' => 'required|max:255|regex:/^[a-zA-Z]+(\s[a-zA-Z]+)?$/',
             'email' => 'required|email|unique:users,email,'.$this->manager,
             'mobile' => 'required|digits:10',
-            'profile_img' => 'nullable|mimes:jpeg,png,jpg,gif|max:4096'
+            'avatar' => 'nullable|mimes:jpeg,png,jpg,gif|max:4096'
         ];
     }
 }

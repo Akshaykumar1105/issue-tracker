@@ -76,12 +76,13 @@
                         <th>{{ __('messages.table.profile') }}</th>
                         <th>{{ __('messages.table.name') }}</th>
                         <th scope="col">{{ __('messages.table.email') }}</th>
+                        <th scope="col">{{ __('messages.table.number') }}</th>
                         <th>{{ __('messages.table.company') }}</th>
                         @if (Route::currentRouteName() == 'admin.hr.index')
                         @else
                             <th>{{ __('messages.table.hr') }}</th>
                         @endif
-                        <th>{{ __('messages.table.action') }}</th>
+                        <th style="width: 150px;">{{ __('messages.table.action') }}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -187,6 +188,9 @@
                     },
                     {
                         "data": "email",
+                    },
+                    {
+                        "data": "mobile",
                     },
                     {
                         "data": "company.name",

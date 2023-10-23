@@ -24,7 +24,7 @@ class Store extends FormRequest
         return [
             'title' => 'required|min:8|max:255',
             'description' => 'required',
-            'hr_id' => 'required',
+            'hr_id' => 'required|exists:users,id',
             'email' => 'required|email'
         ];
     }

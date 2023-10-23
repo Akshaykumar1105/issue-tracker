@@ -11,11 +11,9 @@ class CommentController extends Controller
 {
 
     protected $commentService;
-    protected $comment;
 
     public function __construct(CommentService $commentService){
         $this->commentService = $commentService;
-        $this->comment = new Comment();
     }
 
     public function index(Request $request){

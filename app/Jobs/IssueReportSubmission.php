@@ -34,7 +34,6 @@ class IssueReportSubmission implements ShouldQueue
         $user = Company::where('email', $this->email)->first();
         if ($user) {
             $user->notify(new NotificationsIssueReportSubmission($user));
-        } else {
         }
     }
 }

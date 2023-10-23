@@ -33,7 +33,15 @@ class IssueService
     }
 
     public function store($request){
-        $slug = Str::slug($request->title, '-', Str::random(5));
+        $originalSlug = Str::slug($request->title, '-', Str::random(5));
+
+        $slug = $originalSlug;
+        $count = 2;
+        while (Issue::where('slug', $slug)->exists()) {
+            $slug = $originalSlug . '-' . $count;
+            $count++;
+        }
+        
         $company = Company::where('uuid', $request->issueUuid)->first();
         $this->issue->fill($request->all());
         $this->issue->slug = $slug;
@@ -43,7 +51,7 @@ class IssueService
     }
 
     public function show($id){
-        return Issue::with(['user', 'company', 'hr'])->findOrFail($id);
+        return Issue::with(['manager', 'company', 'hr'])->findOrFail($id);
     }
 
     public function edit($issue){
@@ -82,7 +90,7 @@ class IssueService
         if (auth()->user()->hasRole(config('site.role.hr'))) {
             if ($request->status == $issue->status) {
                 if ($issue->status !== 'SEND_FOR_REVIEW') {
-                    $user = $issue->user;
+                    $user = $issue->manager;
                     IssueStatusChanged::dispatchSync($issue, $user);
                 }
             }
@@ -105,7 +113,7 @@ class IssueService
         return  ['success' => __('entity.entityDeleted', ['entity' => 'Company']),];
     }
 
-    public function collection($query, $request){
+    public function collection($request){
         $query = Issue::with('company');
         switch ($request->table) {
             case config('site.table.admin'):

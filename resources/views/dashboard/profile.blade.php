@@ -67,7 +67,7 @@
                                     <div class="form-group" style="width: 50%;">
                                         <label for="exampleInputFile">{{ __('messages.form.img') }}</label>
                                         <div class="custom-file ">
-                                            <input name="profile_img" style="width: 50%;font-size: 20px;"
+                                            <input name="avatar" style="width: 50%;font-size: 20px;"
                                                 @if (isset($user->getMedia('user')->first()->filename)) data-default-file="{{ asset('storage/user/' . $user->getMedia('user')->first()->filename . '.' . $user->getMedia('user')->first()->extension) }}"
                                         @else
                                         data-default-file="" @endif

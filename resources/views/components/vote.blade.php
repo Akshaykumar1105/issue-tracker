@@ -7,8 +7,7 @@
             <div class="like grow {{ $comment->id == $vote->comment_id ? 'active' : '' }}"
                 data-user="{{ in_array(auth()->user()->id, $votes) ? 'true' : 'false' }}"
                 data-upvote="{{ in_array(auth()->user()->id, $votes) ? 'true' : 'false' }}"
-                data-commentid="{{ $comment->id }}"
-                data-authid="{{ auth()->user()->id }}">
+                data-comment-id="{{ $comment->id }}">
                 <i class="fa fa-thumbs-up fa-2x likethumb" aria-hidden="true"></i>
             </div>
         </div>
@@ -17,7 +16,7 @@
         <div class="rating">
             <!-- No upvotes, display a like button without the active class -->
             <div class="like grow" data-user="{{ auth()->user()->id }}"
-                data-commentid="{{ $comment->id }}">
+                data-comment-id="{{ $comment->id }}">
                 <i class="fa fa-thumbs-up fa-2x likethumb" aria-hidden="true"></i>
             </div>
         </div>

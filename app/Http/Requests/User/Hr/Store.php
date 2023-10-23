@@ -26,9 +26,9 @@ class Store extends FormRequest
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:8|regex:/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%])/',
             'password_confirmation' => 'required|same:password',
-            'company_id' => 'required',
+            'company_id' => 'required|exists:companies,id',
             'mobile' => 'required|digits:10',
-            
+            'avatar' => 'nullable|mimes:jpeg,png,jpg,gif|max:4096'
         ];
     }
 

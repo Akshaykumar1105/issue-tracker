@@ -11,7 +11,7 @@ class ProfileService{
         $user = User::find($id);
         $user->fill($request->all())->save();
 
-        $profileImg = $request->file('profile_img');
+        $profileImg = $request->file('avatar');
         $oldProfile = $user->firstMedia('user');
 
         if ($oldProfile == '') {

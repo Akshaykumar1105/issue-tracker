@@ -18,8 +18,8 @@ class HrService
     public function store($request){
         $this->user->fill($request->all())->save();
         $this->user->assignRole('hr');
-        if ($request->file('profile_img')) {
-            $media =  MediaUploader::fromSource($request->file('profile_img'))->toDisk('public')
+        if ($request->file('avatar')) {
+            $media =  MediaUploader::fromSource($request->file('avatar'))->toDisk('public')
                 ->toDirectory('user')->upload();
             $this->user->attachMedia($media, 'user');
         }
@@ -34,7 +34,7 @@ class HrService
         $user->fill($request->all());
         $user->save();
 
-        $profileImg = $request->file('profile_img');
+        $profileImg = $request->file('avatar');
         $oldProfile = $user->firstMedia('user');
 
         if ($oldProfile == '') {
@@ -64,10 +64,11 @@ class HrService
 
     public function collection($companyId = null, $request){
         if (auth()->user()->hasRole('hr') == config('site.role.hr')) {
+            $query = User::with('company')->whereNull('parent_id');
             if ($companyId) {
-                $query = User::with('company')->whereNull('parent_id')->where('company_id', $companyId);
+                $query->where('company_id', $companyId);
             } else {
-                $query = User::with('company')->whereNull('parent_id')->whereNotNull('company_id');
+                $query->whereNotNull('company_id');
             }
             if ($request->filter) {
                 $query->where('company_id',  $request->filter);

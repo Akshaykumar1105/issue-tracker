@@ -37,7 +37,7 @@ class AssignManager extends Notification
     public function toMail(object $notifiable)
     {
         // dd($this->issue->user->email);
-        return (new MailAssignManager($this->issue))->to($this->issue->user->email);    
+        return (new MailAssignManager($this->issue))->to($this->issue->manager->email);    
     }
 
     /**

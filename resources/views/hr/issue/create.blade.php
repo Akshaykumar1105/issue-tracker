@@ -11,7 +11,6 @@
     <x-loader />
     <section class="content pt-3">
 
-        <!-- Default box -->
         <div class="card">
             <div class="card-header ">
                 <h3 class="card-title">Issue Detail</h3>
@@ -86,19 +85,19 @@
                                         <select name="status" class="d-block form-control form-control"
                                             style="appearance: auto;">
                                             <option value="default">Select Status</option>
-                                            <option vlaue="OPEN" data-status="OPEN"
+                                            <option vlaue=OPEN data-status="OPEN"
                                                 {{ $issue->status == 'OPEN' ? 'selected' : '' }}>Open</option>
-                                            <option vlaue="IN_PROGRESS" data-status="IN_PROGRESS"
+                                            <option vlaue=IN_PROGRESS data-status="IN_PROGRESS"
                                                 {{ $issue->status == 'IN_PROGRESS' ? 'selected' : '' }}>In Progress
                                             </option>
-                                            <option value="ON_HOLD" data-status="ON_HOLD"
+                                            <option value=ON_HOLD data-status="ON_HOLD"
                                                 {{ $issue->status == 'ON_HOLD' ? 'selected' : '' }}>On Hold</option>
                                             <option value="SEND_FOR_REVIEW" data-status="SEND_FOR_REVIEW"
                                                 {{ $issue->status == 'SEND_FOR_REVIEW' ? 'selected' : '' }}>Send For Review
                                             </option>
-                                            <option value="COMPLETED" data-status="COMPLETED"
+                                            <option value=COMPLETED data-status="COMPLETED"
                                                 {{ $issue->status == 'COMPLETED' ? 'selected' : '' }}>Completed</option>
-                                            <option vlaue="CLOSE" data-status="CLOSE"
+                                            <option vlaue=CLOSE data-status="CLOSE"
                                                 {{ $issue->status == 'CLOSE' ? 'selected' : '' }}>Close</option>
                                         </select>
                                     </div>
@@ -119,7 +118,8 @@
                                     </div>
                                     <div class="col-md-12 mt-4">
                                         <label class="form-label fw-bold" for="name">Status</label>
-                                        <p class="">{{ str_replace('_', ' ', ucwords(strtolower($issue->status))) }}</p>
+                                        <p class="">{{ str_replace('_', ' ', ucwords(strtolower($issue->status))) }}
+                                        </p>
                                     </div>
                                     <div class="col-md-12 mt-4">
                                         <label class="form-label fw-bold" for="name">Due date</label>
@@ -128,13 +128,10 @@
                                 @endif
 
 
-                                {{-- <button type="submit" class="btn btn-primary ms-2 mb-2">Submit</button> --}}
-                                <div class="col-md-4">
+                                <div class="col-md-4 d-flex " style="gap:10px;">
                                     @if ($issue->status == 'COMPLETED')
                                     @else
-                                        <div class="col-md-4 form-group">
-                                            <button type="submit" class="btn btn-primary">Submit</button>
-                                        </div>
+                                        <button type="submit" class="btn btn-primary">Submit</button>
                                     @endif
                                     <a href="{{ route('hr.issue.index', ['type' => 'all-issue']) }}"
                                         class="btn btn-outline-secondary">Back</a>
@@ -183,7 +180,7 @@
                         $('#commentBox').html(response.comments);
 
                         $(".selected-option").on("click", function(e) {
-                            $(this).next(".options").show(); // Show the dropdown
+                            $(this).next(".options").show();
                         });
 
                         $(document).on("click", function(e) {
@@ -208,7 +205,7 @@
                             const commentId = $(this).data("comment-id");
                             $(this).parents('.right-msg').find('.edit-comment').show()
                             $(this).parent().prev().hide();
-                            $(this).parent().prev().prev().prev().show();
+                            $(this).parent().prev().prev().show();
                             $(this).parents('.msg-bubble').find('.edit-comment').show();
                             $(this).hide();
 
@@ -224,6 +221,11 @@
                                 success: function(response) {
                                     $("#comment-text-" + commentId).text(
                                         commentBody);
+                                    toastr.options = {
+                                        closeButton: true,
+                                        progressBar: true,
+                                    };
+                                    toastr.success(response.success);
                                 }
                             })
                         });
@@ -261,7 +263,7 @@
                                 closeButton: true,
                                 progressBar: true,
                             };
-                            toastr.success(message);
+                            toastr.success(response.success);
                         }
                     });
                 }
@@ -274,7 +276,7 @@
                 $(this).addClass('active');
                 let upvote = $(this).data('upvote');
                 let userId = $(this).data('user');
-                let commentId = $(this).data('commentid');
+                let commentId = $(this).data('comment-id');
                 let authId = $(this).data('authid');
 
                 var voteCount = likeButton.closest('.rating').next().children();

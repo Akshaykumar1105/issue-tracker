@@ -6,6 +6,7 @@ use App\Models\Issue;
 use Illuminate\Http\Request;
 use App\Services\IssueService;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\User\Issue\Update;
 use App\Models\Comment;
 use App\Models\User;
 use Yajra\DataTables\Facades\DataTables;
@@ -23,7 +24,7 @@ class IssueController extends Controller
 
     public function index(Request $request){
         if ($request->ajax()) {
-            $query = $this->issueService->collection($query = null, $request);
+            $query = $this->issueService->collection($request);
             return DataTables::of($query)
                 ->orderColumn('title', function ($query, $order) {
                     $query->orderBy('id', $order);
@@ -44,7 +45,8 @@ class IssueController extends Controller
         return view('manager.issue.create', ['issue' => $issue]);
     }
 
-    public function update($id, Request $request){
+    public function update($id, Update $request){
+        
         return $this->issueService->update($id, $request);
     }
 }

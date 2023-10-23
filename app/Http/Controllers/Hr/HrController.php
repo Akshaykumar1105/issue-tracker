@@ -20,7 +20,7 @@ class HrController extends Controller
         if (auth()->user()) {
             return redirect()->route('home');
         }
-        $company = Company::where('is_active', 1)->get();
+        $company = Company::where('is_active', config('site.status.active'))->get();
         return view('front.hr.create', ['companies' => $company]);
     }
 

@@ -27,14 +27,14 @@ class Store extends FormRequest
             'password' => 'required|min:8|regex:/^(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*])(?=.*[0-9]).{8,}$/',
             'password_confirmation' => 'required|same:password',
             'mobile' => 'required|digits:10',
-            'profile_img' => 'required|mimes:jpeg,png,jpg,gif|max:4096',
+            'avatar' => 'nullable|mimes:jpeg,png,jpg,gif|max:4096',
 
         ];
 
         if (auth()->user()->hasRole(config('site.role.admin'))) {
             $rules . [
-                'company_id' => 'required',
-                'hr_id' => 'required',
+                'company_id' => 'required|exists:companies,id',
+                'hr_id' => 'required|exists:users,id',
             ];
         }
 

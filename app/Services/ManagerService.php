@@ -48,8 +48,8 @@ class ManagerService
         $this->user->save();
         $this->user->assignRole('manager');
 
-        if ($request->file('profile_img')) {
-            $media =  MediaUploader::fromSource($request->file('profile_img'))->toDisk('public')
+        if ($request->file('avatar')) {
+            $media =  MediaUploader::fromSource($request->file('avatar'))->toDisk('public')
                 ->toDirectory('user')->upload();
             $this->user->attachMedia($media, 'user');
         }
@@ -69,7 +69,7 @@ class ManagerService
     public function update($id,$request){
         $update = User::where('id', $id)->first();
         $update->fill($request->all())->save();
-        $profileImg = $request->file('profile_img');
+        $profileImg = $request->file('avatar');
         $oldProfile = $update->firstMedia('user');
 
         if ($profileImg) {

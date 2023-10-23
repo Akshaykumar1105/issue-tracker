@@ -47,5 +47,8 @@ class CommentService{
     public function destroy($id){
         $comment = $this->comment->where('id', $id)->first();
         $comment->delete();
+        return  [
+            'success' => __('entity.entityDeleted', ['entity' => 'Comment']),
+        ];
     }
 }

@@ -13,14 +13,14 @@ class IssueController extends Controller{
     protected $issueService;
     protected $companyService;
 
-    public function __construct(IssueService $issueService, CompanyService $companyService){
+    public function __construct(IssueService $issueService){
         $this->issueService = $issueService;
         $this->companyService = new CompanyService();
     }
 
     public function index(Request $request){
         if ($request->ajax()) {
-            $query = $this->issueService->collection($query = null, $request);
+            $query = $this->issueService->collection($request);
             return DataTables::of($query)
                 ->orderColumn('title', function ($query, $order) {
                     $query->orderBy('id', $order);

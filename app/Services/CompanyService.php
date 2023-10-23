@@ -8,30 +8,18 @@ use App\Jobs\IssueReportSubmission as JobsIssueReportSubmission;
 
 class CompanyService
 {
-
     protected $companyModel;
-    protected $managerService;
-    protected $hrService;
 
     public function __construct(){
         $this->companyModel = new Company();
-        $this->managerService = new ManagerService();
-        $this->hrService = new HrService;
     }
 
     public function index(){
         return $this->companyModel::where('is_active', config('site.status.active'))->get();
     }
 
-    public function collection($companyId, $request){
-        $query = $this->companyModel::with('city')->select('id', 'name', 'email', 'city_id', 'number', 'address', 'is_active', 'created_at');
-
-        if ($request->listing == config('site.role.hr')) {
-            $query =  $this->hrService->collection($companyId, $request);
-        } else if ($request->listing == config('site.role.manager')) {
-            $query = $this->managerService->collection($companyId, $request);
-        }
-        return $query;
+    public function collection(){
+        return $this->companyModel::with('city')->select('id', 'name', 'email', 'city_id', 'number', 'address', 'is_active', 'created_at');
     }
 
     public function store($request){

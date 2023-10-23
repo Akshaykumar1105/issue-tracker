@@ -4,9 +4,9 @@
 @endsection
 @section('content')
     <section class="content" style="margin: 0 auto; max-width: 100%">
-        <h1>Discount Coupon</h1>
+        <h1>Coupon</h1>
         <div class="" style="margin: 0 auto; float: right;">
-            <a class="btn btn-primary" href="{{ route('admin.discount-coupon.create') }}">Create Discount Coupon</a>
+            <a class="btn btn-primary" href="{{ route('admin.discount-coupon.create') }}">Create Coupon</a>
         </div>
 
         <div class=""
@@ -18,7 +18,7 @@
                     <tr>
                         <th>{{ __('messages.table.id') }}</th>
                         <th>{{ __('messages.table.status') }}</th>
-                        <th>{{ __('messages.table.code') }}Code</th>
+                        <th>{{ __('messages.table.code') }}</th>
                         <th>{{ __('messages.table.discount') }}</th>
                         <th>{{ __('messages.table.discount-type') }}</th>
                         <th>{{ __('messages.table.active-date') }}</th>
@@ -132,14 +132,13 @@
 
             $(document).on("click", "#deleteCoupon", function(event) {
                 event.preventDefault();
-                deleteCompany(couponId)
+                deleteCoupon(couponId)
             });
 
-            function deleteCompany(couponId) {
+            function deleteCoupon(couponId) {
                 $.ajax({
                     url: "{{ route('admin.discount-coupon.destroy', ['discount_coupon' => ':id']) }}".replace(':id', couponId),
                     data: {
-                        "id": couponId,
                         "_token": "{{ csrf_token() }}"
                     },
                     type: "DELETE",

@@ -28,7 +28,12 @@ class ManagerController extends Controller{
             ->addColumn('profile', function ($row) {
                 $user = User::find($row->id);
                 $media = $user->firstMedia('user');
-                $img = asset('storage/user/' . $media->filename . '.' . $media->extension);
+                if($media){
+                    $img = asset('storage/user/' . $media->filename . '.' . $media->extension);
+                }
+                else{
+                    $img = asset('storage/user/user.png');
+                }
                 $profile = '<img class="image--cover" src=' . $img . ' />';
                 return $profile;
             })

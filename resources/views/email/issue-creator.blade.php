@@ -6,7 +6,7 @@
 <body>
     <h1>Issue Assigned</h1>
     <p>Hello, User</p>
-     <p>An {{$issue->hr->name}} has assigned {{$issue->user->name}} manager for the following issue:</p>
+     <p>An {{$issue->hr->name}} has assigned {{$issue->manager->name}} manager for the following issue:</p>
     <ul>
         <li><strong>Issue Title:</strong> {{ $issue->title }}</li>
         <li><strong>Description:</strong> {{ $issue->description }}</li>

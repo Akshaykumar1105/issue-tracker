@@ -79,14 +79,14 @@
                                             placeholder="Enter your comment">
                                     </div>
                                 @endif
-                                @if ($issue->status == 'COMPLETED' || $issue->status == 'SEND_FOR_REVIEW')
-                                @else
-                                    <div class="col-md-4 form-group">
-                                        <button type="submit" class="btn btn-primary">Submit</button>
-                                    </div>
-                                @endif
-                                <div class="ps-2">
-                                    <a href="{{ url()->previous() }}" class="btn btn-outline-secondary">Back</a>
+                                <div class="col-md-4 d-flex" style="gap:10px;">
+                                    @if ($issue->status == 'COMPLETED' || $issue->status == 'SEND_FOR_REVIEW')
+                                    @else
+                                        <div class="">
+                                            <button type="submit" class="btn btn-primary">Submit</button>
+                                        </div>
+                                    @endif
+                                    <a href="{{ route('manager.issue.index', ['type' => 'all-issue']) }}" class="btn btn-outline-secondary">Back</a>
                                 </div>
                             </form>
                         </div>
@@ -173,8 +173,7 @@
 
                             let commentBody = $(this).parent().prev().val()
                             $.ajax({
-                                url: "{{ route('issue.comment.update', ['commentId' => ':id']) }}"
-                                    .replace(':id', commentId),
+                                url: "{{ route('issue.comment.update', ['commentId' => ':id']) }}".replace(':id', commentId),
                                 type: "PATCH",
                                 data: {
                                     _token: csrfToken,
@@ -183,6 +182,11 @@
                                 success: function(response) {
                                     $("#comment-text-" + commentId).text(
                                         commentBody);
+                                    toastr.options = {
+                                        closeButton: true,
+                                        progressBar: true,
+                                    };
+                                    toastr.success(response.success);
                                 }
                             })
                         });
@@ -215,12 +219,11 @@
                         success: function(response) {
                             $("#deleteComment").modal("toggle");
                             deleteComment.parents(".right-msg").hide();
-                            var message = response.success;
                             toastr.options = {
                                 closeButton: true,
                                 progressBar: true,
                             };
-                            toastr.success(message);
+                            toastr.success(response.success);
                         }
                     });
                 }
@@ -252,7 +255,7 @@
                 var likeButton = $(this);
                 $(this).addClass('active');
                 let userId = $(this).data('user');
-                let commentId = $(this).data('commentid');
+                let commentId = $(this).data('comment-id');
 
                 var csrfToken = $('meta[name="csrf-token"]').attr('content');
                 var voteCountElement = likeButton.closest('.rating').next().children();
@@ -299,13 +302,11 @@
                         },
                         success: function(response) {
                             likeButton.addClass('active');
-
                             var newVoteCount = currentVoteCount + 1;
                             voteCountElement.text(newVoteCount);
                             likeButton.data('user', true);
                         },
                         error: function(xhr, textStatus, errorThrown) {
-                            console.error('Error: ' + textStatus);
                             alert('An error occurred while upvoting.');
                         }
                     });

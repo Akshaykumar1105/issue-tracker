@@ -111,7 +111,7 @@
                             <div class="form-group " style=";font-size: 20px;">
                                 <label for="profile_img" class="form-label">{{ __('messages.form.img') }}</label>
                                 <div class="custom-file ">
-                                    <input name="profile_img" type="file" id="profile_img" class="dropify"
+                                    <input name="avatar" type="file" id="profile_img" class="dropify"
                                         data-height="100"
                                         @if (isset($user)) data-default-file="{{ asset('storage/user/' . $user->getMedia('user')->first()->filename . '.' . $user->getMedia('user')->first()->extension) }}"
                                         @else

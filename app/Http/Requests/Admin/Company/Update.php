@@ -24,6 +24,9 @@ class Update extends FormRequest
         return [
             'name' => 'required|min:6|max:255',
             'email' => 'required|email|unique:companies,email,'.$this->company->id.'id',
+            'number' => 'required|min:10|digits:10',
+            'address' => 'required',
+            'city_id' => 'required|exists:cities,id'
         ];
     }
 }

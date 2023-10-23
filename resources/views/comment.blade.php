@@ -9,23 +9,18 @@
     </header>
 
     @if (!$comments->isEmpty())
-        <main class="msger-chat" style="max-height: 400px; overflow-y: auto;">
+        <main class="msger-chat" style="max-height: 600px; overflow-y: auto; padding:10px 0 80px 0;">
             @foreach ($comments as $comment)
-                {{-- Define $votes here --}}
                 @php
                     $votes = [];
                 @endphp
                 @if ($comment->users->count() > 0)
-                    {{-- Move $user definition inside this loop --}}
                     @foreach ($comment->users as $user)
                         @foreach ($user->media as $img)
                         @endforeach
                     @endforeach
 
-
-
                     @foreach ($comment->commentUpvotes as $vote)
-                        {{-- Populate $votes array --}}
                         @php
                             $votes[] = $vote->user_id;
                         @endphp
@@ -33,7 +28,7 @@
 
                     @if ($user->pivot->user_id == auth()->user()->id)
                         <div class="msg right-msg">
-                            <div style="padding: 25px; margin: 0 0 0 10px;background-size: cover; background-image: url('@if (isset(auth()->user()->getMedia('user')->first()->filename)) {{ asset('storage/user/' .auth()->user()->getMedia('user')->first()->filename .'.' .auth()->user()->getMedia('user')->first()->extension) }}');" @else{{ asset('/asset/dist/img/AdminLTELogo.png') }} @endif class="img-circle
+                            <div style="padding: 25px; margin: 0 10px 0 0;background-size: cover; background-image: url('@if (isset(auth()->user()->getMedia('user')->first()->filename)) {{ asset('storage/user/' .auth()->user()->getMedia('user')->first()->filename .'.' .auth()->user()->getMedia('user')->first()->extension) }}');" @else {{ asset('storage/user/user.png') }}')" @endif class="img-circle
                                 elevation-2" alt="User Image"></div>
                             <div class="dropdown">
                                 <div class="custom-dropdown">
@@ -79,7 +74,7 @@
                                             <div class="like grow {{ $comment->id == $vote->comment_id ? 'active' : '' }}"
                                                 data-user="{{ in_array(auth()->user()->id, $votes) ? 'true' : 'false' }}"
                                                 data-upvote="{{ in_array(auth()->user()->id, $votes) ? 'true' : 'false' }}"
-                                                data-commentid="{{ $comment->id }}"
+                                                data-comment-id="{{ $comment->id }}"
                                                 data-authid="{{ auth()->user()->id }}">
                                                 <i class="fa fa-thumbs-up fa-2x likethumb" aria-hidden="true"></i>
                                             </div>
@@ -89,9 +84,8 @@
                                         </p>
                                     @else
                                         <div class="rating">
-                                            <!-- No upvotes, display a like button without the active class -->
                                             <div class="like grow" data-authid="{{ auth()->user()->id }}"
-                                                data-commentid="{{ $comment->id }}"
+                                                data-comment-id="{{ $comment->id }}"
                                                 data-user="{{ in_array(auth()->user()->id, $votes) ? 'true' : 'false' }}"
                                                 data-upvote="{{ in_array(auth()->user()->id, $votes) ? 'true' : 'false' }}">
                                                 <i class="fa fa-thumbs-up fa-2x likethumb" aria-hidden="true"></i>
@@ -106,7 +100,7 @@
                         </div>
                     @else
                         <div class="msg left-msg">
-                            <div style="padding: 25px; margin: 0 10px 10px 0 ;background-size: cover; background-image: url('@if (isset($img->filename)) {{ asset('storage/user/' . $img->filename . '.' . $img->extension) }}');" @else{{ asset('/asset/dist/img/AdminLTELogo.png') }} @endif class="img-circle
+                            <div style="padding: 25px; margin: 0 10px 10px 10px ;background-size: cover; background-image: url('@if (isset($img->filename)) {{ asset('storage/user/' . $img->filename . '.' . $img->extension) }}');" @else{{ asset('storage/user/user.png') }}')" @endif class="img-circle
                                 elevation-2" alt="User Image"></div>
                             <div class="msg-bubble d-block">
                                 <div class="msg-info">
@@ -128,8 +122,7 @@
                                             <div class="like grow {{ $comment->id == $vote->comment_id ? 'active' : '' }}"
                                                 data-user="{{ in_array(auth()->user()->id, $votes) ? 'true' : 'false' }}"
                                                 data-upvote="{{ in_array(auth()->user()->id, $votes) ? 'true' : 'false' }}"
-                                                data-commentid="{{ $comment->id }}"
-                                                data-authid="{{ auth()->user()->id }}">
+                                                data-comment-id="{{ $comment->id }}">
                                                 <i class="fa fa-thumbs-up fa-2x likethumb" aria-hidden="true"></i>
                                             </div>
                                         </div>
@@ -140,7 +133,7 @@
                                         <div class="rating">
                                             <!-- No upvotes, display a like button without the active class -->
                                             <div class="like grow" data-user="{{ auth()->user()->id }}"
-                                                data-commentid="{{ $comment->id }}">
+                                                data-comment-id="{{ $comment->id }}">
                                                 <i class="fa fa-thumbs-up fa-2x likethumb" aria-hidden="true"></i>
                                             </div>
                                         </div>

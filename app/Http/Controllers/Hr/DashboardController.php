@@ -12,10 +12,12 @@ class DashboardController extends Controller
     public function __invoke()
     {
         $user = auth()->user();
+
+        $issueStatus = Issue::where('hr_id', $user->id)->select('status')->selectRaw('COUNT(*) as count')->groupBy('status')->get();
         $data = [
-            'manager' => User::where('company_id', $user->company_id)->where('parent_id', $user->id)->count(),
-            'issue' => Issue::where('hr_id', $user->id)->count()
+            'managerCount' => User::where('company_id', $user->company_id)->where('parent_id', $user->id)->count(),
+            'issueCount' => Issue::where('hr_id', $user->id)->count(),
         ];
-        return view('hr.dashboard.index', ['data' => $data]);
+        return view('hr.dashboard.index', ['data' => $data, 'issueStatus' => $issueStatus]);
     }
 }

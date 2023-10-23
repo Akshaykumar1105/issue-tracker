@@ -60,7 +60,6 @@
                             <option value="{{ $company->id }}">{{ $company->name }}</option>
                         @endforeach
                     </select>
-
                 </div>
                 <div class="form-group mb-4 " style="flex-grow: 1;">
                     <label for="mobile" class="form-label label-filed">Mobile</label>
@@ -72,7 +71,7 @@
             <div class="form-group col-span-6 mb-4" style="width: 50%;font-size: 20px;">
                 <label for="profile_img" class="form-label">{{ __('messages.form.img') }}</label>
                 <div class="custom-file ">
-                    <input name="profile_img" type="file" id="profile_img" class="dropify" data-height="100" />
+                    <input name="avatar" type="file" id="profile_img" class="dropify" data-height="100" />
                 </div>
             </div>
 
@@ -104,11 +103,10 @@
 
             $.validator.addMethod("filesize", function(value, element, param) {
                 var fileSize = element.files[0].size; // Get the file size in bytes
-                return fileSize <= param; // Compare the file size to the maximum allowed size
+                return fileSize <= param;
             });
 
             $.validator.addMethod("pattern", function(value, element) {
-                    // Use a regular expression to check if the password meets the criteria
                     return /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/.test(value);
                 },
                 "Password must include at least one uppercase letter, one lowercase letter, one digit, and one special character."

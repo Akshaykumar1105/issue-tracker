@@ -38,7 +38,7 @@ class ConfirmPassword implements ShouldQueue
                 Log::warning("User with email {$this->email} not found.");
             }
         } catch (\Exception $e) {
-            Log::error("Error processing ConfirmPassword job: " . $e->getMessage());
+            Log::error("Error processing Confirm Password job: " . $e->getMessage());
         }
     }
 }

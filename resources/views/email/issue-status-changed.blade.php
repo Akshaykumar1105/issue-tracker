@@ -16,7 +16,7 @@
             </header>
             <section>
                 <div class="card-body">
-                    <p class="card-text">A {{ $issue->user->name }} has changed the status of an issue to "Send
+                    <p class="card-text">A {{ $issue->manager->name }} has changed the status of an issue to "Send
                         for Review." Please review the issue details below:</p>
 
                     <p><strong>Issue Title:</strong> {{ $issue->title }}</p>

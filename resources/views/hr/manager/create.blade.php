@@ -12,9 +12,7 @@
     <section class="content">
         <div class="container-fluid">
             <div class="row">
-                <!-- left column -->
-                <div class="col-md-11 mx-auto mt-3">
-                    <!-- general form elements -->
+                <div class="col-md-12 mx-auto mt-3">
                     <div class="card card-primary">
                         <div class="card-header">
                             @if (isset($manager))
@@ -24,8 +22,7 @@
                             @endif
 
                         </div>
-                        <!-- /.card-header -->
-                        <!-- form start -->
+                       
                         @if (isset($manager))
                             <form method='post' id="managerCreate"
                                 action="{{ route('hr.manager.update', ['manager' => $manager->id]) }}"
@@ -72,7 +69,7 @@
                                 <div class="form-group " style=";font-size: 20px;">
                                     <label for="profile_img" class="form-label">{{ __('messages.form.img') }}</label>
                                     <div class="custom-file ">
-                                        <input name="profile_img" type="file" id="profile_img" class="dropify"
+                                        <input name="avatar" type="file" id="profile_img" class="dropify"
                                             data-height="100"
                                             @if (isset($manager)) data-default-file="{{ asset('storage/user/' . $manager->getMedia('user')->first()->filename . '.' . $manager->getMedia('user')->first()->extension) }}"
                                             @else
@@ -90,12 +87,8 @@
                             </div>
                         </form>
                     </div>
-                    <!-- /.card -->
-
                 </div>
-                <!-- /.card-body -->
             </div>
-            <!-- /.card -->
         </div>
 
 

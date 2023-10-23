@@ -35,7 +35,7 @@
                             @if ($issue->manager_id == null)
                                 <p>Not assigned to a manager.</p>
                             @else
-                                <p>{{ $issue->user->name }}</p>
+                                <p>{{ $issue->manager->name }}</p>
                             @endif
                         </div>
                         <div class="form-group">
@@ -67,10 +67,7 @@
         // Your custom JavaScript file
         $(document).ready(function() {
             $('#back').click(function() {
-                // Go back to the previous page
                 window.history.back();
-                // Reload the page
-                // location.reload();
             });
 
         });

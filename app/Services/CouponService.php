@@ -1,7 +1,7 @@
 <?php
 namespace App\Services;
 
-use App\Models\DiscountCoupons;
+use App\Models\Coupon;
 use Carbon\Carbon;
 
 class CouponService {
@@ -9,11 +9,11 @@ class CouponService {
     protected $discountCouponObj;
 
     public function __construct(){
-        $this->discountCouponObj = new DiscountCoupons();
+        $this->discountCouponObj = new Coupon();
     }
 
     public function collection(){
-        return DiscountCoupons::select('id', 'code', 'is_active','discount', 'discount_type','active_at','expire_at');
+        return Coupon::select('id', 'code', 'is_active','discount', 'discount_type','active_at','expire_at');
     }
 
     public function store($request){
@@ -42,7 +42,7 @@ class CouponService {
 
 
     public function edit($id){
-       return DiscountCoupons::find($id);
+       return Coupon::find($id);
     }
 
     public function update($request, $id){
@@ -68,7 +68,7 @@ class CouponService {
     }
 
     public function destory($id){
-        $coupon = DiscountCoupons::find($id)->delete();
+        $coupon = Coupon::find($id)->delete();
         if($coupon){
             return [
                 'success' => __('entity.entityDeleted', ['entity' => 'Discount Coupon']),
