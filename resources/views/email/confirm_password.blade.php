@@ -1,76 +1,93 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Password Reset Successful</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title></title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            font-family: Helvetica, Arial, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            line-height: 1.6;
+            padding: 20px;
+            background-color: #f7f7f7;
         }
+
         .container {
             background-color: #ffffff;
             padding: 20px;
-            border-radius: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            max-width: 600px;
-            margin: 0 auto;
         }
-        .header {
-            background-color: #007bff;
-            color: #ffffff;
-            padding: 20px;
+
+        .box {
+            margin: 50px auto;
+            width: 90%;
+            padding: 20px 0;
+            border-bottom: 5px solid #9aa6ad;
+        }
+
+        .title {
+            border-bottom: 1px solid #eee;
             text-align: center;
         }
-        .content {
-            padding: 20px;
+
+        .title h1 {
+            font-size: 2em;
+            color: #00466a;
+            text-decoration: none;
+            font-weight: 600
         }
-        .message {
-            font-size: 18px;
-            line-height: 1.5;
+
+        .title p {
+            font-size: 1em;
+            color: #00466a;
+            text-decoration: none;
+            font-weight: 600;
         }
-        .button-container {
-            text-align: center;
+
+        .box .emailDody {
+            font-size: 1.1em;
             margin-top: 20px;
         }
+
         .btn {
             display: inline-block;
-            background-color: #007bff;
-            color: #ffffff;
+            margin: 20px auto;
             padding: 10px 20px;
-            border-radius: 5px;
+            background: #00466a;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
             text-decoration: none;
-        }
-        .btn:hover {
-            background-color: #0056b3;
-        }
-        .footer {
-            background-color: #f4f4f4;
-            padding: 10px 0;
-            text-align: center;
-        }
-        .footer p {
-            margin: 0;
         }
     </style>
 </head>
+
 <body>
     <div class="container">
-        <div class="header">
-            <h2>Password Reset Successful</h2>
-        </div>
-        <div class="content">
-            <p class="message">Hello,</p>
-            <p class="message">We are writing to inform you that your password has been successfully reset.</p>
-            <p class="message">If you did not request this change, please contact our support team immediately.</p>
-            <div class="button-container">
-                <a href="{{route('login')}}" class="btn">Login</a>
+        <div class="box">
+            <div class="title">
+                <h1 href="{{ config('app.url') }}">{{ config('app.name') }}</h1>
+
+                <p>Password reset successfully</p>
             </div>
-        </div>
-        <div class="footer">
-            <p>&copy; 2023 Issue Tracker. All rights reserved.</p>
+
+            <div class="content">
+                <p class="message">Hello, User</p>
+                <p class="message">We are writing to inform you that your password has been successfully reset.</p>
+                <p class="message">If you did not request this change, please contact our support team immediately.</p>
+                <div class="button-container">
+                    <a href="{{route('login')}}" class="btn">Login</a>
+                </div>
+            </div>
+            <div class="footer">
+                <p>&copy; 2023 Issue Tracker. All rights reserved.</p>
+            </div>
         </div>
     </div>
 </body>
+
 </html>

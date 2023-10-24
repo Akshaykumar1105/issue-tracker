@@ -2,22 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use App\Models\CommentUpvotes;
-use App\Services\CommentService;
-use App\Services\CommentUpVoteService;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Services\CommentUpVoteService;
 
 class CommentUpvoteController extends Controller{
 
     protected $commentUpVoteService;
 
-    public function __construct(CommentUpVoteService $commentUpVoteService)
-    {
+    public function __construct(CommentUpVoteService $commentUpVoteService){
         $this->commentUpVoteService = $commentUpVoteService;
     }
 
-    public function store($commentId, Request $request){
+    public function store($commentId){
         return $this->commentUpVoteService->store($commentId);
     }
 

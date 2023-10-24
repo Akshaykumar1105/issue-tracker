@@ -2,7 +2,6 @@
 namespace App\Services;
 
 use App\Models\Coupon;
-use Carbon\Carbon;
 
 class CouponService {
 
@@ -17,19 +16,6 @@ class CouponService {
     }
 
     public function store($request){
-        $now = Carbon::now()->format('Y-m-d');
-        if ($request->active_at <  $now) {
-            return ['status' => 'false', 'startAt' =>  'Discount start date must be equal to or later than the current date. Please select a valid start date.'];
-        }
-
-        if (!empty($request->active_at) && !empty($request->expire_at)) {
-            $startAt = Carbon::createFromFormat('Y-m-d', $request->active_at);
-            $endsAt = Carbon::createFromFormat('Y-m-d', $request->expire_at);
-
-            if ($endsAt->gt($startAt) == false) {
-                return ['status' => 'false', 'endAt' => 'Expiry date must be greater than the start date'];
-            }
-        }
         $coupon = $this->discountCouponObj;
         $coupon->fill($request->all())->save();
         if($coupon){
@@ -46,19 +32,6 @@ class CouponService {
     }
 
     public function update($request, $id){
-        $now = Carbon::now()->format('Y-m-d');
-        if ($request->active_at <  $now) {
-            return ['status' => 'false', 'startAt' =>  'Discount start date must be equal to or later than the current date. Please select a valid start date.'];
-        }
-
-        if (!empty($request->active_at) && !empty($request->expire_at)) {
-            $startAt = Carbon::createFromFormat('Y-m-d', $request->active_at);
-            $endsAt = Carbon::createFromFormat('Y-m-d', $request->expire_at);
-
-            if ($endsAt->gt($startAt) == false) {
-                return ['status' => 'false', 'endAt' => 'Expiry date must be greater than the start date'];
-            }
-        }
         $coupon = $this->discountCouponObj->find($id);
         $coupon->fill($request->all())->save();
         return  [

@@ -38,7 +38,7 @@ return [
     ],
 
     'password' => [
-        'not_macth' => 'The entered password does not match.',
+        'not_match' => 'The entered password does not match.',
     ],
 
     'table' => [

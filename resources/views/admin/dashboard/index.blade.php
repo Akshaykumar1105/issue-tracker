@@ -64,14 +64,14 @@
             </div>
 
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-5">
                     <div class="card">
                         <div class="card-body">
                             <div class="d-flex justify-content-between">
                                 <h5 class="card-title">Issue Chart</h5>
                                 <div class="d-flex flex-column">
                                     <select class="form-control" id="companyId" style="appearance: auto;">
-                                        <option value="default">Select Company</option>
+                                        <option value="default">All Company</option>
                                         @foreach ($data['companies'] as $company)
                                             <option value="{{ $company->id }}">{{ $company->name }}</option>
                                         @endforeach
@@ -84,11 +84,11 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-7">
                     <div class="card pb-3">
                         <div class="card-body">
                             <h5 class="card-title">User Chart</h5>
-                            <div class="chart-container" style="height: 300px;">
+                            <div class="chart-container" style="height: 350px;">
                                 <canvas id="userChart"></canvas>
                             </div>
                         </div>
@@ -171,8 +171,8 @@
 
     <script>
         const userChart = document.getElementById('userChart').getContext('2d');
-        const hrData = @json($resultData['hrCount']);
-        const managerData = @json($resultData['managerCount']);
+        const hrData = @json($userCount['hrCount']);
+        const managerData = @json($userCount['managerCount']);
 
         const months = Object.keys(hrData);
         const hrCounts = Object.values(hrData);

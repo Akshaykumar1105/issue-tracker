@@ -99,6 +99,12 @@
                 }
             });
 
+            $.validator.addMethod("pattern", function(value, element) {
+                    return /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/.test(value);
+                },
+                "Password must include at least one uppercase letter, one lowercase letter, one digit, and one special character."
+            );
+
             $("#userlogin").validate({
                 errorClass: "text-danger fw-normal",
                 rules: {
@@ -108,6 +114,7 @@
                     },
                     password: {
                         required: true,
+                        pattern:true,
                         minlength: 6,
                     },
                 },

@@ -32,7 +32,6 @@
             </table>
         </div>
 
-        <!-- Modal -->
         <div class="modal fade" id="deleteCouponModel" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -96,20 +95,10 @@
                         'name' : "discount_type"
                     },
                     {
-                        "data": "active_at",
-                        render: function(data, type, row) {
-                            var date = data == null ? 'Not select due date' : moment(data).format("{{config('site.date')}}");
-                            return '<div class="form-check form-switch p-1">' + date +
-                                '</div>';
-                        },
+                        "data": "activeAt",
                     },
                     {
-                        "data": "expire_at",
-                        render: function(data, type, row) {
-                            var date = data == null ? 'Not select due date' : moment(data).format("{{config('site.date')}}");
-                            return '<div class="form-check form-switch p-1">' + date +
-                                '</div>';
-                        },
+                        "data": "expireAt",
                     },
                     {
                         "data": "action",

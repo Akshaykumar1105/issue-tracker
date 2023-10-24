@@ -24,7 +24,7 @@ class Company extends Model
 
     public function uniqueIds(): array
     {
-        return ['uuid']; 		//your new column name
+        return ['uuid'];
     }
 
     public function users(){

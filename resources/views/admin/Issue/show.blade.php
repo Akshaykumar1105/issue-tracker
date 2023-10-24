@@ -20,7 +20,7 @@
                         </div>
                         <div class="form-group">
                             <label class="fw-bold" for="priority">Priority</label>
-                            <p>{{ $issue->priority }}</p>
+                            <p>{{ ucwords(strtolower($issue->priority)) }}</p>
                         </div>
                         <div class="form-group">
                             <label class="fw-bold" for="company">Company Name</label>
@@ -51,7 +51,7 @@
                             @if ($issue->due_date == null)
                                 <p>Not selected a due date.</p>
                             @else
-                                <p>{{ $issue->due_date }}</p>
+                                <p>{{ date(config('site.date'), strtotime($issue->due_date))  }}</p>
                             @endif
                         </div>
                         <a href="{{ $route }}" id="back" class="btn btn-primary mt-3">Back</a>
@@ -64,7 +64,6 @@
 
 @section('script')
     <script>
-        // Your custom JavaScript file
         $(document).ready(function() {
             $('#back').click(function() {
                 window.history.back();

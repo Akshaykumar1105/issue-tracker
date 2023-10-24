@@ -28,7 +28,6 @@ class Store extends FormRequest
             'password_confirmation' => 'required|same:password',
             'mobile' => 'required|digits:10',
             'avatar' => 'nullable|mimes:jpeg,png,jpg,gif|max:4096',
-
         ];
 
         if (auth()->user()->hasRole(config('site.role.admin'))) {

@@ -111,11 +111,8 @@
                             <div class="form-group " style=";font-size: 20px;">
                                 <label for="profile_img" class="form-label">{{ __('messages.form.img') }}</label>
                                 <div class="custom-file ">
-                                    <input name="avatar" type="file" id="profile_img" class="dropify"
-                                        data-height="100"
-                                        @if (isset($user)) data-default-file="{{ asset('storage/user/' . $user->getMedia('user')->first()->filename . '.' . $user->getMedia('user')->first()->extension) }}"
-                                        @else
-                                        data-default-file="" @endif />
+                                    <input name="avatar" type="file" id="profile_img" class="dropify" data-height="100"
+            data-default-file="{{ isset($manager) && $manager->getMedia('user')->isNotEmpty() ? asset('storage/user/' . $manager->getMedia('user')->first()->filename . '.' . $manager->getMedia('user')->first()->extension) : asset('storage/user/user.png') }}" />
                                 </div>
                             </div>
 

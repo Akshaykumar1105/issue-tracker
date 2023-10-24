@@ -140,12 +140,7 @@
                         }
                     },
                     {
-                        "data": "due_date",
-                        render: function(data, type, row) {
-                            var date = data == null ? 'Not select due date' : moment(data).format("{{config('site.date')}}");
-                            return '<div class="form-check form-switch p-1">' + date +
-                                '</div>';
-                        },
+                        "data": 'dueDate',
                     },
                     {
                         "data": "manager.name",
@@ -237,7 +232,6 @@
             $(document).on('change', "#selectPriority, #dueDate", function() {
                 priority = $("#selectPriority").val();
                 date = $("#dueDate").val();
-
                 filter();
                 $('.table').DataTable().ajax.reload();
             });

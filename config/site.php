@@ -24,8 +24,8 @@ return [
         'manager' => 'manager'
     ],
 
-    'date' => 'Do MMMM, YYYY',
-    'date_time' => 'Y-m-d H:i:s',
+    'date' => 'jS M Y',
+    'date_time' => 'jS M Y H:i A',
     'time' => 'h:i A',
 
 ];

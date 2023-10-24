@@ -11,7 +11,7 @@
 
     @if ($issue->status == 'SEND_FOR_REVIEW')
         <div class="container">
-            <header class="jumbotron bg-primary text-white text-center">
+            <header style="pedding: 30px" class="bg-primary text-white text-center">
                 <h1>{{ $issue->status == 'SEND_FOR_REVIEW' ? 'Issue Report Submission' : 'Issue Status Changed' }}</h1>
             </header>
             <section>

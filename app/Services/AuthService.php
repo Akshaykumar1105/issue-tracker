@@ -90,27 +90,19 @@ class AuthService
     }
 
     public function updateResetPassword($request){
-        $token = PasswordResetToken::where([
-            'token' => $request->token
-        ])->first();
-
+        $token = PasswordResetToken::where('token' , $request->token)->first();
         $email =$token->email;
-
         if (!$token) {
             return abort(404);
         }
 
-        User::where('email', $email)->update([
-            'password' => Hash::make($request->password)
-        ]);
+        User::where('email', $email)->update(['password' => Hash::make($request->password)]);
 
         ConfirmPassword::dispatchSync($email);
 
-        PasswordResetToken::where([
-            'token' => $request->token,
-        ])->delete();
+        PasswordResetToken::where(['token' => $request->token])->delete();
 
-        return response()->json(['success' => 'Password has been reseted!', 'route' => route('login')]);
+        return response()->json(['success' => 'Password has been reseted.', 'route' => route('login')]);
     }
 
     public function changePassword($request){

@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Services\AuthService;
+use App\Models\PasswordResetToken;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\ResetPassword;
-use App\Models\PasswordResetToken;
-use App\Services\AuthService;
-use Carbon\Carbon;
 
 class ResetPasswordController extends Controller
 {

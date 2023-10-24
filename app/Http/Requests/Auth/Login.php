@@ -23,7 +23,13 @@ class Login extends FormRequest
     {
         return [
             'email' => 'required|email|exists:users,email',
-            'password' => 'required',
+            'password' => 'required||regex:/^(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*])(?=.*[0-9]).{8,}$/',
+        ];
+    }
+
+    public function messages(){
+        return [
+            'password.regex' => 'The password must include at least one uppercase letter, one lowercase letter, one digit, and one special character.',
         ];
     }
 }

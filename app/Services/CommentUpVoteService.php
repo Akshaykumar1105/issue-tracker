@@ -4,13 +4,11 @@ namespace App\Services;
 
 use App\Models\CommentUpvotes;
 
-class CommentUpVoteService {
-    
-    public function store($commentId){
-        $upvote = CommentUpvotes::where('user_id', auth()->id())
-            ->where('comment_id', $commentId)
-            ->first();
+class CommentUpVoteService
+{
 
+    public function store($commentId){
+        $upvote = CommentUpvotes::where('user_id', auth()->id())->where('comment_id', $commentId)->first();
         if (!$upvote) {
             CommentUpvotes::create([
                 'user_id' => auth()->id(),
@@ -25,5 +23,3 @@ class CommentUpVoteService {
             ->delete();
     }
 }
-
-?>

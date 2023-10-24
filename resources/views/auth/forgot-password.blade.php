@@ -130,7 +130,6 @@
                             progressBar: true,
                         }
                         toastr.error(message);
-
                     },
                 });
             }

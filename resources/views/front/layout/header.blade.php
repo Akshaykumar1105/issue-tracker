@@ -21,7 +21,7 @@
                     </li>
                     <li class="nav-item "> <a class="nav-link" href="contact.html">Contact</a>
                     </li>
-                    <li class="nav-item dropdown"> <a class="nav-link dropdown-toggle" href="#"
+                    {{-- <li class="nav-item dropdown"> <a class="nav-link dropdown-toggle" href="#"
                             id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Pages</a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <li><a class="dropdown-item " href="blog.html">Blog</a>
@@ -39,11 +39,10 @@
                             <li><a class="dropdown-item " href="privacy-policy.html">Privacy &amp; Policy</a>
                             </li>
                         </ul>
-                    </li>
+                    </li> --}}
                 </ul>
                 <!-- account btn -->
-                @if (auth()->user())
-                @else
+                @if (!auth()->user())
                     <a href="{{ route('login') }}" class="btn btn-outline-primary">Log In</a>
                 @endif
                 <a href="{{ route('hr.register.create') }}" class="btn btn-primary ms-2 ms-lg-3">Sign Up</a>

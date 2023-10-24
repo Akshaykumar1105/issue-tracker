@@ -10,7 +10,6 @@
 @section('content')
     <x-loader />
     <section class="content pt-3">
-
         <div class="card">
             <div class="card-header ">
                 <h3 class="card-title">Issue Detail</h3>
@@ -123,7 +122,7 @@
                                     </div>
                                     <div class="col-md-12 mt-4">
                                         <label class="form-label fw-bold" for="name">Due date</label>
-                                        <p class="">{{ $issue->due_date }}</p>
+                                        <p class="">{{ date(config('site.date'), strtotime($issue->due_date)) }}</p>
                                     </div>
                                 @endif
 
@@ -194,9 +193,8 @@
                             var commentId = $(this).data("comment-id");
                             $("#comment-text-" + commentId).hide();
                             $("#comment-edit-" + commentId).show();
-                            const rightMsg = $(this).parents('.right-msg');
-                            rightMsg.find('.comment-edit, .save-comment').show();
-                            rightMsg.find('.options').hide();
+                            $(this).parents('.right-msg').find('.comment-edit, .save-comment').show();
+                            $(this).parents('.right-msg').find('.options').hide();
                             $(this).hide();
                         });
 
@@ -277,7 +275,6 @@
                 let upvote = $(this).data('upvote');
                 let userId = $(this).data('user');
                 let commentId = $(this).data('comment-id');
-                let authId = $(this).data('authid');
 
                 var voteCount = likeButton.closest('.rating').next().children();
                 var currentVoteCount = parseInt(voteCount.text());
@@ -291,10 +288,7 @@
                         },
                         success: function(response) {
                             likeButton.removeClass('active');
-
-                            var currentVoteCount = parseInt(voteCount.text());
                             var newVoteCount = currentVoteCount - 1;
-
                             if (newVoteCount == 1) {
                                 likeButton.addClass('active');
                             }
@@ -308,8 +302,7 @@
 
                 } else {
                     $.ajax({
-                        url: "{{ route('issue.comment.upvote.post', ['commentId' => ':id']) }}"
-                            .replace(':id', commentId),
+                        url: "{{ route('issue.comment.upvote.post', ['commentId' => ':id']) }}".replace(':id', commentId),
                         type: "POST",
                         data: {
                             comment: commentId,
@@ -317,7 +310,6 @@
                         },
                         success: function(response) {
                             likeButton.addClass('active');
-
                             var newVoteCount = currentVoteCount + 1;
                             voteCount.text(newVoteCount);
                             likeButton.data('user', true);
@@ -401,9 +393,6 @@
                     })
                 },
             });
-
-
-
         });
     </script>
 @endsection

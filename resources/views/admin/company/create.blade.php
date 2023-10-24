@@ -86,7 +86,6 @@
                         class="btn btn-primary ms-2 ">{{ isset($company) ? 'Update' : 'Submit' }}</button>
 
                     <a href="{{ route('admin.company.index') }}" class="btn btn-outline-secondary my-0">Back</a>
-
                 </div>
                 </form>
             </div>

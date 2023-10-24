@@ -25,6 +25,20 @@ class CouponController extends Controller
                 ->orderColumn('code', function ($query, $order) {
                     $query->orderBy('id', $order);
                 })
+                ->addColumn('activeAt', function ($row) {
+                    if ($row->active_at) {
+                        return date( config('site.date'), strtotime($row->active_at));
+                    } else {
+                        return 'Not select due date';
+                    }
+                })
+                ->addColumn('expireAt', function ($row) {
+                    if ($row->expire_at) {
+                        return date( config('site.date'), strtotime($row->expire_at));
+                    } else {
+                        return 'Not select due date';
+                    }
+                })
                 ->addColumn('action', function ($row) {
                     $edit = route('admin.discount-coupon.edit', ['discount_coupon' => $row->id]);
                     $actionBtn = '<div class="d-flex" style="flex-direction: column;justify-content: initial;align-items: baseline;gap: 10px;"><div><a href=' . $edit . ' id="edit' . $row->id . '" data-userId="' . $row->id . '" class="edit btn btn-success btn-sm"><i class="fas fa-pencil-alt" style="margin: 0 5px 0 0"></i>Edit</a> <button type="submit" data-user-id="' . $row->id . '" class="delete btn btn-danger btn-sm" data-bs-toggle="modal"
@@ -48,7 +62,7 @@ class CouponController extends Controller
 
     public function edit(string $id){
         $coupon = $this->discountCouponService->edit($id);
-        return view('admin.discount-coupon.create', ['coupon' => $coupon]);
+        return view('admin.coupon.create', ['coupon' => $coupon]);
     }
 
     public function update(Update $request, string $id){

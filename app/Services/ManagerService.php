@@ -67,17 +67,25 @@ class ManagerService
     }
 
     public function update($id,$request){
-        $update = User::where('id', $id)->first();
-        $update->fill($request->all())->save();
+        $user = User::where('id', $id)->first();
+        $user->fill($request->all())->save();
         $profileImg = $request->file('avatar');
-        $oldProfile = $update->firstMedia('user');
+        $oldProfile = $user->firstMedia('user');
 
-        if ($profileImg) {
-            $newFileName = pathinfo($profileImg->getClientOriginalName(), PATHINFO_FILENAME);
-            MediaUploader::fromSource($profileImg)
-                ->useFilename($newFileName)
-                ->replace($oldProfile);
-            $update->syncMedia($oldProfile, 'user');
+        if($oldProfile){
+            if ($profileImg) {
+                $newFileName = pathinfo($profileImg->getClientOriginalName(), PATHINFO_FILENAME);
+                MediaUploader::fromSource($profileImg)
+                    ->useFilename($newFileName)
+                    ->replace($oldProfile);
+                $user->syncMedia($oldProfile, 'user');
+            }
+        }else{
+            if ($request->file('avatar')) {
+                $media =  MediaUploader::fromSource($request->file('avatar'))->toDisk('public')
+                    ->toDirectory('user')->upload();
+                $user->attachMedia($media, 'user');
+            }
         }
 
         return  [

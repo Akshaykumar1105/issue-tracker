@@ -23,10 +23,10 @@ class Store extends FormRequest
     {
         return [
             'code' => 'required|unique:coupons,code',
-            'discount' => 'required|numeric|min:0|max:'.(request()->discount_type == 'FLAT' ? '2000' : '100'),
+            'discount' => 'required|numeric|min:0'.(request()->discount_type == 'FLAT' ? '' : '|max:100'),
             'discount_type' => 'required|in:FLAT,VARIABLE',
-            'active_at' => 'nullable|date',
-            'expire_at' => 'nullable|date',
+            'active_at' => 'date|after_or_equal:today',
+            'expire_at' => 'date|after:active_at',
             'is_active' => 'required|in:0,1',
         ];
     }

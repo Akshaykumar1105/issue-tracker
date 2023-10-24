@@ -22,11 +22,11 @@ class Update extends FormRequest
     public function rules(): array
     {
         return [
-            'code' => 'required|unique:discount_coupons,code,'.$this->discount_coupon.',id',
-            'discount' => 'required|numeric|min:0|max:'.(request()->discount_type == 'FLAT' ? '2000' : '100'),
+            'code' => 'required|unique:coupons,code,'.$this->discount_coupon.',id',
+            'discount' => 'required|numeric|min:0'.(request()->discount_type == 'FLAT' ? '' : '|max:100'),
             'discount_type' => 'required|in:FLAT,VARIABLE',
-            'active_at' => 'nullable|date',
-            'expire_at' => 'nullable|date',
+            'active_at' => 'required|date',
+            'expire_at' => 'required|date',
             'is_active' => 'required|in:0,1',
         ];
     }

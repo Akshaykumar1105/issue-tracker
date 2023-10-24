@@ -1,40 +1,96 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Submit Issues</title>
-    <!-- Include Bootstrap CSS (adjust the path as needed) -->
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title></title>
+    <style>
+        body {
+            font-family: Helvetica, Arial, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            line-height: 1.6;
+            padding: 20px;
+            background-color: #f7f7f7;
+        }
+
+        .container {
+            background-color: #ffffff;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .box {
+            margin: 50px auto;
+            width: 90%;
+            padding: 20px 0;
+            border-bottom: 5px solid #9aa6ad;
+        }
+
+        .title {
+            border-bottom: 1px solid #eee;
+            text-align: center;
+        }
+
+        .title h1 {
+            font-size: 2em;
+            color: #00466a;
+            text-decoration: none;
+            font-weight: 600
+        }
+
+        .title p {
+            font-size: 1em;
+            color: #00466a;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .box .emailDody {
+            font-size: 1.1em;
+            margin-top: 20px;
+        }
+
+        .btn {
+            display: inline-block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background: #00466a;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            text-decoration: none;
+        }
+    </style>
 </head>
+
 <body>
     <div class="container">
-        <!-- Header Section -->
-        <header class="jumbotron bg-primary text-white text-center">
-            <h1>Submit Issues</h1>
-        </header>
+        <div class="box">
+            <div class="title">
+                <h1 href="{{ config('app.url') }}">{{ config('app.name') }}</h1>
 
-        <!-- Content Section -->
-        <section>
-            <p>Hello {{$user->name}},</p>
-            <p>We hope this message finds you well. We greatly value your feedback and want to make it easy for you to report any issues or problems you may encounter while using our services.</p>
+                <p>Create Your Issues</p>
+            </div>
+            <p class="emailDody">Hello ,{{$user->name}}</p>
+
             <p>Here's how you can submit issues:</p>
-            <ol>
-                <li>Click on the following link to access our issue submission form:</li>
+
+             <ol>
+                <li><a href="{{ route('issue.index', ['company' => $user->uuid]) }}">Click </a>on the following link to access our issue submission form:</li>
             </ol>
-            <p><a href="{{ route('issue.index', ['company' => $user->uuid]) }}" class="btn btn-success  ms-3">Submit Issues</a></p>
             <ol start="2">
                 <li>Fill out the form with details about the issue you're experiencing. Please be as specific as possible, including any error messages or screenshots if applicable.</li>
                 <li>Submit the form, and our support team will review your report promptly.</li>
             </ol>
-            <p>If you have any questions or need further assistance, don't hesitate to contact our dedicated support team at support@example.com.</p>
-            <p>We appreciate your help in improving our services and ensuring a smooth experience for all our users.</p>
-        </section>
-
-        <!-- Footer Section -->
-        <footer class="mt-4 text-center">
-            <p>Thank you for choosing us as your service provider.</p>
-        </footer>
+            <p>If you have any questions or need further assistance, don't hesitate to contact our dedicated support team at <a href="#">support@example.com</a>.</p>
+            
+            <p>If you have any questions or need further assistance, please contact our support team.</p>
+            <p>Regards, {{ config('app.name') }}</p>
+        </div>
     </div>
 </body>
+
 </html>

@@ -130,7 +130,7 @@
                                 progressBar: true,
                             }
                             toastr.success(response.success);
-                            $(form).validate().resetForm();
+                            form.reset();
                         },
                         error: function(xhr, status, error) {
                             var response = JSON.parse(xhr.responseText);

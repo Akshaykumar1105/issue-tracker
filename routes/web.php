@@ -40,7 +40,7 @@ Route::get('reset-password/{token}', [ResetPasswordController::class, 'index'])-
 Route::patch('reset-password/update', [ResetPasswordController::class, 'update'])->name('reset-password.update');
 
 Route::get('companies/{company}/issue', [UserIssueController::class, 'index'])->name('issue.index');
-Route::post('companies/create-issue', [UserIssueController::class, 'store'])->name('issue.store'); // change link
+Route::post('companies/create-issue', [UserIssueController::class, 'store'])->name('issue.store');
 
 //hr register route
 Route::prefix('/hr')->group(function () {

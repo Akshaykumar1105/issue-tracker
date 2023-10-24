@@ -1,6 +1,7 @@
 @extends('dashboard.layout.master')
 @section('style')
     <link rel="stylesheet" href="{{ asset('asset/css/dropify.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('asset/css/loader.css') }}">
     <style>
         .password-container {
             position: relative;
@@ -15,6 +16,7 @@
     </style>
 @endsection
 @section('content')
+    <x-loader />
     <section class="content pt-3 px-3">
         <div class="container-fluid">
             <div class="row">
@@ -89,7 +91,8 @@
                                             $link = route('admin.dashboard');
                                         }
                                     @endphp
-                                    <a href="{{$link}}" type="submit" class="btn btn btn-outline-secondary">Back</a>
+                                    <a href="{{ $link }}" type="submit"
+                                        class="btn btn btn-outline-secondary">Back</a>
 
                                 </div>
                             </form>
@@ -207,13 +210,15 @@
                 },
                 submitHandler: function(form) {
                     var formData = new FormData(form);
+                    $(".loader-container").fadeIn();
                     $.ajax({
                         url: $(form).attr("action"),
                         type: $(form).attr("method"),
                         data: formData,
-                        processData: false, // Important: Don't process the data
+                        processData: false,
                         contentType: false,
                         success: function(response) {
+                            $(".loader-container").fadeOut();
                             toastr.options = {
                                 closeButton: true,
                                 progressBar: true,
@@ -224,6 +229,7 @@
                             }, 2000);
                         },
                         error: function(xhr, status, error) {
+                            $(".loader-container").fadeOut();
                             var response = JSON.parse(xhr.responseText);
                             toastr.options = {
                                 closeButton: true,
@@ -235,24 +241,20 @@
                 }
             })
 
-            // password hide show
             $('#togglePassword').click(function() {
                 var passwordInput = $('#password');
                 var togglePassword = $('#togglePassword');
 
                 if (passwordInput.attr('type') === 'password') {
                     passwordInput.attr('type', 'text');
-                    togglePassword.html('<i class="fa fa-eye"></i>'); // Icon for hide
+                    togglePassword.html('<i class="fa fa-eye"></i>');
                 } else {
                     passwordInput.attr('type', 'password');
-                    togglePassword.html('<i class="fa fa-eye-slash"></i>'); // Icon for show
+                    togglePassword.html('<i class="fa fa-eye-slash"></i>');
                 }
             });
 
-            // change password
-
             $.validator.addMethod("pattern", function(value, element) {
-                    // Use a regular expression to check if the password meets the criteria
                     return /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/.test(value);
                 },
                 "Password must include at least one uppercase letter, one lowercase letter, one digit, and one special character."
@@ -273,11 +275,10 @@
                     },
                     password_confirmation: {
                         required: true,
-                        equalTo: "#password" // Confirm password must match password
+                        equalTo: "#password"
                     }
                 },
                 messages: {
-                    // ... (previous messages)
                     old_password: {
                         required: "Please enter your current password.",
                         minlength: "Password must be at least 8 characters long.",
@@ -302,9 +303,6 @@
                                 progressBar: true,
                             }
                             toastr.success(response.success);
-                            // setTimeout(function() {
-                            //     window.location.href = response.route;
-                            // }, 2000);
                             $(form).validate().resetForm();
                             form.reset();
                         },

@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use Illuminate\Bus\Queueable;
 use App\Mail\ResetPasswordEmail;
+use App\Models\User;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
@@ -28,7 +29,8 @@ class ResetPassword implements ShouldQueue
      * Execute the job.
      */
     public function handle(): void{
-        $token = new ResetPasswordEmail($this->resetPassword['token']);
-        Mail::to($this->resetPassword['email'])->send($token);
+        $user = User::where('email', $this->resetPassword['email'])->first();
+        $token = new ResetPasswordEmail($this->resetPassword['token'], $user);
+        Mail::to($this->resetPassword['email'])->send($token, $user);
     }
 }

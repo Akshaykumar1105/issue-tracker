@@ -24,10 +24,17 @@ class IssueController extends Controller{
         if ($request->ajax()) {
             $query = $this->issueService->collection($request);
             return DataTables::of($query)
+            ->addIndexColumn()
             ->orderColumn('title', function ($query, $order) {
                 $query->orderBy('id', $order);
             })
-            ->addIndexColumn()
+            ->addColumn('dueDate', function ($row) {
+                if ($row->due_date) {
+                    return date( config('site.date'), strtotime($row->due_date));
+                } else {
+                    return 'Not select due date';
+                }
+            })
             ->addColumn('action', function ($row) {
                 $editRoute = route('hr.issue.edit', ['issue' => $row->id]);
                 $actionBtn = '<a href=' . $editRoute . ' class="view btn btn-success btn-sm"><i class="fas fa-pencil-alt" style="margin: 0 5px 0 0"></i>Edit</a>';

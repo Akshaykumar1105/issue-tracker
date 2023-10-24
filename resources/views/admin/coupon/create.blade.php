@@ -123,25 +123,14 @@
                     data: $(form).serialize(),
                     success: function(response) {
                         $(".loader-container").fadeOut();
-                        let startAt = response.startAt;
-                        let endAt = response.endAt;
-                        if (startAt) {
-                            $("#startDate").text(startAt)
-                        } else if (endAt) {
-                            $("#startDate").remove(startAt)
-                            $("#endDate").text(endAt)
-                        } else {
-                            $("#startDate").remove(startAt)
-                            $("#endDate").remove(endAt)
-                            toastr.options = {
-                                closeButton: true,
-                                progressBar: true,
-                            }
-                            toastr.success(response.success);
-                            setTimeout(function() {
-                                window.location.href = response.route;
-                            }, 2000);
+                        toastr.options = {
+                            closeButton: true,
+                            progressBar: true,
                         }
+                        toastr.success(response.success);
+                        setTimeout(function() {
+                            window.location.href = response.route;
+                        }, 2000);
                     },
                     error: function(xhr, status, error) {
                         $(".loader-container").fadeOut();
@@ -156,6 +145,10 @@
                 });
             }
 
+            $.validator.addMethod("greaterThan", function(value, element, params) {
+                return new Date(value) > new Date($(params).val());
+            }, "Expiry date must be greater than the active date.");
+
             $.validator.addMethod("valueNotEquals", function(value, element, arg) {
                 return arg !== value;
             }, "{{ __('validation.valueNotEquals', ['attribute' => 'Discount type']) }}");
@@ -164,6 +157,10 @@
                 var pattern = /^[A-Z]{2,}[0-9]{2,10}$/;
                 return this.optional(element) || pattern.test(value);
             }, "Coupon code must contain at least 2 capital letters and 2 to 10 numbers.");
+
+            $.validator.addMethod("numericOnly", function(value, element) {
+                return /^\d+(\.\d{2})?$/.test(value);
+            }, "Discount amount should be a valid number (with up to two decimal places).");
 
 
             $("#createDiscountCoupon").validate({
@@ -177,32 +174,38 @@
                     discount: {
                         required: true,
                         number: true,
+                        numericOnly: true,
                         min: 0,
                         max: function() {
                             const discountType = $("input[name='discount_type']:checked").val();
-                            return discountType === "FLAT" ? 2000 : 100;
+                            return discountType === "FLAT" ? 50000 : 100;
                         },
                     },
                     discount_type: {
                         required: true,
-                        valueNotEquals: "default"
+                        valueNotEquals: "default",
                     },
                     is_active: {
                         required: true
                     },
                     active_at: {
                         required: true,
-                        date: true
+                        date: true,
+                        min: new Date().toISOString().split("T")[0],
                     },
                     expire_at: {
                         required: true,
-                        date: true
+                        date: true,
+                        greaterThan: '#active_at',
                     },
                 },
                 messages: {
                     code: {
                         required: "{{ __('validation.required', ['attribute' => 'code']) }}",
                         maxlength: "{{ __('validation.max_digits', ['attribute' => 'code', 'max' => '30']) }}",
+                    },
+                    active_at: {
+                        min: "Active at date must be today or a future date.",
                     },
                 },
                 submitHandler: function(form) {

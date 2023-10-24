@@ -38,10 +38,10 @@ class SendIssueCreatorNotification implements ShouldQueue
             if ($issue) {
                 $issue->notify(new NofitySendIssueCreatorNotification($issue));
             } else {
-                Log::warning("User with email {$this->email} not found.");
+                Log::warning("User with this email {$this->email} not found.");
             }
         } catch (\Exception $e) {
-            Log::error("Error processing ConfirmPassword job: " . $e->getMessage());
+            Log::error("Error encountered while processing email to issue creator job: " . $e->getMessage());
         }
     }
 }

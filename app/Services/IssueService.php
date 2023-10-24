@@ -34,7 +34,6 @@ class IssueService
 
     public function store($request){
         $originalSlug = Str::slug($request->title, '-', Str::random(5));
-
         $slug = $originalSlug;
         $count = 2;
         while (Issue::where('slug', $slug)->exists()) {
@@ -45,7 +44,11 @@ class IssueService
         $company = Company::where('uuid', $request->issueUuid)->first();
         $this->issue->fill($request->all());
         $this->issue->slug = $slug;
-        $this->issue->company_id = $company->id;
+        if($request->company_id){
+            $this->issue->company_id = $request->company_id;
+        }else{
+            $this->issue->company_id = $company->id;
+        }
         $this->issue->save();
         return ['success' => __('entity.entityCreated', ['entity' => 'Issue'])];
     }

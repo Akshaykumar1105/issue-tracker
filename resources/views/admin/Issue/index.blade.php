@@ -64,8 +64,6 @@
             </table>
         </div>
 
-        <!-- Modal -->
-
         <div class="modal fade" id="deleteIssue" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -142,7 +140,7 @@
                                         'badge bg-red';
                                     break;
                                 default:
-                                    colorClass = ''; // Default class
+                                    colorClass = '';
                             }
                             return '<div style="width:70px" class="' + colorClass +
                                 ' bg-opacity-75">' + data + '</div>';
@@ -159,18 +157,13 @@
                         },
                     },
                     {
-                        "data": "due_date",
-                        render: function(data, type, row) {
-                            var date = data == null ? 'Not select due date' : moment(data).format("{{config('site.date')}}");
-                            return '<div class="form-check form-switch p-1">' + date +
-                                '</div>';
-                        },
+                        "data": 'dueDate',
                     },
                     {
                         "data": "action"
                     }
                 ],
-                lengthMenu: [10, 25, 50, 100], // Define your page limit options
+                lengthMenu: [10, 25, 50, 100],
                 pageLength: 10,
                 order: [
                     [1, 'desc']
@@ -230,7 +223,6 @@
                     }
                 });
             }
-
         });
     </script>
 @endsection

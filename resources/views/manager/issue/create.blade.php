@@ -5,7 +5,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
         integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.5.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="{{ asset('asset/css/comment.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('asset/css/loader.css') }}">
 @endsection
@@ -19,7 +18,6 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-12 col-md-12 ">
-
                         <div class="row">
                             @php
                                 $issueId = $issue->id;
@@ -44,12 +42,14 @@
                                         <label for="email" class="form-label fw-bold">Priority</label>
                                         <p>{{ ucwords(strtolower($issue->priority)) }}</p>
                                     </div>
-
+                                </div>
+                                <div class="col-md-12 d-flex ">
                                     <div class="col-md-6 p-0">
                                         <label class="d-block font-weight-bold">Due Date</label>
-                                        <p>{{ $issue->due_date }}</p>
+                                        <p>{{ date(config('site.date'), strtotime($issue->due_date)) }}</p>
                                     </div>
                                 </div>
+
                                 <div class="col-md-3 form-group">
                                     <label for="email" class="form-label fw-bold">Status<span
                                             class="text-danger ms-1">*</span></label>
@@ -86,16 +86,15 @@
                                             <button type="submit" class="btn btn-primary">Submit</button>
                                         </div>
                                     @endif
-                                    <a href="{{ route('manager.issue.index', ['type' => 'all-issue']) }}" class="btn btn-outline-secondary">Back</a>
+                                    <a href="{{ route('manager.issue.index', ['type' => 'all-issue']) }}"
+                                        class="btn btn-outline-secondary">Back</a>
                                 </div>
                             </form>
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
-
     </section>
 
     <div id="commentBox"></div>
@@ -173,7 +172,8 @@
 
                             let commentBody = $(this).parent().prev().val()
                             $.ajax({
-                                url: "{{ route('issue.comment.update', ['commentId' => ':id']) }}".replace(':id', commentId),
+                                url: "{{ route('issue.comment.update', ['commentId' => ':id']) }}"
+                                    .replace(':id', commentId),
                                 type: "PATCH",
                                 data: {
                                     _token: csrfToken,
@@ -192,7 +192,6 @@
                         });
                     },
                     error: function(xhr, textStatus, errorThrown) {
-                        console.error('Error: ' + textStatus);
                         alert('An error occurred while loading comments.');
                     }
                 });
@@ -229,20 +228,6 @@
                 }
             }
             commentBox();
-
-            $("#commentDropdown").click(function() {
-                $("#commentMenu").toggle();
-            });
-
-            $(".edit-comment").click(function() {
-                alert("Edit Comment clicked");
-                $("#commentMenu").hide();
-            });
-
-            $(".delete-comment").click(function() {
-                alert("Delete Comment clicked");
-                $("#commentMenu").hide();
-            });
 
             $(document).click(function(event) {
                 if (!$(event.target).closest(".dropdown").length) {
@@ -286,7 +271,6 @@
                             likeButton.data('user', false);
                         },
                         error: function(xhr, textStatus, errorThrown) {
-                            console.error('Error: ' + textStatus);
                             alert('An error occurred while removing the upvote.');
                         }
                     });
@@ -312,7 +296,6 @@
                     });
                 }
             });
-
 
             $.validator.addMethod("valueNotEquals", function(value, element, arg) {
                 return arg !== value;
@@ -377,7 +360,6 @@
                     })
                 },
             });
-
         });
     </script>
 @endsection

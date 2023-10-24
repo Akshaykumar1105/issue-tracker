@@ -4,7 +4,7 @@
     <link rel="stylesheet" href="{{ asset('asset/css/toastr.css') }}">
 @endsection
 @section('content')
-    <div class="modal applyLoanModal fade" id="applyLoan" tabindex="-1" aria-labelledby="applyLoanLabel" aria-hidden="true">
+    <div class="modal applyLoanModal fade" id="issueModel" tabindex="-1" aria-labelledby="issueModelLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header border-bottom-0">
@@ -90,7 +90,7 @@
                         <h1 class="text-capitalize mb-4">{{__('messages.home.title')}}</h1>
                         <p class="mb-4">{{__('messages.home.description')}}
                         </p> <a type="button" class="btn btn-primary" href="#" data-bs-toggle="modal"
-                            data-bs-target="#applyLoan">Create Issue<span style="font-size: 14px;"
+                            data-bs-target="#issueModel">Create Issue<span style="font-size: 14px;"
                                 class="ms-2 fas fa-arrow-right"></span></a>
                     </div>
                 </div>
@@ -799,8 +799,6 @@
 
 @section('script')
     <script src="{{ asset('asset/js/validation.min.js') }}"></script>
-
-    <!--toastr js -->
     <script src="{{ asset('asset/js/toastr.min.js') }}"></script>
     <script>
         $(document).ready(function() {
@@ -892,7 +890,8 @@
                                 progressBar: true,
                             }
                             toastr.success(response.success);
-                            $("#applyLoan").modal("toggle");
+                            $("#issueModel").modal("toggle");
+                            form.reset();
                         },
                         error: function(xhr, status, error) {
                             var response = JSON.parse(xhr.responseText);
@@ -902,7 +901,6 @@
                                 progressBar: true,
                             }
                             toastr.error(message);
-
                         },
                     })
                 },

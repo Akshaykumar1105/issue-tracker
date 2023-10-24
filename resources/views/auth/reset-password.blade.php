@@ -66,7 +66,6 @@
                         @csrf
                         @method('PATCH')
                         <input name="token" type="hidden" value="{{ $token }}" />
-                        <!-- Password input -->
                         <div class="form-outline ">
                             <label class="form-label" for="password">Password<span class="text-danger"> *</span></label>
                             <input type="password" name="password" id="password" class="form-control" />
@@ -86,7 +85,6 @@
                             <a href="#" class="text-primary  position-absolute top-0 end-0">Forgot Password ?</a>
                         </div>
 
-                        <!-- Submit button -->
                         <button type="submit" class="btn btn-primary btn-block mb-3">Reset Password</button>
                     </form>
                 </div>
@@ -110,15 +108,22 @@
 
     <script>
         $(document).ready(function() {
+
+            $.validator.addMethod("pattern", function(value, element) {
+                    return /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/.test(value);
+                },
+                "Password must include at least one uppercase letter, one lowercase letter, one digit, and one special character."
+            );
             $("#resetPassword").validate({
                 rules: {
                     password: {
                         required: true,
-                        minlength: 8, // Minimum password length
+                        pattern:true,
+                        minlength: 8,
                     },
                     password_confirmation: {
                         required: true,
-                        equalTo: "#password" // Confirm password must match password
+                        equalTo: "#password"
                     }
                 },
                 messages: {

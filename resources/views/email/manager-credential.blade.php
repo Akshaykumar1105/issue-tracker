@@ -1,49 +1,92 @@
+<!DOCTYPE html>
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manager Credentials</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title></title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-        }
-        .container {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            max-width: 600px;
+            font-family: Helvetica, Arial, sans-serif;
+            max-width: 1000px;
             margin: 0 auto;
-        }
-        .header {
-            background-color: #007bff;
-            color: #fff;
+            line-height: 1.6;
             padding: 20px;
+            background-color: #f7f7f7;
+        }
+
+        .container {
+            background-color: #ffffff;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .box {
+            margin: 50px auto;
+            width: 90%;
+            padding: 20px 0;
+            border-bottom: 5px solid #9aa6ad;
+        }
+
+        .title {
+            border-bottom: 1px solid #eee;
             text-align: center;
         }
-        .content {
-            padding: 20px;
+
+        .title h1 {
+            font-size: 2em;
+            color: #00466a;
+            text-decoration: none;
+            font-weight: 600
         }
-        .credentials {
-            font-size: 18px;
+
+        .title p {
+            font-size: 1em;
+            color: #00466a;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .box .emailDody {
+            font-size: 1.1em;
+            margin-top: 20px;
+        }
+
+        .btn {
+            display: inline-block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background: #00466a;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            text-decoration: none;
         }
     </style>
 </head>
+
 <body>
     <div class="container">
-        <div class="header">
-            <h2>Manager Credentials</h2>
-        </div>
-        <div class="content">
+        <div class="box">
+            <div class="title">
+                <h1 href="{{ config('app.url') }}">{{ config('app.name') }}</h1>
+
+                <p>Your credentials</p>
+            </div>
             <p>Hello,</p>
             <p>Here are the login credentials for the manager:</p>
+            <p>{{$issue->hr->name}} HR has assigned you as the manager for the following issue:</p>
+
             <div class="credentials">
                 <p><strong>Email:</strong>{{$email}}</p>
                 <p><strong>Password:</strong> {{$password}}</p>
             </div>
+            
             <p>Please use these credentials to access the manager's account.</p>
+            <a href="{{route('login')}}">Login</a>
             <p>If you have any questions or need assistance, please feel free to contact us.</p>
-            <p>Thank you!</p>
+            <p>Regards,, {{ config('app.name') }}</p>
         </div>
     </div>
 </body>

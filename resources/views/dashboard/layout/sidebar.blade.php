@@ -37,7 +37,6 @@
                     <li>
                         <button type="submit" class="dropdown-item" data-bs-toggle="modal"
                             data-bs-target="#logoutModel">Logout</button>
-                        {{-- <a id="logout" class="dropdown-item">Logout</a> --}}
                     </li>
                 </ul>
             </div>
@@ -86,7 +85,7 @@
 
                     <li
                         class="nav-item {{ in_array(Route::currentRouteName(), ['admin.manager.index', 'admin.hr.index', 'admin.hr.edit', 'admin.manager.edit']) ? 'menu-is-opening menu-open' : '' }}">
-                        <a href="#" class="nav-link ">
+                        <a href="#" class="nav-link {{ in_array(Route::currentRouteName(), ['admin.manager.index', 'admin.hr.index', 'admin.hr.edit', 'admin.manager.edit'])  ? 'active' : '410' }} ">
                             <i class="fas fa-users"></i>
                             <p>
                                 {{ __('messages.admin.user') }}
@@ -112,7 +111,7 @@
                         </ul>
                     </li>
                     <li
-                        class="nav-item {{ in_array(Route::currentRouteName(), ['admin.issue.index', 'admin.issue.show']) ? 'menu-open ' : '' }}">
+                        class="nav-item {{ in_array(Route::currentRouteName(), ['admin.issue.index', 'admin.issue.show']) ? 'menu-open' : '' }}">
                         <a href="{{ route('admin.issue.index') }}" class="nav-link">
                             <i class="fas fa-bug"></i>
                             <p>{{ __('messages.admin.issue') }}</p>
@@ -120,17 +119,17 @@
                     </li>
 
                     <li
-                        class="nav-item {{ in_array(Route::currentRouteName(), ['admin.discount-coupon.index', 'admin.discount-coupon.edit']) ? 'menu-open ' : '' }}">
+                        class="nav-item {{ in_array(Route::currentRouteName(), ['admin.discount-coupon.index', 'admin.discount-coupon.edit']) ? 'menu-open' : '' }}">
                         <a href="{{ route('admin.discount-coupon.index') }}" class="nav-link">
                             <i class="fas fa-tags"></i>
-                            <p>Discount Coupon</p>
+                            <p>Coupon</p>
                         </a>
                     </li>
                 @endrole
 
                 @role('hr')
                     <li
-                        class="nav-item {{ in_array(Route::currentRouteName(), ['hr.dashboard.index']) ? 'menu-open' : '' }}">
+                        class="nav-item {{ in_array(Route::currentRouteName(), ['hr.dashboard']) ? 'menu-open' : '' }}">
                         <a href="{{ route('hr.dashboard') }}" class="nav-link">
                             <i class="nav-icon fas fa-chart-pie"></i>
                             <p>Dashboard</p>
@@ -152,7 +151,7 @@
                         </a>
                         <ul class="nav nav-treeview"
                             style="{{ in_array(Route::currentRouteName(), ['hr.issue.index', 'hr.issue.edit']) ? 'display: block;' : '' }}">
-                            <li class="nav-item">
+                            <li class="nav-item {{ Route::currentRouteName() == 'hr.issue.index' ? 'active' : '410' }} ">
                                 <a href="{{ route('hr.issue.index', ['type' => 'pending']) }}"
                                     class="nav-link {{ request('type') === 'pending' ? 'active' : '' }}">
                                     <i class="far fa-circle nav-icon"></i>
@@ -168,7 +167,7 @@
                             </li>
                             <li class="nav-item">
                                 <a href="{{ route('hr.issue.index', ['type' => 'all-issue']) }}"
-                                    class="nav-link {{ request('type') === 'all-issue' ? 'active' : '' }}">
+                                    class="nav-link {{ request('type') === 'all-issue' || Route::currentRouteName() == 'hr.issue.edit' ? 'active' : '' }}">
                                      <i class="far fa-circle nav-icon"></i>
                                      <p>All Issue</p>
                                  </a>
@@ -178,16 +177,15 @@
                 @endrole
 
                 @role('manager')
-                    <li class="nav-item {{ Route::currentRouteName() == 'manager.dashboard.index' ? 'menu-open' : '' }}">
+                    <li class="nav-item {{ Route::currentRouteName() == 'manager.dashboard' ? 'menu-open' : '' }}">
                         <a href="{{ route('manager.dashboard') }}" class="nav-link">
                             <i class="nav-icon fas fa-chart-pie"></i>
                             <p>Dashboard</p>
                         </a>
                     </li>
 
-                    <li
-                        class="nav-item {{ Route::currentRouteName() == 'manager.issue.index' ? 'menu-is-opening manu-open' : '410' }}">
-                        <a href="#" class="nav-link ">
+                    <li class="nav-item {{ Route::currentRouteName() == 'manager.issue.index' || Route::currentRouteName() == 'manager.issue.edit' ? 'menu-is-opening manu-open ' : '410' }}">
+                        <a href="#" class="nav-link  {{ Route::currentRouteName() == 'manager.issue.index' || Route::currentRouteName() == 'manager.issue.edit' ? 'active' : '410' }} ">
                             <i class="nav-icon fas fa-tachometer-alt"></i>
                             <p>Issues<i class="right fas fa-angle-left"></i></p>
                         </a>

@@ -25,6 +25,13 @@ class IssueController extends Controller{
                 ->orderColumn('title', function ($query, $order) {
                     $query->orderBy('id', $order);
                 })
+                ->addColumn('dueDate', function ($row) {
+                    if ($row->due_date) {
+                        return date( config('site.date'), strtotime($row->due_date));
+                    } else {
+                        return 'Not select due date';
+                    }
+                })
                 ->addColumn('action', function ($row) {
                     $showRoute = route('admin.issue.show', ['issue' => $row->id]);
                     $actionBtn = '<a href=' . $showRoute . ' data-issue-id="' . $row->id . '" class="view btn btn-primary btn-sm"><i class="fa-solid fa-eye" style="margin:0 5px 0 0"></i>View</a> <a href="delete" data-issue-id="' . $row->id . '"  class="delete  btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteIssue"><i class="fas fa-trash" style="margin: 0 5px 0 0;"></i>Delete</a>';

@@ -12,6 +12,7 @@ use App\Services\DashboardService;
 class DashboardController extends Controller
 {
     protected $dashboardService;
+    
     public function __construct(DashboardService $dashboardService){
      $this->dashboardService = $dashboardService;   
     }
@@ -23,8 +24,7 @@ class DashboardController extends Controller
 
     public function issueChart(Request $request){
         if ($request->ajax()) {
-            $companyId = $request->companyId;
-            $issueStatusData = $this->dashboardService->getIssueStatusData($companyId);
+            $issueStatusData = $this->dashboardService->getIssueStatusCount($request->companyId);
             return $issueStatusData;
         }
     }

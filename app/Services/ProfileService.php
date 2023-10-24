@@ -11,16 +11,16 @@ class ProfileService{
         $user = User::find($id);
         $user->fill($request->all())->save();
 
-        $profileImg = $request->file('avatar');
+        $profile = $request->file('avatar');
         $oldProfile = $user->firstMedia('user');
 
         if ($oldProfile == '') {
-            $media =  MediaUploader::fromSource($profileImg)->toDisk('public')
+            $media =  MediaUploader::fromSource($profile)->toDisk('public')
                 ->toDirectory('user')->upload();
             $user->attachMedia($media, 'user');
-        } else if ($profileImg) {
-            $newFileName = pathinfo($profileImg->getClientOriginalName(), PATHINFO_FILENAME);
-            MediaUploader::fromSource($profileImg)
+        } else if ($profile) {
+            $newFileName = pathinfo($profile->getClientOriginalName(), PATHINFO_FILENAME);
+            MediaUploader::fromSource($profile)
                 ->useFilename($newFileName)
                 ->replace($oldProfile);
             $user->syncMedia($oldProfile, 'user');

@@ -49,7 +49,7 @@
                             <div class="msg-bubble d-block" style="width: 100%;">
                                 <div class="msg-info">
                                     <div class="msg-info-name">{{ auth()->user()->name }}</div>
-                                    <div class="msg-info-time">{{ $comment->created_at->toDayDateTimeString() }}</div>
+                                    <div class="msg-info-time">{{ date(config('site.date_time'), strtotime($comment->created_at)) }}</div>
                                 </div>
 
                                 <div class="msg-text">
@@ -105,7 +105,7 @@
                             <div class="msg-bubble d-block">
                                 <div class="msg-info">
                                     <div class="msg-info-name">{{ $user->name }}</div>
-                                    <div class="msg-info-time">{{ $comment->created_at->toDayDateTimeString() }}</div>
+                                    <div class="msg-info-time">{{ date(config('site.date_time'), strtotime($comment->created_at)) }}</div>
                                 </div>
 
                                 <div class="msg-text">

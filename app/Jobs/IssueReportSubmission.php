@@ -31,9 +31,13 @@ class IssueReportSubmission implements ShouldQueue
      */
     public function handle(): void
     {
-        $user = Company::where('email', $this->email)->first();
-        if ($user) {
-            $user->notify(new NotificationsIssueReportSubmission($user));
+        try {
+            $user = Company::where('email', $this->email)->first();
+            if ($user) {
+                $user->notify(new NotificationsIssueReportSubmission($user));
+            }
+        } catch (\Exception $e) {
+            Log::error("Error processing issue report submission job: " . $e->getMessage());
         }
     }
 }
