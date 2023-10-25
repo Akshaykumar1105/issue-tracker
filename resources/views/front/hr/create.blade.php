@@ -13,6 +13,11 @@
         #login:hover {
             color: #51B56D;
         }
+
+        .form-label {
+            margin-bottom: 0.5rem;
+            color: #000;
+        }
     </style>
 @endsection
 @section('content')
@@ -68,7 +73,7 @@
                 </div>
             </div>
 
-            <div class="form-group col-span-6 mb-4" style="width: 50%;font-size: 20px;">
+            <div class="form-group col-span-6 mb-4" style="width: 100%;">
                 <label for="profile_img" class="form-label">{{ __('messages.form.img') }}</label>
                 <div class="custom-file ">
                     <input name="avatar" type="file" id="profile_img" class="dropify" data-height="100" />
@@ -76,7 +81,7 @@
             </div>
 
             <div class="d-flex align-items-center mb-3">
-                <button class="btn btn-primary w-25 " type="submit">Submit</button>
+                <button class="btn btn-primary w-25 " id="issueSubmit" type="submit">Submit</button>
                 <a href="{{ route('login') }}" id="login" style="text-decoration: none;" class="ms-3">Already have an
                     Account?</a>
             </div>
@@ -182,6 +187,7 @@
                     },
                 },
                 submitHandler: function(form) {
+                    $('#issueSubmit').prop("disabled", true);
                     $(".loader-container").fadeIn();
                     let formData = new FormData(form);
                     $.ajax({
@@ -200,6 +206,7 @@
                             setTimeout(function() {
                                 window.location.href = "{{route('admin.hr.index')}}";
                             }, 2000);
+                            $('#issueSubmit').prop("disabled", false);
                         },
                         error: function(xhr, status, error) {
                             $(".loader-container").fadeOut();

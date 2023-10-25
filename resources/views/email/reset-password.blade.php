@@ -24,7 +24,7 @@
         }
 
         .box {
-            margin: 50px auto;
+            margin: 0px auto;
             width: 90%;
             padding: 20px 0;
             border-bottom: 5px solid #9aa6ad;
@@ -81,7 +81,8 @@
 
             <p>Please click the button below to reset your password:</p>
             <a href="{{ route('reset-password.index', $token) }}" class="btn">Reset Password</a>
-            <p>Or copy and paste the url into your browser</p>
+            
+            <p>If you have any questions or need further assistance, don't hesitate to contact our dedicated support team at <a href="mailto:support@issuetracker.com">support@issuetracker.com</a>.</p>
             <p style="font-size:0.9em;">Regards,<br />{{ config('app.name') }}</p>
         </div>
     </div>

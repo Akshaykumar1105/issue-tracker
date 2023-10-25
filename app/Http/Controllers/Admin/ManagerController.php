@@ -24,7 +24,7 @@ class ManagerController extends Controller{
         if ($request->ajax()) {
             $query = $this->managerService->collection($companyId = null,$request);
             return DataTables::eloquent($query)
-                ->orderColumn('name', function ($query, $order) {
+                ->orderColumn('DT_RowIndex', function ($query, $order) {
                     $query->orderBy('id', $order);
                 })
                 ->addIndexColumn()

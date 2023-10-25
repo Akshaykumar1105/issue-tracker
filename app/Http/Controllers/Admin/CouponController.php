@@ -22,8 +22,15 @@ class CouponController extends Controller
         if($request->ajax()){
             $query = $this->discountCouponService->collection();
             return DataTables::of($query)
-                ->orderColumn('code', function ($query, $order) {
+                ->orderColumn('DT_RowIndex', function ($query, $order) {
                     $query->orderBy('id', $order);
+                })
+                ->addColumn('discount', function ($row) {
+                    if ($row->discount_type !== config('site.discount.flat')) {
+                        return $row->discount . config('site.percentage');
+                    } else {
+                        return config('site.currency') . $row->discount ;
+                    }
                 })
                 ->addColumn('activeAt', function ($row) {
                     if ($row->active_at) {

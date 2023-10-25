@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\User\Issue;
 
+use App\Models\Issue;
 use Illuminate\Foundation\Http\FormRequest;
 
 class Update extends FormRequest
@@ -21,17 +22,28 @@ class Update extends FormRequest
      */
     public function rules(): array
     {
-        if(auth()->user()->hasRole(config('site.role.hr'))){
+        $rules = [
+            'status' => 'required|in:OPEN,IN_PROGRESS,ON_HOLD,SEND_FOR_REVIEW,COMPLETED',
+        ];
+        if (auth()->user()->hasRole(config('site.role.hr'))) {
+            $issue = Issue::find($this->issue);
+    
+            if (route('hr.issue.index')) {
+                return $rules;
+            }
             return [
                 'manager_id' => 'required|exists:users,id',
                 'priority' => 'required',
-                'status' => 'required|in:OPEN,IN_PROGRESS,ON_HOLD,SEND_FOR_REVIEW,COMPLETED',
-                'due_date' => 'required|date'
-            ];
-        }else{
-            return [
+                'due_date' => 'required|date',
                 'status' => 'required|in:OPEN,IN_PROGRESS,ON_HOLD,SEND_FOR_REVIEW,COMPLETED',
             ];
         }
+        return $rules;
+    }
+
+    public function messages(){
+        return [
+            'manager_id' => 'Please assign a manager to this issue before updating status.',
+        ];
     }
 }

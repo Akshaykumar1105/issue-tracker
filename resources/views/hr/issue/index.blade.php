@@ -153,6 +153,7 @@
                     },
                     {
                         "data": "status",
+                        orderable: false,
                         render: function(data, type, row) {
                             const statusOptions = [{
                                     value: 'default',
@@ -191,9 +192,14 @@
                                 optionsHtml +=
                                     `<option value="${option.value}" data-status="${option.value}" ${selected}>${option.label}</option>`;
                             }
-
+                            let manager = '';
+                            
+                            if(row.manager_id == null){
+                                manager = 0;
+                            }
+                            manager = row.manager_id;
                             const selectHtml =
-                                `<select name="status" data-status="${row.id}" id="status" class="custom-select custom-select-sm form-control form-control-sm">${optionsHtml}</select>`;
+                                `<select name="status" data-manager-id="${manager}"  data-status="${row.id}" id="status" class="custom-select custom-select-sm form-control form-control-sm">${optionsHtml}</select>`;
                             return selectHtml;
                         },
                     },
@@ -240,11 +246,13 @@
                 $(".loader-container").fadeIn();
                 status = $(this).val();
                 let issueId = $(this).attr('data-status');
+                let managerId = $(this).attr('data-manager-id');
                 var csrfToken = $('meta[name="csrf-token"]').attr('content');
                 $.ajax({
                     url: "{{ route('hr.issue.update', ['issue' => ':id']) }}".replace(':id',issueId),
                     type: 'patch',
                     data: {
+                        managerId: managerId,
                         status: status,
                         _token: csrfToken,
                     },

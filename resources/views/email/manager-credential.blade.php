@@ -23,7 +23,7 @@
         }
 
         .box {
-            margin: 50px auto;
+            margin: 0px auto;
             width: 90%;
             padding: 20px 0;
             border-bottom: 5px solid #9aa6ad;
@@ -74,18 +74,17 @@
 
                 <p>Your credentials</p>
             </div>
-            <p>Hello,</p>
-            <p>Here are the login credentials for the manager:</p>
-            <p>{{$issue->hr->name}} HR has assigned you as the manager for the following issue:</p>
+            <p>Hello, {{$user->name}}</p>
+            <p>Here are the login credentials for you:</p>
 
             <div class="credentials">
-                <p><strong>Email:</strong>{{$email}}</p>
+                <p><strong>Email:</strong>{{$user->email}}</p>
                 <p><strong>Password:</strong> {{$password}}</p>
             </div>
             
             <p>Please use these credentials to access the manager's account.</p>
-            <a href="{{route('login')}}">Login</a>
-            <p>If you have any questions or need assistance, please feel free to contact us.</p>
+            <a href="{{route('login')}}" class="btn">Login</a>
+            <p>If you have any questions or need further assistance, don't hesitate to contact our dedicated support team at <a href="mailto:support@issuetracker.com">support@issuetracker.com</a>.</p>
             <p>Regards,, {{ config('app.name') }}</p>
         </div>
     </div>

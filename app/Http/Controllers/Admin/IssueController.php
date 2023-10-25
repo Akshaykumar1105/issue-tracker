@@ -22,7 +22,7 @@ class IssueController extends Controller{
         if ($request->ajax()) {
             $query = $this->issueService->collection($request);
             return DataTables::of($query)
-                ->orderColumn('title', function ($query, $order) {
+                ->orderColumn('DT_RowIndex', function ($query, $order) {
                     $query->orderBy('id', $order);
                 })
                 ->addColumn('dueDate', function ($row) {

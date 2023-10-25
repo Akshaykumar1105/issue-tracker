@@ -64,7 +64,7 @@
                                 </div>
 
                                 <div class="msg-text">
-                                    Status:-{{ $comment->status }}
+                                    Status:-{{  str_replace('_', ' ', ucwords(strtolower($comment->status))) }}
                                 </div>
 
                                 <div class="rating">
@@ -112,7 +112,7 @@
                                     {{ $comment->body }}
                                 </div>
                                 <div class="msg-text">
-                                    Status:-{{ $comment->status }}
+                                    Status:-{{ str_replace('_', ' ', ucwords(strtolower($comment->status))) }}
                                 </div>
 
                                 <div class="rating">

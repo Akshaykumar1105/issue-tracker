@@ -109,11 +109,11 @@
                                 @else
                                     <div class="col-md-12 mt-4">
                                         <label class="form-label fw-bold" for="name">Priority</label>
-                                        <p class="">{{ $issue->priority }}</p>
+                                        <p class="">{{ ucwords(strtolower($issue->priority)) }}</p>
                                     </div>
                                     <div class="col-md-12 mt-4">
                                         <label class="form-label fw-bold" for="name">Assign to</label>
-                                        <p class="">{{ $issue->user->name }}</p>
+                                        <p class="">{{ $issue->manager->name }}</p>
                                     </div>
                                     <div class="col-md-12 mt-4">
                                         <label class="form-label fw-bold" for="name">Status</label>
@@ -217,8 +217,7 @@
                                     body: commentBody
                                 },
                                 success: function(response) {
-                                    $("#comment-text-" + commentId).text(
-                                        commentBody);
+                                    $("#comment-text-" + commentId).text(commentBody);
                                     toastr.options = {
                                         closeButton: true,
                                         progressBar: true,

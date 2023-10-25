@@ -10,7 +10,7 @@ use App\Mail\IssueSolve as MailIssueSolve;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
-
+use Illuminate\Support\Facades\Log;
 
 class IssueSolve implements ShouldQueue
 {
@@ -28,7 +28,12 @@ class IssueSolve implements ShouldQueue
      * Execute the job.
      */
     public function handle(): void{
-        $uuid = new MailIssueSolve($this->issueSolve['issue']);
-        Mail::to($this->issueSolve['email'])->send($uuid);
+        try {
+            $uuid = new MailIssueSolve($this->issueSolve['issue']);
+            Mail::to($this->issueSolve['email'])->send($uuid);
+        } catch (\Exception $e) {
+            Log::error("Error processing issue solve job: " . $e->getMessage());
+        }
+       
     }
 }

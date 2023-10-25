@@ -2,12 +2,15 @@
 
 namespace App\Services;
 
+use App\Jobs\ManagerCredential as JobsManagerCredential;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\ManagerCredentialsEmail;
 use App\Notifications\ManagerCredential;
+use Exception;
+use Illuminate\Support\Facades\Log;
 use Yajra\DataTables\Facades\DataTables;
 use Plank\Mediable\Facades\MediaUploader;
 
@@ -57,7 +60,11 @@ class ManagerService
         $password = $request->password;
 
         if (isset($this->user)) {
-            $this->user->notify(new ManagerCredential($email, $password));
+            try {
+                JobsManagerCredential::dispatchSync($this->user, $password);
+            } catch (Exception $e) {
+                Log::info($e);
+            }
         }
 
         return [
@@ -95,7 +102,9 @@ class ManagerService
     }
 
     public function destroy($id){
-        User::where('id', $id)->delete();
+        $user = User::where('id', $id)->first();
+        $user->getMedia('user')->delete();
+        $user->delete();
         return  response()->json([
             'success' =>  __('entity.entityDeleted', ['entity' => 'Manager'])
         ]);

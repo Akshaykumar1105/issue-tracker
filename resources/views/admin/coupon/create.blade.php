@@ -30,7 +30,7 @@
                 @endif
                 @csrf
 
-                <div class="col-md-12 mt-3">
+                <div class="col-md-12 mt-3 ps-3">
                     <div class="form-group">
                         <label class="form-label fw-bold" for="code">Code<span class="text-danger ms-1">*</span></label>
                         <input type="text" id="name" name="code" class="form-control"
@@ -38,7 +38,7 @@
                     </div>
                 </div>
 
-                <div class="col-md-12">
+                <div class="col-md-12 ps-3">
                     <div class="form-group">
                         <label for="discount" class="form-label fw-bold">Discount<span
                                 class="text-danger ms-1">*</span></label>
@@ -47,7 +47,7 @@
                     </div>
                 </div>
 
-                <div class="col-md-12">
+                <div class="col-md-12 ps-3">
                     <div class="form-group">
                         <label for="discount_type" class="form-label fw-bold d-block">Discount Type<span
                                 class="text-danger ms-1">*</span></label>
@@ -69,7 +69,7 @@
                     </div>
                 </div>
 
-                <div class="col-md-12">
+                <div class="col-md-12 ps-3">
                     <div class="form-group">
                         <label for="is_active" class="form-label fw-bold">Status<span
                                 class="text-danger ms-1">*</span></label>
@@ -80,7 +80,7 @@
                     </div>
                 </div>
 
-                <div class="col-md-12">
+                <div class="col-md-12 ps-3">
                     <div class="form-group">
                         <label for="active_at" class="form-label fw-bold">Active At<span
                                 class="text-danger ms-1">*</span></label>
@@ -90,7 +90,7 @@
                     </div>
                 </div>
 
-                <div class="col-md-12">
+                <div class="col-md-12 ps-3">
                     <div class="form-group">
                         <label for="expire_at" class="form-label fw-bold">Expire At<span
                                 class="text-danger ms-1">*</span></label>
@@ -100,7 +100,7 @@
                     </div>
                 </div>
 
-                <div class="mb-3">
+                <div class="mb-3 ps-2">
                     <button type="submit"
                         class="btn btn-primary ms-2 ">{{ isset($company) ? 'Update' : 'Submit' }}</button>
 
@@ -149,10 +149,6 @@
                 return new Date(value) > new Date($(params).val());
             }, "Expiry date must be greater than the active date.");
 
-            $.validator.addMethod("valueNotEquals", function(value, element, arg) {
-                return arg !== value;
-            }, "{{ __('validation.valueNotEquals', ['attribute' => 'Discount type']) }}");
-
             $.validator.addMethod("couponCode", function(value, element) {
                 var pattern = /^[A-Z]{2,}[0-9]{2,10}$/;
                 return this.optional(element) || pattern.test(value);
@@ -183,7 +179,6 @@
                     },
                     discount_type: {
                         required: true,
-                        valueNotEquals: "default",
                     },
                     is_active: {
                         required: true

@@ -68,7 +68,7 @@
                             <div class="form-group mb-4">
                                 <label for="company_id" class="form-label">Company</label>
                                 <select class="form-control" value="{{ old('company_id') }}" name="company_id"
-                                    id='company_id' style="width: 300px;appearance: revert;padding-right: 65px;">
+                                    id='company_id' style="appearance: revert;padding-right: 65px;">
                                     <option value="">Select Company</option>
                                     @foreach ($companies as $company)
                                         <option value="{{ $company->id }}"
@@ -78,11 +78,11 @@
                                 </select>
                             </div>
 
-                            @if (Route::currentRouteName() == 'admin.manager.create')
+                            @if (Route::currentRouteName() == 'admin.manager.create' || Route::currentRouteName() == 'admin.manager.edit')
                                 <div class="form-group mb-4">
                                     <label class="form-label">Hr</label>
                                     <select id="selectHr" name="hr_id" class="form-control"
-                                        style="width: 300px;appearance: revert;padding-right: 65px;">
+                                        style="appearance: revert;padding-right: 65px;">
                                         <option value="">Select Hr</option>
                                     </select>
                                 </div>

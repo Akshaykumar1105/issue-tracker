@@ -22,7 +22,7 @@ class ManagerController extends Controller{
         if ($request->ajax()) {
             $data = $this->managerService->collection($companyId =null, $request);
             return DataTables::of($data)->with('media')->addIndexColumn()
-            ->orderColumn('name', function ($query, $order) {
+            ->orderColumn('DT_RowIndex', function ($query, $order) {
                 $query->orderBy('id', $order);
             })
             ->addColumn('profile', function ($row) {

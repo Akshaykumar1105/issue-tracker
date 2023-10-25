@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use Exception;
 use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Company;
@@ -12,6 +13,7 @@ use App\Jobs\ConfirmPassword;
 use App\Mail\ResetPasswordEmail;
 use App\Models\PasswordResetToken;
 use App\Mail\ConfirmPasswordEmail;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Hash;
@@ -79,10 +81,15 @@ class AuthService
                 'token' => $token,
                 'created_at' => Carbon::now()
             ]);
-            ResetPassword::dispatchSync([
-                'email' => $request->email,
-                'token' => $token,
-            ]);
+            try {
+                ResetPassword::dispatchSync([
+                    'email' => $request->email,
+                    'token' => $token,
+                ]);
+            } catch (Exception $e) {
+                Log::info($e);
+            }
+            
             return['message' => __('messages.email.reset-email')];
         } else {
             return ['message' => __('messages.email.email-fail')];
@@ -98,7 +105,12 @@ class AuthService
 
         User::where('email', $email)->update(['password' => Hash::make($request->password)]);
 
-        ConfirmPassword::dispatchSync($email);
+        try {
+            ConfirmPassword::dispatchSync($email);
+        } catch (Exception $e) {
+            Log::info($e);
+        }
+        
 
         PasswordResetToken::where(['token' => $request->token])->delete();
 

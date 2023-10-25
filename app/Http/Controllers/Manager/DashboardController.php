@@ -10,6 +10,6 @@ class DashboardController extends Controller{
     public function __invoke(){
         $user =auth()->user();
         $issue = Issue::where('manager_id', $user->id)->count();
-        return view('manager.dashboard.index', ['issue' => $issue]);
+        return view('manager.dashboard', ['issue' => $issue]);
     }
 }

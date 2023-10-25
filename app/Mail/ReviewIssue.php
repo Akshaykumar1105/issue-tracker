@@ -28,7 +28,7 @@ class ReviewIssue extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Review Issue Request',
+            subject: 'Review Issue Request | Issue Tracker',
         );
     }
 

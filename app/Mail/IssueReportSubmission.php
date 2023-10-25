@@ -28,7 +28,7 @@ class IssueReportSubmission extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Issue Report Submission',
+            subject: 'Issue Report Submission | Issue Tracker',
         );
     }
 

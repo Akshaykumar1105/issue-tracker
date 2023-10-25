@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use App\Mail\ConfirmPasswordEmail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -11,12 +12,13 @@ class ConfirmPassword extends Notification
 {
     use Queueable;
 
+    protected $user;
     /**
      * Create a new notification instance.
      */
     public function __construct($user)
     {
-        // dd()
+        $this->user = $user;
     }
 
     /**
@@ -32,16 +34,9 @@ class ConfirmPassword extends Notification
     /**
      * Get the mail representation of the notification.
      */
-    public function toMail(object $notifiable): MailMessage
+    public function toMail(object $notifiable)
     {
-        return (new MailMessage)
-            ->subject('Confirm Password')
-            ->line('Hello,')
-            ->line('We are writing to inform you that your password has been successfully reset')
-            ->line('If you did not request this change, please contact our support team immediately.')
-            ->action('Login', url('/login'))
-            ->line('If you have any questions or need assistance, please feel free to contact us.')
-            ->line('Thank you!');
+        return (new ConfirmPasswordEmail($this->user))->to($this->user->email);
     }
 
     /**

@@ -29,7 +29,7 @@ class IssueSolve extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Issue Solved',
+            subject: 'Issue has been resolved | Issue Tracker',
         );
     }
 

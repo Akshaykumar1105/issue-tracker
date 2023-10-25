@@ -13,12 +13,13 @@ class ConfirmPasswordEmail extends Mailable
 {
     use Queueable, SerializesModels;
 
+    protected $user;
     /**
      * Create a new message instance.
      */
-    public function __construct()
+    public function __construct($user)
     {
-        //
+        $this->user = $user;
     }
 
     /**
@@ -27,7 +28,7 @@ class ConfirmPasswordEmail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Confirm Password Email',
+            subject: 'Confirm Password | Issue Tracker',
         );
     }
 
@@ -38,6 +39,7 @@ class ConfirmPasswordEmail extends Mailable
     {
         return new Content(
             view: 'email.confirm_password',
+            with: ['user' => $this->user],
         );
     }
 

@@ -23,7 +23,7 @@
         }
 
         .box {
-            margin: 50px auto;
+            margin: 0px auto;
             width: 90%;
             padding: 20px 0;
             border-bottom: 5px solid #9aa6ad;
@@ -72,9 +72,9 @@
             <div class="title">
                 <h1 href="{{ config('app.url') }}">{{ config('app.name') }}</h1>
 
-                <p>Assign manager</p>
+                <p>Assign Manager</p>
             </div>
-            <p class="emailDody">Hello {{$issue->manager->name}},</p>
+            <p class="emailDody">Hello, {{$issue->manager->name}}</p>
 
             <p>{{$issue->hr->name}} HR has assigned you as the manager for the following issue:</p>
 
@@ -89,7 +89,7 @@
             <p>
                 <a class="btn btn-primary" href="{{ route('manager.issue.edit', ['issue' => $issue->id]) }}">View Issue</a>
             </p>
-            <p>If you have any questions or need further assistance, please contact our support team.</p>
+            <p>If you have any questions or need further assistance, don't hesitate to contact our dedicated support team at <a href="mailto:support@issuetracker.com">support@issuetracker.com</a>.</p>
             <p>Regards, {{ config('app.name') }}</p>
         </div>
     </div>

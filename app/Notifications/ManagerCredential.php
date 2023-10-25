@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use App\Mail\ManagerCredentialsEmail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -11,16 +12,16 @@ class ManagerCredential extends Notification
 {
     use Queueable;
 
-    protected $email;
+    protected $user;
     protected $password;
 
 
     /**
      * Create a new notification instance.
      */
-    public function __construct($email, $password)
+    public function __construct($user, $password)
     {
-        $this->email = $email;
+        $this->user = $user;
         $this->password = $password;
     }
 
@@ -37,18 +38,9 @@ class ManagerCredential extends Notification
     /**
      * Get the mail representation of the notification.
      */
-    public function toMail(object $notifiable): MailMessage
+    public function toMail(object $notifiable)
     {
-        return (new MailMessage)
-            ->subject('Manager Credentials')
-            ->line('Hello,')
-            ->line('Here are the login credentials for the manager:')
-            ->line('Email: ' . $this->email)
-            ->line('Password: ' . $this->password)
-            ->line('Please use these credentials to access the managers account. ')
-            ->action('Login', url('/login'))
-            ->line('If you have any questions or need assistance, please feel free to contact us.')
-            ->line('Thank you!');
+        return (new ManagerCredentialsEmail($this->user, $this->password))->to($this->user->email);
     }
 
     /**

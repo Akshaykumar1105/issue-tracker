@@ -23,7 +23,7 @@
         }
 
         .box {
-            margin: 50px auto;
+            margin: 0px auto;
             width: 90%;
             padding: 20px 0;
             border-bottom: 5px solid #9aa6ad;
@@ -76,9 +76,9 @@
             </div>
 
             <div class="content">
-                <p class="message">Hello, User</p>
+                <p class="message">Hello, {{ $user->name }}</p>
                 <p class="message">We are writing to inform you that your password has been successfully reset.</p>
-                <p class="message">If you did not request this change, please contact our support team immediately.</p>
+                <p>If you did not request this change, please contact our support team immediately <a href="mailto:support@issuetracker.com">support@issuetracker.com</a>.</p>
                 <div class="button-container">
                     <a href="{{route('login')}}" class="btn">Login</a>
                 </div>

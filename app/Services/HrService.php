@@ -56,6 +56,7 @@ class HrService
 
     public function destroy($id){
         $user = User::find($id);
+        $user->getMedia('user')->delete();
         $user->delete();
         return [
             'success' => __('entity.entityDeleted', ['entity' => 'Hr']),

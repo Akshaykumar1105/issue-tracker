@@ -23,7 +23,7 @@
         }
 
         .box {
-            margin: 50px auto;
+            margin: 0px auto;
             width: 90%;
             padding: 20px 0;
             border-bottom: 5px solid #9aa6ad;
@@ -74,9 +74,9 @@
 
                 <p>Your issue update</p>
             </div>
-            <p class="emailDody">Hello {{$issue->manager->name}},</p>
+            <p class="emailDody">Hello {{$issue->email}},</p>
 
-            <p>{{$issue->hr->name}} HR has assigned you as the manager for the following issue:</p>
+            <p>{{$issue->hr->name}} HR has assigned {{$issue->manager->name}} as the manager for the following issue:</p>
 
             <ul>
                 <li><strong>Issue Title:</strong> {{ $issue->title }}</li>
@@ -88,7 +88,7 @@
                 <li><strong>Company Name:</strong> {{ $issue->company->name }}</li>
             </ul>
             
-            <p>If you have any questions or need further assistance, please contact our support team.</p>
+            <p>If you have any questions or need further assistance, don't hesitate to contact our dedicated support team at <a href="mailto:support@issuetracker.com">support@issuetracker.com</a>.</p>
             <p>Regards, {{ config('app.name') }}</p>
         </div>
     </div>

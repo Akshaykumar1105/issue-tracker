@@ -33,7 +33,7 @@ class ConfirmPassword implements ShouldQueue
         try {
             $user = User::where('email', $this->email)->first();
             if ($user) {
-                $user->notify(new NotificationsConfirmPassword($user->email));
+                $user->notify(new NotificationsConfirmPassword($user));
             } else {
                 Log::warning("User with email {$this->email} not found.");
             }

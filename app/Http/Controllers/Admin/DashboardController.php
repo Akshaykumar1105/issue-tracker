@@ -19,7 +19,7 @@ class DashboardController extends Controller
 
     public function index(){
         $dashboardData = $this->dashboardService->index();
-        return view('admin.dashboard.index', $dashboardData);
+        return view('admin.dashboard', $dashboardData);
     }
 
     public function issueChart(Request $request){

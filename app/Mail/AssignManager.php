@@ -28,7 +28,7 @@ class AssignManager extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Assign Issue',
+            subject: 'Assign Issue | Issue Tracker',
         );
     }
 

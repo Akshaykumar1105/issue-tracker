@@ -32,7 +32,7 @@ class IssueStatusChanged extends Mailable
         $sendForReview = $this->issue->status == 'SEND_FOR_REVIEW';
 
         // Set the subject based on the condition
-        $subject = $sendForReview ? 'Issue Report Submission' : 'Issue status changed';
+        $subject = $sendForReview ? 'Issue Sent for Review | Issue Tracker' : 'Issue status changed | Issue Tracker';
 
         return new Envelope(
             subject: $subject

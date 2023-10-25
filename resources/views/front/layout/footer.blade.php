@@ -45,31 +45,13 @@
 					</ul>
 				</div>
 			</div>
-			<div class="col-lg-4 col-md-12 newsletter-form">
-				<div style="background-color: #F4F4F4; padding: 35px;">
-					<h5 class="mb-4 text-primary font-secondary">Subscribe</h5>
-					<div class="pe-0 pe-xl-5">
-						<form action="#!" method="post" name="mc-embedded-subscribe-form" target="_blank">
-							<div class="input-group mb-3">
-								<input type="text" class="form-control shadow-none bg-white border-end-0" placeholder="Email address"> <span class="input-group-text border-0 p-0">
-                    <button class="input-group-text border-0 bg-primary" type="submit" name="subscribe"
-                      aria-label="Subscribe for Newsletter"><i class="fas fa-arrow-right"></i></button>
-                  </span>
-							</div>
-							<div style="position: absolute; left: -5000px;" aria-hidden="true">
-								<input type="text" name="b_463ee871f45d2d93748e77cad_a0a2c6d074" tabindex="-1">
-							</div>
-						</form>
-					</div>
-					<p class="mb-0">Lorem ipsum dolor sit amet, rdghds consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat</p>
-				</div>
-			</div>
 		</div>
 		<div class="row align-items-center mt-5 text-center text-md-start">
 			<div class="col-lg-4">
-        <a href="index.html">
-          <img loading="prelaod" decoding="async" class="img-fluid" width="160" src="{{asset('asset/user/images/logo.png')}}" alt="Wallet">
-        </a>
+				<a class="navbar-brand" href="{{route('home')}}">
+					<img style="width: 50px; margin: 0 10px 0 0;" loading="prelaod" decoding="async" class="img-fluid" width="160"
+						src="{{ asset('asset/logo/logo.png') }}" alt="Issue Tracker">Issue Tracker
+				</a>
 			</div>
 			<div class="col-lg-4 col-md-6 mt-4 mt-lg-0">
 				<ul class="list-unstyled list-inline mb-0 text-lg-center">

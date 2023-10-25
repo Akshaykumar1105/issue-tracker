@@ -145,7 +145,7 @@
 
                     <li
                         class="nav-item {{ in_array(Route::currentRouteName(), ['hr.issue.index', 'hr.issue.edit']) ? 'menu-is-opening  manu-open' : '' }}">
-                        <a href="#" class="nav-link ">
+                        <a href="#" class="nav-link {{ in_array(Route::currentRouteName(), ['hr.issue.index', 'hr.issue.edit']) ? 'active' : '' }}">
                             <i class="fas fa-bug"></i>
                             <p>Issues<i class="right fas fa-angle-left"></i></p>
                         </a>

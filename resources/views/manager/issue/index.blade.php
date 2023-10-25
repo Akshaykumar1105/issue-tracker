@@ -127,13 +127,14 @@
                     },
                     {
                         "data": "status",
+                        orderable: false,
                         render: function(data, type, row) {
                             if (data === 'COMPLETED' || data === 'SEND_FOR_REVIEW') {
                                 status = data.replace(/_/g, ' ').replace(/\w\S*/g, function(txt) {
                                     return txt.charAt(0).toUpperCase() + txt.substr(1)
                                         .toLowerCase();
                                 });
-                                return `<div style="font-size: 15px;" class="badge fw-normal ${ data == 'COMPLETED' ? 'bg-success' : 'bg-yellow'}">${status}</div>`;
+                                return `<div style="font-size: 15px;" class="fw-normal">${status}</div>`;
                             } else {
                                 const statusOptions = [
                                     {value: 'OPEN',label: 'Open'},

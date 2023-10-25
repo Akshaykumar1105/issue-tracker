@@ -24,9 +24,16 @@ return [
         'manager' => 'manager'
     ],
 
+    'discount' => [
+        'flat' => 'FLAT',
+        'variable' => 'VARIABLE'
+    ],
+
+    'percentage' => '%',
+    'currency' => '₹',
+
     'date' => 'jS M Y',
     'date_time' => 'jS M Y H:i A',
     'time' => 'h:i A',
-
 ];
 ?>

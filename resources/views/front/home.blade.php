@@ -2,6 +2,7 @@
 @section('style')
     <!-- toastr css -->
     <link rel="stylesheet" href="{{ asset('asset/css/toastr.css') }}">
+    <link rel="stylesheet" href="{{ asset('asset/css/pricing.css') }}">
 @endsection
 @section('content')
     <div class="modal applyLoanModal fade" id="issueModel" tabindex="-1" aria-labelledby="issueModelLabel" aria-hidden="true">
@@ -23,7 +24,7 @@
                                         name="title" id="title" placeholder="Enter issue title.">
                                 </div>
                             </div>
-                            
+
                             <div class="col-lg-12 mb-4 pb-2">
                                 <div class="form-group">
                                     <label for="description" class="form-label">Issue Description<span
@@ -38,7 +39,8 @@
                                 <div class="form-group">
                                     <label for="company" class="form-label">Company<span
                                             class="text-danger ms-1">*</span></label>
-                                    <select class="form-control" value="{{ old('company') }}" name="company_id" id="company">
+                                    <select class="form-control" value="{{ old('company') }}" name="company_id"
+                                        id="company">
                                         <option value="default">Select Company</option>
                                         @foreach ($companies as $company)
                                             <option value="{{ $company->id }}">{{ $company->name }}</option>
@@ -87,8 +89,8 @@
             <div class="row align-items-center justify-content-center">
                 <div class="col-lg-6 mb-5 mb-lg-0">
                     <div class="block text-center text-lg-start pe-0 pe-xl-5">
-                        <h1 class="text-capitalize mb-4">{{__('messages.home.title')}}</h1>
-                        <p class="mb-4">{{__('messages.home.description')}}
+                        <h1 class="text-capitalize mb-4">{{ __('messages.home.title') }}</h1>
+                        <p class="mb-4">{{ __('messages.home.description') }}
                         </p> <a type="button" class="btn btn-primary" href="#" data-bs-toggle="modal"
                             data-bs-target="#issueModel">Create Issue<span style="font-size: 14px;"
                                 class="ms-2 fas fa-arrow-right"></span></a>
@@ -164,16 +166,16 @@
                 <div class="col-lg-4 col-md-6 service-item">
                     <a class="text-black" href="service-details.html">
                         <div class="block"> <span class="colored-box text-center h3 mb-4">01</span>
-                            <h3 class="mb-3 service-title">{{__('messages.service.first.title')}}</h3>
-                            <p class="mb-0 service-description">{{__('messages.service.first.description') }}</p>
+                            <h3 class="mb-3 service-title">{{ __('messages.service.first.title') }}</h3>
+                            <p class="mb-0 service-description">{{ __('messages.service.first.description') }}</p>
                         </div>
                     </a>
                 </div>
                 <div class="col-lg-4 col-md-6 service-item">
                     <a class="text-black" href="service-details.html">
                         <div class="block"> <span class="colored-box text-center h3 mb-4">02</span>
-                            <h3 class="mb-3 service-title">{{__('messages.service.second.title')}}</h3>
-                            <p class="mb-0 service-description">{{__('messages.service.second.description') }}</p>
+                            <h3 class="mb-3 service-title">{{ __('messages.service.second.title') }}</h3>
+                            <p class="mb-0 service-description">{{ __('messages.service.second.description') }}</p>
                         </div>
                     </a>
                 </div>
@@ -181,8 +183,8 @@
                     <a class="text-black" href="service-details.html">
                         <div class="block"> <span class="colored-box text-center h3 mb-4">03
                             </span>
-                            <h3 class="mb-3 service-title">{{__('messages.service.third.title')}}</h3>
-                            <p class="mb-0 service-description">{{__('messages.service.third.description') }}</p>
+                            <h3 class="mb-3 service-title">{{ __('messages.service.third.title') }}</h3>
+                            <p class="mb-0 service-description">{{ __('messages.service.third.description') }}</p>
                         </div>
                     </a>
                 </div>
@@ -190,8 +192,8 @@
                     <a class="text-black" href="service-details.html">
                         <div class="block"> <span class="colored-box text-center h3 mb-4">04
                             </span>
-                            <h3 class="mb-3 service-title">{{__('messages.service.fourth.title')}}</h3>
-                            <p class="mb-0 service-description">{{__('messages.service.fourth.description') }}</p>
+                            <h3 class="mb-3 service-title">{{ __('messages.service.fourth.title') }}</h3>
+                            <p class="mb-0 service-description">{{ __('messages.service.fourth.description') }}</p>
                         </div>
                     </a>
                 </div>
@@ -354,102 +356,51 @@
                                 class="nav-link btn btn-outline-primary effect-none text-dark active"
                                 id="pills-how-much-can-i-recive-tab" data-bs-toggle="pill"
                                 href="#pills-how-much-can-i-recive" role="tab"
-                                aria-controls="pills-how-much-can-i-recive" aria-selected="true">How Much Can I
-                                Recive?</a>
-                        </li>
-                        <li class="nav-item m-2" role="presentation"> <a
-                                class="nav-link btn btn-outline-primary effect-none text-dark "
-                                id="pills-how-much-does-it-costs-tab" data-bs-toggle="pill"
-                                href="#pills-how-much-does-it-costs" role="tab"
-                                aria-controls="pills-how-much-does-it-costs" aria-selected="true">How Much Does It
+                                aria-controls="pills-how-much-can-i-recive" aria-selected="true">How Much Does It
                                 Costs?</a>
-                        </li>
-                        <li class="nav-item m-2" role="presentation"> <a
-                                class="nav-link btn btn-outline-primary effect-none text-dark "
-                                id="pills-how-do-i-repay-tab" data-bs-toggle="pill" href="#pills-how-do-i-repay"
-                                role="tab" aria-controls="pills-how-do-i-repay" aria-selected="true">How Do I
-                                Repay?</a>
                         </li>
                     </ul>
                     <div class="rounded shadow bg-white p-5 tab-content" id="pills-tabContent">
                         <div class="tab-pane fade show active" id="pills-how-much-can-i-recive" role="tabpanel"
                             aria-labelledby="pills-how-much-can-i-recive-tab">
-                            <div class="row align-items-center">
-                                <div class="col-md-6 order-1 order-md-0">
-                                    <div class="content-block">
-                                        <h3 class="mb-4">How Much Can I Recive?</h3>
-                                        <div class="content">
-                                            <p>Lorem ipsum dolor sit amet, consec tetasssur adipiscing elit. Tellus integer
-                                                proin nisl pretium,
-                                                vestibulum dictum blandit risus. Nisl commodo</p>
-                                            <p>turpis vivamus donec. Id congue vesti bualum odio dignissim at quisque
-                                                viverra. Non semper in sed
-                                                quisque dui. Platea posuere ullamcorper id fames ut sed urna cursus eget.
-                                                Neque, vel</p>
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="card pricing-card pricing-plan-basic">
+                                            <div class="card-body">
+                                                <i class="mdi mdi-cube-outline pricing-plan-icon"></i>
+                                                <p class="pricing-plan-title">Basic</p>
+                                                <h3 class="pricing-plan-cost ml-auto">FREE</h3>
+                                                <ul class="pricing-plan-features">
+                                                    <li>Unlimited conferences</li>
+                                                    <li>100 participants max</li>
+                                                    <li>Custom Hold Music</li>
+                                                    <li>10 participants max</li>
+                                                </ul>
+                                                <a href="#!" class="btn pricing-plan-purchase-btn">Free</a>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="col-md-6 order-0 order-md-1 mb-5 mt-md-0">
-                                    <div class="image-block text-center">
-                                        <img loading="lazy" decoding="async"
-                                            src="{{ asset('asset/user/images/payment-info.png') }}"
-                                            alt="How Much Can I Recive?" class="img-fluid">
+                                    <div class="col-md-6">
+                                        <div class="card pricing-card pricing-card-highlighted  pricing-plan-pro">
+                                            <div class="card-body">
+                                                <i class="mdi mdi-trophy pricing-plan-icon"></i>
+                                                <p class="pricing-plan-title">Premium</p>
+                                                <h3 class="pricing-plan-cost ml-auto">₹5000</h3>
+                                                <ul class="pricing-plan-features">
+                                                    <li>Unlimited conferences</li>
+                                                    <li>100 participants max</li>
+                                                    <li>Custom Hold Music</li>
+                                                    <li>10 participants max</li>
+                                                </ul>
+                                                <a href="#!" class="btn pricing-plan-purchase-btn">Purchase</a>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="tab-pane fade " id="pills-how-much-does-it-costs" role="tabpanel"
-                            aria-labelledby="pills-how-much-does-it-costs-tab">
-                            <div class="row align-items-center">
-                                <div class="col-md-6 order-1 order-md-0">
-                                    <div class="content-block">
-                                        <h3 class="mb-4">How Much Does It Costs?</h3>
-                                        <div class="content">
-                                            <p>Lorem ipsum dolor sit amet, consec tetasssur adipiscing elit. Tellus integer
-                                                proin nisl pretium,
-                                                vestibulum dictum blandit risus. Nisl commodo</p>
-                                            <p>turpis vivamus donec. Id congue vesti bualum odio dignissim at quisque
-                                                viverra. Non semper in sed
-                                                quisque dui. Platea posuere ullamcorper id fames ut sed urna cursus eget.
-                                                Neque, vel</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6 order-0 order-md-1 mb-5 mt-md-0">
-                                    <div class="image-block text-center">
-                                        <img loading="lazy" decoding="async"
-                                            src="{{ asset('asset/user/images/illustration-2.png') }}"
-                                            alt="How Much Does It Costs?" class="img-fluid">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="tab-pane fade " id="pills-how-do-i-repay" role="tabpanel"
-                            aria-labelledby="pills-how-do-i-repay-tab">
-                            <div class="row align-items-center">
-                                <div class="col-md-6 order-1 order-md-0">
-                                    <div class="content-block">
-                                        <h3 class="mb-4">How Do I Repay?</h3>
-                                        <div class="content">
-                                            <p>Lorem ipsum dolor sit amet, consec tetasssur adipiscing elit. Tellus integer
-                                                proin nisl pretium,
-                                                vestibulum dictum blandit risus. Nisl commodo</p>
-                                            <p>turpis vivamus donec. Id congue vesti bualum odio dignissim at quisque
-                                                viverra. Non semper in sed
-                                                quisque dui. Platea posuere ullamcorper id fames ut sed urna cursus eget.
-                                                Neque, vel</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6 order-0 order-md-1 mb-5 mt-md-0">
-                                    <div class="image-block text-center">
-                                        <img loading="lazy" decoding="async"
-                                            src="{{ asset('asset/user/images/illustration-1.png') }}"
-                                            alt="How Do I Repay?" class="img-fluid">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+
                     </div>
                 </div>
             </div>
@@ -816,7 +767,8 @@
                         var hrSelect = $('#company');
                         if (response.hrs !== null && response.hrs.length > 0) {
                             $.each(response.hrs, function(index, user) {
-                                option += '<option value=' + user.id + '>' + user.name +'</option>'
+                                option += '<option value=' + user.id + '>' + user.name +
+                                    '</option>'
                                 $('#hr').html(option)
                             });
                         } else {
@@ -827,7 +779,6 @@
                     }
                 });
             })
-
 
             $.validator.addMethod("valueNotEquals", function(value, element, arg) {
                 return arg !== value;
@@ -851,7 +802,7 @@
                         required: true,
                         email: true,
                     },
-                    hr_id:{
+                    hr_id: {
                         required: true,
                         valueNotEquals: "defaultHr"
                     }
@@ -859,24 +810,24 @@
                 },
                 messages: {
                     company_id: {
-                        required: "{{__('validation.required', ['attribute' => 'hr'])}}",
-                        valueNotEquals: "{{__('validation.valueNotEquals', ['attribute' => 'company'])}}"
+                        required: "{{ __('validation.required', ['attribute' => 'hr']) }}",
+                        valueNotEquals: "{{ __('validation.valueNotEquals', ['attribute' => 'company']) }}"
                     },
                     hr_id: {
-                        required: "{{__('validation.required', ['attribute' => 'hr'])}}",
-                        valueNotEquals: "{{__('validation.valueNotEquals', ['attribute' => 'hr'])}}"
+                        required: "{{ __('validation.required', ['attribute' => 'hr']) }}",
+                        valueNotEquals: "{{ __('validation.valueNotEquals', ['attribute' => 'hr']) }}"
                     },
                     email: {
-                        required: "{{__('validation.required', ['attribute' => 'email'])}}",
-                        email: "{{__('validation.valid' , ['attribute' => 'email'])}}",
+                        required: "{{ __('validation.required', ['attribute' => 'email']) }}",
+                        email: "{{ __('validation.valid', ['attribute' => 'email']) }}",
                     },
                     title: {
-                        required: "{{__('validation.required', ['attribute' => 'title'])}}",
-                        maxlength: "{{__('validation.max_digits', ['attribute' => 'title', 'max' => '255'])}}",
+                        required: "{{ __('validation.required', ['attribute' => 'title']) }}",
+                        maxlength: "{{ __('validation.max_digits', ['attribute' => 'title', 'max' => '255']) }}",
                     },
                     description: {
-                        required: "{{__('validation.required', ['attribute' => 'description'])}}",
-                        minlength:  "{{__('validation.min_digits', ['attribute' => 'description', 'min' => '50'])}}",
+                        required: "{{ __('validation.required', ['attribute' => 'description']) }}",
+                        minlength: "{{ __('validation.min_digits', ['attribute' => 'description', 'min' => '50']) }}",
                     },
                 },
                 submitHandler: function(form) {

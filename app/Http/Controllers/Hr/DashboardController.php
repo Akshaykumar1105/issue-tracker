@@ -18,6 +18,6 @@ class DashboardController extends Controller
             'managerCount' => User::where('company_id', $user->company_id)->where('parent_id', $user->id)->count(),
             'issueCount' => Issue::where('hr_id', $user->id)->count(),
         ];
-        return view('hr.dashboard.index', ['data' => $data, 'issueStatus' => $issueStatus]);
+        return view('hr.dashboard', ['data' => $data, 'issueStatus' => $issueStatus]);
     }
 }

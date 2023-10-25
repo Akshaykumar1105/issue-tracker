@@ -12,14 +12,14 @@ use Illuminate\Queue\SerializesModels;
 class ManagerCredentialsEmail extends Mailable
 {
     use Queueable, SerializesModels;
-    public $email;
+    public $user;
     public $password;
     /**
      * Create a new message instance.
      */
-    public function __construct($email, $password)
+    public function __construct($user, $password)
     {
-        $this->email = $email;
+        $this->user = $user;
         $this->password = $password;
     }
 
@@ -29,7 +29,7 @@ class ManagerCredentialsEmail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Manager Credentials Email',
+            subject: 'Your Credentials | Issue Tracker',
         );
     }
 
@@ -40,7 +40,7 @@ class ManagerCredentialsEmail extends Mailable
     {
         return new Content(
             view: 'email.manager-credential',
-            with: ['email' => $this->email, 'password' => $this->password]
+            with: ['user' => $this->user, 'password' => $this->password]
         );
     }
 

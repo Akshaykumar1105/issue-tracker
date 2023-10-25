@@ -25,7 +25,7 @@ class CompanyController extends Controller
         if ($request->ajax()) {
             $query = $this->companyService->collection();
             return DataTables::of($query)
-                ->orderColumn('name', function ($query, $order) {
+                ->orderColumn('DT_RowIndex', function ($query, $order) {
                     $query->orderBy('id', $order);
                 })
                 ->addColumn('action', function ($row) {
