@@ -10,9 +10,9 @@
 @endsection
 @section('content')
     <section class="content" style="margin: 0 auto; max-width: 100%">
-        <h1>{{__('messages.company.title')}}</h1>
+        <h1>{{ __('messages.company.title') }}</h1>
         <div class="" style="margin: 0 auto; float: right;">
-            <a class="btn btn-primary" href="{{ route('admin.company.create') }}">{{__('messages.company.register')}}</a>
+            <a class="btn btn-primary" href="{{ route('admin.company.create') }}">{{ __('messages.company.register') }}</a>
         </div>
 
         <div class=""
@@ -22,11 +22,11 @@
             <table class="table" id="companyData" style="width: 100%">
                 <thead>
                     <tr>
-                        <th >{{ __('messages.table.id') }}</th>
-                        <th >{{ __('messages.table.status') }}</th>
-                        <th >{{ __('messages.table.name') }}</th>
-                        <th  style="width: 150px; box-sizing: border-box;">{{ __('messages.table.email') }}</th>
-                        <th >{{ __('messages.table.number') }}</th>
+                        <th>{{ __('messages.table.id') }}</th>
+                        <th>{{ __('messages.table.status') }}</th>
+                        <th>{{ __('messages.table.name') }}</th>
+                        <th style="width: 150px; box-sizing: border-box;">{{ __('messages.table.email') }}</th>
+                        <th>{{ __('messages.table.number') }}</th>
                         <th style="width: 200px; box-sizing: border-box;">{{ __('messages.table.address') }}</th>
                         <th>City</th>
                         <th style="width: 250px; box-sizing: border-box;">{{ __('messages.table.action') }}</th>
@@ -47,7 +47,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        {{__('messages.conformation.delete', ['attribute' => 'company?'])}}
+                        {{ __('messages.conformation.delete', ['attribute' => 'company?']) }}
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -65,7 +65,6 @@
     <script src="{{ asset('asset/js/datatable.min.js') }}"></script>
 
     <script>
-        // Your custom JavaScript file
         $(document).ready(function() {
 
             $('.table').DataTable({
@@ -94,18 +93,23 @@
                     },
                     {
                         "data": "name",
+                        "name": "name",
                     },
                     {
                         "data": "email",
+                        "name": "email",
                     },
                     {
                         "data": "number",
+                        "name": "number",
                     },
                     {
                         "data": "address",
+                        "name": "address",
                     },
                     {
-                        "data": "city.name"
+                        "data": "city.name",
+                        "name": "city.name"
                     },
                     {
                         "data": "action",
@@ -114,7 +118,7 @@
                     },
                 ],
                 order: [
-                    [2, 'desc']
+                    [2, 'desc'],
                 ],
                 lengthMenu: [10, 25, 50, 100],
                 pageLength: 10,
@@ -133,7 +137,8 @@
 
             function deleteCompany(companyId) {
                 $.ajax({
-                    url: "{{ route('admin.company.destroy', ['company' => ':id']) }}".replace(':id', companyId),
+                    url: "{{ route('admin.company.destroy', ['company' => ':id']) }}".replace(':id',
+                        companyId),
                     data: {
                         "id": companyId,
                         "_token": "{{ csrf_token() }}"
@@ -141,7 +146,7 @@
                     type: "DELETE",
                     success: function(response) {
                         $("#deleteCompany").modal("toggle");
-                        const  message = response.success;
+                        const message = response.success;
                         toastr.options = {
                             closeButton: true,
                             progressBar: true,

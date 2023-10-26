@@ -19,7 +19,7 @@ class UserSeeder extends Seeder
             [
                 'name' => 'admin',
                 'email' => 'admin@gmail.com',
-                'password' => Hash::make('admin@123'),
+                'password' => Hash::make('Admin@123'),
                 'mobile' => '1234567890',
             ]
         )->assignRole(config('site.role.admin'));

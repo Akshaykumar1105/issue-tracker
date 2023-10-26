@@ -25,14 +25,14 @@ class IssueController extends Controller{
             $query = $this->issueService->collection($request);
             return DataTables::of($query)
             ->addIndexColumn()
-            ->orderColumn('DT_RowIndex', function ($query, $order) {
+            ->orderColumn('title', function ($query, $order) {
                 $query->orderBy('id', $order);
             })
             ->addColumn('dueDate', function ($row) {
                 if ($row->due_date) {
                     return date( config('site.date'), strtotime($row->due_date));
                 } else {
-                    return 'Not select due date';
+                    return 'Due date is not selected';
                 }
             })
             ->addColumn('action', function ($row) {

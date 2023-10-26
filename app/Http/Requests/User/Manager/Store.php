@@ -31,7 +31,7 @@ class Store extends FormRequest
         ];
 
         if (auth()->user()->hasRole(config('site.role.admin'))) {
-            $rules . [
+            $rules = [
                 'company_id' => 'required|exists:companies,id',
                 'hr_id' => 'required|exists:users,id',
             ];

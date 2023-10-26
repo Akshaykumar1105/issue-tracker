@@ -84,6 +84,7 @@
                                     <select id="selectHr" name="hr_id" class="form-control"
                                         style="appearance: revert;padding-right: 65px;">
                                         <option value="">Select Hr</option>
+                                        
                                     </select>
                                 </div>
                             @else
@@ -112,7 +113,7 @@
                                 <label for="profile_img" class="form-label">{{ __('messages.form.img') }}</label>
                                 <div class="custom-file ">
                                     <input name="avatar" type="file" id="profile_img" class="dropify" data-height="100"
-            data-default-file="{{ isset($manager) && $manager->getMedia('user')->isNotEmpty() ? asset('storage/user/' . $manager->getMedia('user')->first()->filename . '.' . $manager->getMedia('user')->first()->extension) : asset('storage/user/user.png') }}" />
+                                        data-default-file="{{ isset($manager) && $manager->getMedia('user')->isNotEmpty() ? asset('storage/user/' . $manager->getMedia('user')->first()->filename . '.' . $manager->getMedia('user')->first()->extension) : asset('storage/user/user.png') }}" />
                                 </div>
                             </div>
 
@@ -146,17 +147,18 @@
     <script src="{{ asset('asset/js/dropify.min.js') }}"></script>
 
     <script>
-        // Your custom JavaScript file
         $(document).ready(function() {
             $('.dropify').dropify();
 
             let currentRoute = "{{ Route::currentRouteName() }}";
 
-            if (currentRoute == 'admin.manager.create') {
+            if (currentRoute == 'admin.manager.create' || currentRoute == 'admin.manager.edit') {
                 $(document).on('change', '#company_id', function() {
                     companyId = $(this).val();
+                    var condition = true;
+                    var url = condition ? "{{ route('admin.manager.create') }}" : "{{ route('admin.manager.edit', ['manager' => ':id'])}}".replace(':id', companyId)
                     $.ajax({
-                        url: "{{ route('admin.manager.create') }}",
+                        url: url,
                         type: 'get',
                         data: {
                             company: companyId
@@ -164,14 +166,13 @@
                         success: function(response) {
                             let option;
                             var hrSelect = $('#selectHr');
-
+                            console.log(response)
                             if (response !== null) {
                                 $.each(response, function(index, user) {
                                     option += '<option value=' + user.id + '>' + user
                                         .name + '</option>';
                                 });
 
-                                // Set the HTML of the hrSelect element
                                 hrSelect.html(option);
                             } else {
                                 option +=
@@ -199,8 +200,10 @@
             }, "Please enter letters without extra spaces.");
 
             $.validator.addMethod("pattern", function(value, element) {
-                return /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/.test(value);
-            },"Password must include at least one uppercase letter, one lowercase letter, one digit, and one special character.");
+                    return /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/.test(value);
+                },
+                "Password must include at least one uppercase letter, one lowercase letter, one digit, and one special character."
+                );
 
             $("#createUser").validate({
                 errorClass: "text-danger fw-normal",
@@ -232,7 +235,7 @@
                     mobile: {
                         required: true,
                         number: true,
-                        validNumber:true,
+                        validNumber: true,
                         digits: true,
                         minlength: 10,
                         maxlength: 10
@@ -255,7 +258,7 @@
                     },
                     password_confirmation: {
                         required: "Please confirm your password.",
-                        equalTo: "Passwords do not match.",
+                        equalTo: "Passwords does not match.",
                     },
                     number: {
                         required: "{{ __('validation.required', ['attribute' => 'number']) }}",
@@ -282,8 +285,16 @@
                             }
                             toastr.success(response.success);
                             setTimeout(function() {
-                                window.location.href =
-                                    "{{ route('admin.hr.index') }}";
+                                var currentRouteName ="{{ Route::currentRouteName() }}";
+
+                                if (currentRouteName === 'admin.hr.update'){
+                                    window.location.href =
+                                        "{{ route('admin.hr.index') }}";
+                                }
+                                else{
+                                    window.location.href =
+                                        "{{ route('admin.manager.index') }}";
+                                }
                             }, 2000);
                         },
                         error: function(xhr, status, error) {

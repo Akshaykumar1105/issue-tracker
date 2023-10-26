@@ -145,7 +145,7 @@
                     {
                         "data": "manager.name",
                         render: function(data, type, row) {
-                            var manager = data == null ? 'Not Assign' : data;
+                            var manager = data == null ? 'Not Assigned' : data;
                             return '<div class="form-check form-switch p-1">' + manager +
                                 '</div>';
                         },

@@ -1,6 +1,5 @@
 @extends('dashboard.layout.master')
 @section('style')
-    {{-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" /> --}}
     <link href="{{ asset('asset/css/datatables.min.css') }}" rel="stylesheet">
 
     <style>
@@ -148,16 +147,18 @@
                     },
                     {
                         "data": "status",
-                        render: function(data, type, row) {
-                            data = data.replace(/_/g, ' ').replace(/\w\S*/g, function(txt) {
-                                return txt.charAt(0).toUpperCase() + txt.substr(1)
-                                    .toLowerCase();
-                            });
-                            return `<div>${data}</div>`;
-                        },
+                        render: {
+                            _: 'display',
+                            sort: 'status'
+                        }
                     },
                     {
-                        "data": 'dueDate',
+                        "data": 'due_date',
+                        type: 'num',
+                        render: {
+                            _: 'display',
+                            sort: 'timestamp'
+                        }
                     },
                     {
                         "data": "action"

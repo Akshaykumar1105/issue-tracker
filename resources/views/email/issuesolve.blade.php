@@ -74,7 +74,7 @@
 
                 <p>Your issue update</p>
             </div>
-            <p class="emailDody">Hello, {{$issue->email}}</p>
+            <p class="emailDody">Hello {{$issue->email}},</p>
 
             <p>We are pleased to inform you that the issue you reported has been successfully resolved. Here are the details:</p>
             <ul>

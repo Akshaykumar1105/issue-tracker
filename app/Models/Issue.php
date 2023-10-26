@@ -25,6 +25,20 @@ class Issue extends Model
         'manager_id'
     ];
 
+
+    public function scopeFilter($query, $request)
+    {
+        if ($request->filter) {
+            $query->where('priority', $request->filter);
+        }
+        if ($request->duedate) {
+            $query->where('due_date', $request->duedate);
+        }
+        if ($request->company) {
+            $query->where('company_id', $request->company);
+        }
+    }
+
     public function manager(){
         return $this->belongsTo(User::class, 'manager_id');
     }

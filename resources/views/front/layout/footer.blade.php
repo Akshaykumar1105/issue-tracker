@@ -6,15 +6,15 @@
 				<div class="footer-widget">
 					<h5 class="mb-4 text-primary font-secondary">Service</h5>
 					<ul class="list-unstyled">
-						<li class="mb-2"><a href="service-details.html">Personal loans</a>
+						<li class="mb-2"><a href="#">Personal loans</a>
 						</li>
-						<li class="mb-2"><a href="service-details.html">Home Equity Loans</a>
+						<li class="mb-2"><a href="#">Home Equity Loans</a>
 						</li>
-						<li class="mb-2"><a href="service-details.html">Student Loans</a>
+						<li class="mb-2"><a href="#">Student Loans</a>
 						</li>
-						<li class="mb-2"><a href="service-details.html">Mortgage Loans</a>
+						<li class="mb-2"><a href="#">Mortgage Loans</a>
 						</li>
-						<li class="mb-2"><a href="service-details.html">Payday Loans</a>
+						<li class="mb-2"><a href="#">Payday Loans</a>
 						</li>
 					</ul>
 				</div>
@@ -38,9 +38,9 @@
 				<div class="footer-widget">
 					<h5 class="mb-4 text-primary font-secondary">Help</h5>
 					<ul class="list-unstyled">
-						<li class="mb-2"><a href="contact.html">Contact Us</a>
+						<li class="mb-2"><a href="#">Contact Us</a>
 						</li>
-						<li class="mb-2"><a href="faq.html">FAQs</a>
+						<li class="mb-2"><a href="#">FAQs</a>
 						</li>
 					</ul>
 				</div>
@@ -55,19 +55,19 @@
 			</div>
 			<div class="col-lg-4 col-md-6 mt-4 mt-lg-0">
 				<ul class="list-unstyled list-inline mb-0 text-lg-center">
-					<li class="list-inline-item me-4"><a class="text-black" href="privacy-policy.html">Privacy Policy</a>
+					<li class="list-inline-item me-4"><a class="text-black" href="#">Privacy Policy</a>
 					</li>
-					<li class="list-inline-item me-4"><a class="text-black" href="terms.html">Terms &amp; Conditions</a>
+					<li class="list-inline-item me-4"><a class="text-black" href="#">Terms &amp; Conditions</a>
 					</li>
 				</ul>
 			</div>
 			<div class="col-lg-4 col-md-6 text-md-end mt-4 mt-md-0">
 				<ul class="list-unstyled list-inline mb-0 social-icons">
-					<li class="list-inline-item me-3"><a title="Explorer Facebook Profile" class="text-black" href="https://facebook.com/"><i class="fab fa-facebook-f"></i></a>
+					<li class="list-inline-item me-3"><a title="Explorer Facebook Profile" class="text-black" href="#"><i class="fab fa-facebook-f"></i></a>
 					</li>
-					<li class="list-inline-item me-3"><a title="Explorer Twitter Profile" class="text-black" href="https://twitter.com/"><i class="fab fa-twitter"></i></a>
+					<li class="list-inline-item me-3"><a title="Explorer Twitter Profile" class="text-black" href="#"><i class="fab fa-twitter"></i></a>
 					</li>
-					<li class="list-inline-item me-3"><a title="Explorer Instagram Profile" class="text-black" href="https://instagram.com/"><i class="fab fa-instagram"></i></a>
+					<li class="list-inline-item me-3"><a title="Explorer Instagram Profile" class="text-black" href="#"><i class="fab fa-instagram"></i></a>
 					</li>
 				</ul>
 			</div>

@@ -26,7 +26,7 @@ class CompanyService
         $this->companyModel->fill($request->all())->save();
         $company = $this->companyModel::where('email', $request->email)->first();
         $email = $company->email;
-        JobsIssueReportSubmission::dispatchSync($email);
+        JobsIssueReportSubmission::dispatch($email);
         return [
             'success' => __('entity.entityCreated', ['entity' => 'Company']),
             'route' => route('admin.company.index')

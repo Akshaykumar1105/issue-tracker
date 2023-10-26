@@ -136,11 +136,22 @@
                                 });
                                 return `<div style="font-size: 15px;" class="fw-normal">${status}</div>`;
                             } else {
-                                const statusOptions = [
-                                    {value: 'OPEN',label: 'Open'},
-                                    {value: 'IN_PROGRESS',label: 'In Progress'},
-                                    {value: 'ON_HOLD',label: 'On Hold'},
-                                    {value: 'SEND_FOR_REVIEW',label: 'Send For Review'}
+                                const statusOptions = [{
+                                        value: 'OPEN',
+                                        label: 'Open'
+                                    },
+                                    {
+                                        value: 'IN_PROGRESS',
+                                        label: 'In Progress'
+                                    },
+                                    {
+                                        value: 'ON_HOLD',
+                                        label: 'On Hold'
+                                    },
+                                    {
+                                        value: 'SEND_FOR_REVIEW',
+                                        label: 'Send For Review'
+                                    }
                                 ];
                                 let optionsHtml = '';
                                 for (const option of statusOptions) {

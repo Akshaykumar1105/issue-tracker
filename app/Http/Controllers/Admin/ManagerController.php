@@ -24,7 +24,7 @@ class ManagerController extends Controller{
         if ($request->ajax()) {
             $query = $this->managerService->collection($companyId = null,$request);
             return DataTables::eloquent($query)
-                ->orderColumn('DT_RowIndex', function ($query, $order) {
+                ->orderColumn('name', function ($query, $order) {
                     $query->orderBy('id', $order);
                 })
                 ->addIndexColumn()
@@ -69,9 +69,13 @@ class ManagerController extends Controller{
         return $this->managerService->store($request);
     }
 
-    public function edit($id){
+    public function edit($id, Request $request){
         $user = User::findOrFail($id);
         $companies = Company::where('is_active', config('site.status.active'))->get();
+        if($request->ajax()){
+            $hrs = User::where('company_id', $request->companyId);
+            return $hrs;
+        }
         return view('admin.user.create', ['companies' => $companies, 'user' => $user]);
     }
 

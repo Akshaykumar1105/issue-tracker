@@ -14,37 +14,31 @@ class CouponController extends Controller
 
     protected $discountCouponService;
 
-    public function __construct(CouponService $discountCouponService){
+    public function __construct(CouponService $discountCouponService)
+    {
         $this->discountCouponService = $discountCouponService;
     }
 
-    public function index(Request $request){
-        if($request->ajax()){
+    public function index(Request $request)
+    {
+        if ($request->ajax()) {
             $query = $this->discountCouponService->collection();
             return DataTables::of($query)
-                ->orderColumn('DT_RowIndex', function ($query, $order) {
+                ->orderColumn('code', function ($query, $order) {
                     $query->orderBy('id', $order);
                 })
-                ->addColumn('discount', function ($row) {
+                ->editColumn('discount', function ($row) {
                     if ($row->discount_type !== config('site.discount.flat')) {
                         return $row->discount . config('site.percentage');
                     } else {
-                        return config('site.currency') . $row->discount ;
+                        return config('site.currency') . $row->discount;
                     }
                 })
-                ->addColumn('activeAt', function ($row) {
-                    if ($row->active_at) {
-                        return date( config('site.date'), strtotime($row->active_at));
-                    } else {
-                        return 'Not select due date';
-                    }
+                ->editColumn('active_at', function ($row) {
+                    return date(config('site.date'), strtotime($row->active_at));
                 })
-                ->addColumn('expireAt', function ($row) {
-                    if ($row->expire_at) {
-                        return date( config('site.date'), strtotime($row->expire_at));
-                    } else {
-                        return 'Not select due date';
-                    }
+                ->editColumn('expire_at', function ($row) {
+                    return date(config('site.date'), strtotime($row->expire_at));
                 })
                 ->addColumn('action', function ($row) {
                     $edit = route('admin.discount-coupon.edit', ['discount_coupon' => $row->id]);
@@ -59,24 +53,29 @@ class CouponController extends Controller
         return view('admin.coupon.index');
     }
 
-    public function create(){
+    public function create()
+    {
         return view('admin.coupon.create');
     }
 
-    public function store(Store $request){
+    public function store(Store $request)
+    {
         return $this->discountCouponService->store($request);
     }
 
-    public function edit(string $id){
+    public function edit(string $id)
+    {
         $coupon = $this->discountCouponService->edit($id);
         return view('admin.coupon.create', ['coupon' => $coupon]);
     }
 
-    public function update(Update $request, string $id){
+    public function update(Update $request, string $id)
+    {
         return $this->discountCouponService->update($request, $id);
     }
 
-    public function destroy(string $id){
+    public function destroy(string $id)
+    {
         return $this->discountCouponService->destory($id);
     }
 }

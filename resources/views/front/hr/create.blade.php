@@ -18,6 +18,18 @@
             margin-bottom: 0.5rem;
             color: #000;
         }
+
+        .form-control:not(textarea) {
+            height: 50px;
+        }
+
+        textarea.form-control {
+            height: 80px !important;
+        }
+
+        .form-group .label-filed {
+            z-index: 1;
+        }
     </style>
 @endsection
 @section('content')
@@ -39,7 +51,6 @@
                 <label for="email" class="form-label label-filed">Email address</label>
                 <input type="email" value="{{ old('email') }}" class="form-control shadow-none" name="email"
                     id="email">
-
             </div>
 
             <div class="form-group mb-4">
@@ -55,26 +66,25 @@
                     name="password_confirmation" id="password_confirmation">
             </div>
 
-            <div class="d-flex justify-space-between" style="gap: 10px;">
-                <div class="form-group mb-4">
-                    <label for="company_id" class="form-label label-filed">Company</label>
-                    <select class="form-control" value="{{ old('company_id') }}" name="company_id" id='company_id'
-                        style="width: 330px;appearance: revert;padding-right: 65px;">
-                        <option value="">Select Company</option>
-                        @foreach ($companies as $company)
-                            <option value="{{ $company->id }}">{{ $company->name }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="form-group mb-4 " style="flex-grow: 1;">
-                    <label for="mobile" class="form-label label-filed">Mobile</label>
-                    <input type="number" value="{{ old('mobile') }}" class="form-control shadow-none" name="mobile"
-                        id="mobile">
-                </div>
+            <div class="form-group mb-4">
+                <label for="company_id" class="form-label label-filed">Company</label>
+                <select class="form-control" value="{{ old('company_id') }}" name="company_id" id='company_id'
+                    style="appearance: revert;padding-right: 65px;">
+                    <option value="">Select Company</option>
+                    @foreach ($companies as $company)
+                        <option value="{{ $company->id }}">{{ $company->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div class="form-group mb-4 " style="flex-grow: 1;">
+                <label for="mobile" class="form-label label-filed">Mobile</label>
+                <input type="number" value="{{ old('mobile') }}" class="form-control shadow-none" name="mobile"
+                    id="mobile">
             </div>
 
             <div class="form-group col-span-6 mb-4" style="width: 100%;">
-                <label for="profile_img" class="form-label">{{ __('messages.form.img') }}</label>
+                <label for="profile_img" class="form-label label-filed">{{ __('messages.form.img') }}</label>
                 <div class="custom-file ">
                     <input name="avatar" type="file" id="profile_img" class="dropify" data-height="100" />
                 </div>
@@ -104,7 +114,7 @@
 
             $.validator.addMethod("valueNotEquals", function(value, element, arg) {
                 return arg !== value;
-            }, "{{__('validation.valueNotEquals', ['attribute' => 'company'])}}");
+            }, "{{ __('validation.valueNotEquals', ['attribute' => 'company']) }}");
 
             $.validator.addMethod("filesize", function(value, element, param) {
                 var fileSize = element.files[0].size; // Get the file size in bytes
@@ -151,8 +161,8 @@
                     },
                     mobile: {
                         required: true,
-                        number:true,
-                        validNumber:true,
+                        number: true,
+                        validNumber: true,
                         digits: true,
                         minlength: 10,
                         maxlength: 10,
@@ -173,17 +183,17 @@
                     },
                     password_confirmation: {
                         required: "Please confirm your password.",
-                        equalTo: "Passwords do not match.",
+                        equalTo: "Passwords does not match.",
                     },
                     company_id: {
                         required: "{{ __('validation.required', ['attribute' => 'company']) }}",
                     },
                     number: {
-                        required: "{{__('validation.required', ['attribute' => 'number'])}}",
-                        number: "{{__('validation.valid' , ['attribute' => 'number'])}}",
+                        required: "{{ __('validation.required', ['attribute' => 'number']) }}",
+                        number: "{{ __('validation.valid', ['attribute' => 'number']) }}",
                         digits: "The number must be a 10 digits",
-                        minlength:  "{{__('validation.min_digits', ['attribute' => 'number', 'min' => '10'])}}",
-                        maxlength: "{{__('validation.max_digits', ['attribute' => 'number', 'max' => '10'])}}",
+                        minlength: "{{ __('validation.min_digits', ['attribute' => 'number', 'min' => '10']) }}",
+                        maxlength: "{{ __('validation.max_digits', ['attribute' => 'number', 'max' => '10']) }}",
                     },
                 },
                 submitHandler: function(form) {
@@ -204,7 +214,8 @@
                             }
                             toastr.success(response.success);
                             setTimeout(function() {
-                                window.location.href = "{{route('admin.hr.index')}}";
+                                window.location.href =
+                                    "{{ route('admin.hr.index') }}";
                             }, 2000);
                             $('#issueSubmit').prop("disabled", false);
                         },

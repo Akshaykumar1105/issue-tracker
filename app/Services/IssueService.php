@@ -89,7 +89,7 @@ class IssueService
                 $email = $issue->email;
                 // Issue resolve email
                 try {
-                    JobsIssueSolve::dispatchSync([
+                    JobsIssueSolve::dispatch([
                         'email' => $email,
                         'issue' => $issue,
                     ]);
@@ -97,18 +97,19 @@ class IssueService
                     Log::info($e);
                 }
             } else {
-                if ($issue->manager_id !== $request->managerId || $issue->manager_id !== $managerId) {
+                if ($issue->manager_id !== $request->manager_id) {
                     $user = User::find($issue->manager_id);
                     // Assign manager email
                     try {
-                        AssignManager::dispatchSync($user->email, $issue);
+                        AssignManager::dispatch($user->email, $issue);
                     } catch (Exception $e) {
                         Log::info($e);
                     }
                 }
                 try {
+                    $email = $issue->email;
                     // issue creater email
-                    SendIssueCreatorNotification::dispatchSync($issue->email, $user);
+                    SendIssueCreatorNotification::dispatch($email, $user);
                 } catch (Exception $e) {
                     Log::info($e);
                 }
@@ -118,7 +119,7 @@ class IssueService
                 $user = $issue->hr;
                 // issue statsu change email
                 try {
-                    IssueStatusChanged::dispatchSync($issue, $user);
+                    IssueStatusChanged::dispatch($issue, $user);
                 } catch (Exception $e) {
                     Log::info($e);
                 }
@@ -143,12 +144,12 @@ class IssueService
         $query = Issue::with('company');
         switch ($request->table) {
             case config('site.table.admin'):
-                $query->with(['manager', 'hr']);
+                $query->with(['manager', 'hr'])->filter($request);
                 break;
 
             case config('site.table.hr'):
                 $id = auth()->user()->id;
-                $query->with('manager')->where('hr_id', $id);
+                $query->with('manager')->where('hr_id', $id)->filter($request);
 
                 if ($request->type == 'pending') {
                     $query->whereNull(['due_date', 'manager_id']);
@@ -158,28 +159,14 @@ class IssueService
                 break;
 
             case config('site.table.manager'):
-                $companyId = auth()->user()->id;
-                $query->where('manager_id', $companyId);
+                $managerId = auth()->user()->id;
+                $query->where('manager_id', $managerId)->filter($request);
 
                 if ($request->type == 'pending') {
                     $query->where('status', '<>', 'SEND_FOR_REVIEW')->where('status', '<>', 'COMPLETED');
                 }
                 break;
         }
-        $this->filters($request, $query);
         return $query;
-    }
-
-    public function filters($request, $query)
-    {
-        if ($request->filter) {
-            $query->where('priority', $request->filter);
-        }
-        if ($request->duedate) {
-            $query->where('due_date', $request->duedate);
-        }
-        if ($request->company) {
-            $query->where('company_id', $request->company);
-        }
     }
 }

@@ -172,6 +172,10 @@
                 return this.optional(element) || /^[a-zA-Z\s]+$/i.test(value);
             }, "Please enter letters only (no special characters or numbers).")
 
+            $.validator.addMethod("validNumber", function(value, element) {
+                return !/0{10}/.test(value);
+            }, "{{ __('validation.valid', ['attribute' => 'mobile']) }}");
+
             $("#userView").validate({
                 errorClass: "text-danger fw-normal",
                 rules: {
@@ -186,6 +190,7 @@
                     mobile: {
                         required: true,
                         number: true,
+                        validNumber: true,
                         minlength: 10,
                         maxlength: 10,
                         digits: true,
@@ -289,7 +294,7 @@
                     },
                     password_confirmation: {
                         required: "Please confirm your password",
-                        equalTo: "Passwords do not match"
+                        equalTo: "Passwords does not match"
                     }
                 },
                 submitHandler: function(form) {
@@ -302,6 +307,7 @@
                                 closeButton: true,
                                 progressBar: true,
                             }
+                            console.log(response);
                             toastr.success(response.success);
                             $(form).validate().resetForm();
                             form.reset();
@@ -312,7 +318,7 @@
                                 closeButton: true,
                                 progressBar: true,
                             }
-                            toastr.error(response.message);
+                            toastr.error(response.error);
                             $(form).validate().resetForm();
                             form.reset();
                         },

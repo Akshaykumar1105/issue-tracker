@@ -77,7 +77,7 @@
                     <p>{{ $issue->status == 'SEND_FOR_REVIEW' ? 'Issue Report Submission' : 'Issue Status Changed' }}
                     </p>
                 </div>
-                <p class="emailDody">Hello ,{{ $issue->hr->name }}</p>
+                <p class="emailDody">Hello {{ $issue->hr->name }},</p>
 
                 <p>A {{ $issue->manager->name }} has changed the status of an issue to "Send
                     for Review." Please review the issue details below:</p>
@@ -104,7 +104,7 @@
                     <p>{{ $issue->status == 'SEND_FOR_REVIEW' ? 'Issue Report Submission' : 'Issue Status Changed' }}
                     </p>
                 </div>
-                <p class="emailDody">Hello ,{{ $issue->hr->name }}</p>
+                <p class="emailDody">Hello {{ $issue->hr->name }},</p>
 
                 <p>A {{ $issue->manager->name }} has updated the status of the issue to {{ ucwords(strtolower(str_replace('_', ' ', $issue->status))) }}. Below are the details of the issue:</p>
 

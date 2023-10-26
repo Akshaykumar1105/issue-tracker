@@ -26,7 +26,7 @@ class HrController extends Controller
         if ($request->ajax()) {
             $query = $this->hrService->collection($companyId = null, $request);
             return DataTables::eloquent($query)
-                ->orderColumn('DT_RowIndex', function ($query, $order) {
+                ->orderColumn('name', function ($query, $order) {
                     $query->orderBy('id', $order);
                 })
                 ->addIndexColumn()

@@ -82,7 +82,7 @@ class AuthService
                 'created_at' => Carbon::now()
             ]);
             try {
-                ResetPassword::dispatchSync([
+                ResetPassword::dispatch([
                     'email' => $request->email,
                     'token' => $token,
                 ]);
@@ -106,7 +106,7 @@ class AuthService
         User::where('email', $email)->update(['password' => Hash::make($request->password)]);
 
         try {
-            ConfirmPassword::dispatchSync($email);
+            ConfirmPassword::dispatch($email);
         } catch (Exception $e) {
             Log::info($e);
         }

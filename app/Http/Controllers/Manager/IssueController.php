@@ -22,16 +22,17 @@ class IssueController extends Controller
         $this->issueService = $issueService;
     }
 
-    public function index(Request $request){
+    public function index(Request $request)
+    {
         if ($request->ajax()) {
             $query = $this->issueService->collection($request);
             return DataTables::of($query)->addIndexColumn()
-                ->orderColumn('DT_RowIndex', function ($query, $order) {
+                ->orderColumn('title', function ($query, $order) {
                     $query->orderBy('id', $order);
                 })
                 ->addColumn('dueDate', function ($row) {
                     if ($row->due_date) {
-                        return date( config('site.date'), strtotime($row->due_date));
+                        return date(config('site.date'), strtotime($row->due_date));
                     } else {
                         return 'Not select due date';
                     }
@@ -47,11 +48,13 @@ class IssueController extends Controller
         return view('manager.issue.index');
     }
 
-    public function edit(Issue $issue){
+    public function edit(Issue $issue)
+    {
         return view('manager.issue.create', ['issue' => $issue]);
     }
 
-    public function update($id, Update $request){
+    public function update($id, Update $request)
+    {
         return $this->issueService->update($id, $request);
     }
 }

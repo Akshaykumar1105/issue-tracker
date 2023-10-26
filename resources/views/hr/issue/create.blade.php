@@ -34,7 +34,7 @@
                                 </div>
 
                                 @if ($issue->status !== 'COMPLETED')
-                                    <div class="col-md-4 form-group">
+                                    <div class="col-md-12 form-group">
                                         <label for="email" class="form-label fw-bold">Priority<span
                                                 class="text-danger ms-1">*</span></label>
                                         <div class="form-check">
@@ -57,11 +57,11 @@
                                         <span id="priority-error" class="text-danger"></span>
                                     </div>
 
-                                    <div class="col-md-4 form-group">
+                                    <div class="col-md-12 form-group">
                                         <label for="manager_id" class="form-label fw-bold">Assign To<span
                                                 class="text-danger ms-1">*</span></label>
                                         <select name="manager_id" class="d-block form-control" style="appearance: revert;">
-                                            <option value="default">Select Manager</option>
+                                            <option value="">Select Manager</option>
                                             @foreach ($managers as $manager)
                                                 <option value='{{ $manager->id }}'
                                                     {{ $issue->manager_id == $manager->id ? 'selected' : '' }}>
@@ -70,7 +70,7 @@
                                         </select>
                                     </div>
 
-                                    <div class="col-md-4 form-group">
+                                    <div class="col-md-12 form-group">
                                         <label class="d-block font-weight-bold ">Due Date<span
                                                 class="text-danger ms-1">*</span></label>
                                         <input id="due_date" type="date" data-date-format="yyyy-mm-dd" name="due_date"
@@ -78,12 +78,12 @@
                                             value="{{ $issue->due_date }}" placeholder="Select due date">
                                     </div>
 
-                                    <div class="col-md-4 form-group">
+                                    <div class="col-md-12 form-group">
                                         <label for="email" class="form-label fw-bold">Status<span
                                                 class="text-danger ms-1">*</span></label>
                                         <select name="status" class="d-block form-control form-control"
-                                            style="appearance: auto;">
-                                            <option value="default">Select Status</option>
+                                            style="appearance: auto; font-size: 17px;">
+                                            <option value="">Select Status</option>
                                             <option vlaue=OPEN data-status="OPEN"
                                                 {{ $issue->status == 'OPEN' ? 'selected' : '' }}>Open</option>
                                             <option vlaue=IN_PROGRESS data-status="IN_PROGRESS"
@@ -101,7 +101,7 @@
                                         </select>
                                     </div>
 
-                                    <div class="col-md-4 form-group">
+                                    <div class="col-md-12 form-group">
                                         <label class="d-block font-weight-bold ">Comment</label>
                                         <input id="body" data-date-format="yyyy-mm-dd" name="body"
                                             class="d-block form-control" placeholder="Enter your comment">
@@ -125,7 +125,6 @@
                                         <p class="">{{ date(config('site.date'), strtotime($issue->due_date)) }}</p>
                                     </div>
                                 @endif
-
 
                                 <div class="col-md-4 d-flex " style="gap:10px;">
                                     @if ($issue->status == 'COMPLETED')
@@ -320,24 +319,20 @@
                 }
             });
 
-            $.validator.addMethod("valueNotEquals", function(value, element, arg) {
-                return arg !== value;
-            }, "Please select a company from the list.");
+            
 
             $("#issueEdit").validate({
-                errorElement: "span",
-                errorClass: "text-danger fw-normal",
+                errorElement: "p",
+                errorClass: "invalid-feedback fs-6",
                 rules: {
                     priority: {
                         required: true
                     },
                     status: {
                         required: true,
-                        valueNotEquals: "default"
                     },
                     manager_id: {
                         required: true,
-                        valueNotEquals: "default"
                     },
                     due_date: {
                         required: true

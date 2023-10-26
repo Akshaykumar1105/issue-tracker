@@ -4,6 +4,7 @@ namespace App\Http\Requests\User\Issue;
 
 use App\Models\Issue;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Routing\Route;
 
 class Update extends FormRequest
 {
@@ -26,17 +27,16 @@ class Update extends FormRequest
             'status' => 'required|in:OPEN,IN_PROGRESS,ON_HOLD,SEND_FOR_REVIEW,COMPLETED',
         ];
         if (auth()->user()->hasRole(config('site.role.hr'))) {
-            $issue = Issue::find($this->issue);
-    
-            if (route('hr.issue.index')) {
+            if ( request()->managerId) {
                 return $rules;
             }
             return [
                 'manager_id' => 'required|exists:users,id',
                 'priority' => 'required',
-                'due_date' => 'required|date',
+                'due_date' => 'required|date|after_or_equal:today',
                 'status' => 'required|in:OPEN,IN_PROGRESS,ON_HOLD,SEND_FOR_REVIEW,COMPLETED',
             ];
+
         }
         return $rules;
     }

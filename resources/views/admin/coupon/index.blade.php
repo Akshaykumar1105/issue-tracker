@@ -95,10 +95,12 @@
                         'name' : "discount_type"
                     },
                     {
-                        "data": "activeAt",
+                        "data": "active_at",
+                        
                     },
                     {
-                        "data": "expireAt",
+                        "data": "expire_at",
+                        
                     },
                     {
                         "data": "action",

@@ -74,7 +74,7 @@
 
                 <p>Your credentials</p>
             </div>
-            <p>Hello, {{$user->name}}</p>
+            <p>Hello {{$user->name}},</p>
             <p>Here are the login credentials for you:</p>
 
             <div class="credentials">

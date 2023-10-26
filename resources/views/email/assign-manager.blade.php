@@ -74,7 +74,7 @@
 
                 <p>Assign Manager</p>
             </div>
-            <p class="emailDody">Hello, {{$issue->manager->name}}</p>
+            <p class="emailDody">Hello {{$issue->manager->name}},</p>
 
             <p>{{$issue->hr->name}} HR has assigned you as the manager for the following issue:</p>
 
@@ -82,6 +82,8 @@
                 <li><strong>Issue Title:</strong> {{ $issue->title }}</li>
                 <li><strong>Description:</strong> {{ $issue->description }}</li>
                 <li><strong>Priority:</strong> {{ ucwords(strtolower($issue->priority)) }}</li>
+                <li><strong>Status:</strong> {{ str_replace('_', ' ', ucwords(strtolower($issue->status))) }}</li>
+
                 <li><strong>Due Date:</strong> {{ date(config('site.date'), strtotime($issue->due_date)) }}</li>
                 <li><strong>Company Name:</strong> {{ $issue->company->name }}</li>
             </ul>

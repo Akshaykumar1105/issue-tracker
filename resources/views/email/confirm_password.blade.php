@@ -76,7 +76,7 @@
             </div>
 
             <div class="content">
-                <p class="message">Hello, {{ $user->name }}</p>
+                <p class="message">Hello {{ $user->name }},</p>
                 <p class="message">We are writing to inform you that your password has been successfully reset.</p>
                 <p>If you did not request this change, please contact our support team immediately <a href="mailto:support@issuetracker.com">support@issuetracker.com</a>.</p>
                 <div class="button-container">

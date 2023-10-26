@@ -156,7 +156,7 @@
                     },
                     password_confirmation: {
                         required: "Please confirm your password.",
-                        equalTo: "Passwords do not match.",
+                        equalTo: "Passwords does not match.",
                     },
                     number: {
                         required: "{{ __('validation.required', ['attribute' => 'number']) }}",

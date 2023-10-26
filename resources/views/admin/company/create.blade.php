@@ -135,7 +135,7 @@
             }, "{{ __('validation.valid', ['attribute' => 'mobile']) }}");
 
             $("#companyRegister").validate({
-                errorClass: "text-danger font-weight-normal",
+                errorClass: "invalid-feedback fs-6",
                 rules: {
                     name: {
                         required: true,

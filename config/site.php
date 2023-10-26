@@ -35,5 +35,13 @@ return [
     'date' => 'jS M Y',
     'date_time' => 'jS M Y H:i A',
     'time' => 'h:i A',
+
+    'issue_status' => [
+        'open' => 'OPEN',
+        'in_progress' => 'IN_PROGRESS',
+        'on_hold' => 'ON_HOLD',
+        'send_for_review' => 'SEND_FOR_REVIEW',
+        'completed' => 'COMPLETED'
+    ],
 ];
 ?>

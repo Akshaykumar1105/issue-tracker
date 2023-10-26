@@ -61,7 +61,7 @@ class ManagerService
 
         if (isset($this->user)) {
             try {
-                JobsManagerCredential::dispatchSync($this->user, $password);
+                JobsManagerCredential::dispatch($this->user, $password);
             } catch (Exception $e) {
                 Log::info($e);
             }

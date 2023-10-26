@@ -7,6 +7,12 @@
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link href="{{ asset('asset/css/comment.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('asset/css/loader.css') }}">
+    <style>
+        .selectStatus{
+            background: #007bff;
+            color: #fff;
+        }
+    </style>
 @endsection
 @section('content')
     <x-loader />
@@ -17,7 +23,7 @@
             </div>
             <div class="card-body">
                 <div class="row">
-                    <div class="col-12 col-md-12 ">
+                    <div class="col-12 col-md-12">
                         <div class="row">
                             @php
                                 $issueId = $issue->id;
@@ -50,7 +56,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-md-3 form-group">
+                                <div class="col-md-12 form-group">
                                     <label for="email" class="form-label fw-bold">Status<span
                                             class="text-danger ms-1">*</span></label>
                                     @if ($issue->status == 'COMPLETED' || $issue->status == 'SEND_FOR_REVIEW')
@@ -60,7 +66,7 @@
                                             <option value="default">Select Status</option>
                                             <option data-status="OPEN" value="OPEN"
                                                 {{ $issue->status == 'OPEN' ? 'selected' : '' }}>Open</option>
-                                            <option vlaue="IN_PROGRESS" data-status="IN_PROGRESS"
+                                            <option vlaue="IN_PROGRESS" class="{{ $issue->status == 'IN_PROGRESS' ? 'selectStatus' : '' }}" data-status="IN_PROGRESS"
                                                 {{ $issue->status == 'IN_PROGRESS' ? 'selected' : '' }}>In Progress
                                             </option>
                                             <option value="ON_HOLD" data-status="ON_HOLD"
@@ -73,7 +79,7 @@
                                 </div>
                                 @if ($issue->status == 'COMPLETED' || $issue->status == 'SEND_FOR_REVIEW')
                                 @else
-                                    <div class="col-md-4 form-group">
+                                    <div class="col-md-12 form-group">
                                         <label class="d-block font-weight-bold ">Comment</label>
                                         <input id="body" name="body" class="d-block form-control"
                                             placeholder="Enter your comment">

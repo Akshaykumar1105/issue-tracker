@@ -10,6 +10,13 @@
             margin-bottom: 0.5rem;
             color: #000;
         }
+        .form-control:not(textarea) {
+            height: 45px;
+        }
+
+        textarea.form-control {
+            height: 80px !important;
+        }
     </style>
 @endsection
 @section('content')
@@ -36,7 +43,7 @@
 
                 <div class="col-lg-12 mb-4 pb-2">
                     <div class="form-group">
-                        <label for="description" class="form-label">Issue Description<span
+                        <label for="description" class="form-label">Description<span
                                 class="text-danger ms-1">*</span></label>
                         <textarea id="description" class="form-control shadow-none" value="{{ old('description') }}" name="description" id="description"
                             style="display: block;width: 100%;padding: 0.375rem 0.75rem;font-size: 1rem;font-weight: 400;line-height: 1.5;background-color: #fff;background-clip: padding-box;-webkit-appearance: none;-moz-appearance: none;appearance: none;border-radius: 0.25rem;transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;"
@@ -45,7 +52,7 @@
                 </div>
                 <div class="col-lg-12 mb-4 pb-2">
                     <div class="form-group">
-                        <label for="hr" class="form-label">Human resources<span
+                        <label for="hr" class="form-label">Human Resources<span
                                 class="text-danger ms-1">*</span></label>
                         <div style="position: relative;">
                             <select class="form-control" value="{{ old('company') }}" name="hr_id" id="hr">
@@ -62,7 +69,7 @@
 
                 <div class="col-lg-12 mb-4 pb-2">
                     <div class="form-group">
-                        <label for="email" class="form-label">E-mail address<span
+                        <label for="email" class="form-label">E-mail<span
                                 class="text-danger ms-1">*</span></label>
                         <input type="email" value="{{ old('email') }}" class="form-control shadow-none" name="email"
                             id="email" placeholder="Enter your E-mail">

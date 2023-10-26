@@ -74,7 +74,7 @@
 
                 <p>Create Your Issues</p>
             </div>
-            <p class="emailDody">Hello, {{$user->name}}</p>
+            <p class="emailDody">Hello {{$user->name}},</p>
 
             <p>Here's how you can submit issues:</p>
 

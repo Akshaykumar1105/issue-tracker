@@ -133,7 +133,7 @@
                     },
                     password_confirmation: {
                         required: "Please confirm your password.",
-                        equalTo: "Passwords do not match."
+                        equalTo: "Passwords does not match."
                     }
                 },
                 submitHandler: function(form) {
