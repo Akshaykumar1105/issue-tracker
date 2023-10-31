@@ -40,13 +40,15 @@
                 </div>
                 <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
                     <h1 class="lead fw-normal mb-0 me-3 display-6 fw-bold">Sign In</h1>
-                    <form class="mt-3" role="form" method="POST" id="userlogin" action="{{ route('login') }}">
+                    <form style="width:400px;" class="mt-3" role="form" method="POST" id="userlogin"
+                        action="{{ route('login') }}">
 
                         @csrf
 
                         <!-- Email input -->
                         <div class="form-outline mb-3">
-                            <label class="form-label mb-3" for="email">Email<span class="text-danger">*</span></label>
+                            <label class="form-label mb-3" for="email">Email<span
+                                    class="text-danger">*</span></label>
                             <input type="email" name="email" value="{{ old('email') }}" id="email"
                                 class="form-control" />
                         </div>
@@ -62,8 +64,12 @@
                             </div>
 
                             <div class="mt-4 d-flex justify-content-between align-items-center">
-                                <button type="submit" class="btn btn-primary btn-block mb-2">Sign in</button>
-                                <a href="{{ route('forgot-password') }}"style="text-decoration: none;">Forgot Password?</a>
+                                <div>
+                                    <button type="submit" class="btn btn-primary btn-block mb-2">Sign in</button>
+                                    <a href="{{route('home')}}" class="btn btn-outline-secondary btn-block mb-2">Home</a>
+                                </div>
+                                <a href="{{ route('forgot-password') }}"style="text-decoration: none;">Forgot
+                                    Password?</a>
                             </div>
                     </form>
                 </div>
@@ -102,7 +108,7 @@
             $.validator.addMethod("pattern", function(value, element) {
                     return /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/.test(value);
                 },
-                "Password must include at least one uppercase letter, one lowercase letter, one digit, and one special character."
+                "Please enter a strong password."
             );
 
             $("#userlogin").validate({
@@ -114,14 +120,14 @@
                     },
                     password: {
                         required: true,
-                        pattern:true,
+                        pattern: true,
                         minlength: 6,
                     },
                 },
                 messages: {
                     email: {
-                        required: "{{__('validation.required', ['attribute' => 'email'])}}",
-                        email: "{{__('validation.valid' , ['attribute' => 'email'])}}",
+                        required: "{{ __('validation.required', ['attribute' => 'email']) }}",
+                        email: "{{ __('validation.valid', ['attribute' => 'email']) }}",
                     },
                     password: {
                         required: "Please enter your password.",

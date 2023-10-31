@@ -2,6 +2,16 @@
 @section('style')
     <link href="{{ asset('asset/css/datatables.min.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('asset/css/dropify.min.css') }}">
+    <style type="text/css">
+        label.error {
+            float: none;
+            color: red;
+            font-size: 15px;
+            font-weight: 400 !important;
+            padding-left: .3em;
+            vertical-align: top;
+        }
+    </style>
 @endsection
 @section('content')
     <x-loader />
@@ -9,7 +19,7 @@
         <div class="container-fluid">
             <div class="row">
                 <!-- left column -->
-                <div class="col-md-11 mx-auto mt-3">
+                <div class="col-md-12 mx-auto mt-3">
                     <!-- general form elements -->
                     <div class="card card-primary">
                         <div class="card-header">
@@ -67,8 +77,9 @@
 
                             <div class="form-group mb-4">
                                 <label for="company_id" class="form-label">Company</label>
-                                <select class="form-control" value="{{ old('company_id') }}" name="company_id"
-                                    id='company_id' style="appearance: revert;padding-right: 65px;">
+                                <select class="form-control" data-hr="{{ isset($user) ? $user->parent_id : '0' }}"
+                                    value="{{ old('company_id') }}" name="company_id" id='company_id'
+                                    style="appearance: revert;padding-right: 65px;">
                                     <option value="">Select Company</option>
                                     @foreach ($companies as $company)
                                         <option value="{{ $company->id }}"
@@ -84,7 +95,7 @@
                                     <select id="selectHr" name="hr_id" class="form-control"
                                         style="appearance: revert;padding-right: 65px;">
                                         <option value="">Select Hr</option>
-                                        
+
                                     </select>
                                 </div>
                             @else
@@ -113,7 +124,7 @@
                                 <label for="profile_img" class="form-label">{{ __('messages.form.img') }}</label>
                                 <div class="custom-file ">
                                     <input name="avatar" type="file" id="profile_img" class="dropify" data-height="100"
-                                        data-default-file="{{ isset($manager) && $manager->getMedia('user')->isNotEmpty() ? asset('storage/user/' . $manager->getMedia('user')->first()->filename . '.' . $manager->getMedia('user')->first()->extension) : asset('storage/user/user.png') }}" />
+                                        data-default-file="{{ isset($user) && $user->getMedia('user')->isNotEmpty() ? asset('storage/user/' . $user->getMedia('user')->first()->filename . '.' . $user->getMedia('user')->first()->extension) : asset('storage/user/user.png') }}" />
                                 </div>
                             </div>
 
@@ -153,10 +164,13 @@
             let currentRoute = "{{ Route::currentRouteName() }}";
 
             if (currentRoute == 'admin.manager.create' || currentRoute == 'admin.manager.edit') {
+
                 $(document).on('change', '#company_id', function() {
                     companyId = $(this).val();
+                    let hr = $(this).attr('data-hr');
                     var condition = true;
-                    var url = condition ? "{{ route('admin.manager.create') }}" : "{{ route('admin.manager.edit', ['manager' => ':id'])}}".replace(':id', companyId)
+                    var url = condition ? "{{ route('admin.manager.create') }}" :
+                        "{{ route('admin.manager.edit', ['manager' => ':id']) }}".replace(':id', companyId)
                     $.ajax({
                         url: url,
                         type: 'get',
@@ -166,10 +180,11 @@
                         success: function(response) {
                             let option;
                             var hrSelect = $('#selectHr');
-                            console.log(response)
                             if (response !== null) {
                                 $.each(response, function(index, user) {
-                                    option += '<option value=' + user.id + '>' + user
+                                    option += '<option value="' + user.id +
+                                        '" ' + (user.id == hr ?
+                                            'selected' : '') + '>' + user
                                         .name + '</option>';
                                 });
 
@@ -184,6 +199,7 @@
                 })
             }
 
+            $("#company_id").trigger("change");
 
             $.validator.addMethod("validNumber", function(value, element) {
                 return !/0{10}/.test(value);
@@ -203,10 +219,9 @@
                     return /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/.test(value);
                 },
                 "Password must include at least one uppercase letter, one lowercase letter, one digit, and one special character."
-                );
+            );
 
             $("#createUser").validate({
-                errorClass: "text-danger fw-normal",
                 rules: {
                     name: {
                         required: true,
@@ -285,13 +300,16 @@
                             }
                             toastr.success(response.success);
                             setTimeout(function() {
-                                var currentRouteName ="{{ Route::currentRouteName() }}";
+                                var currentRouteName =
+                                    "{{ Route::currentRouteName() }}";
 
-                                if (currentRouteName === 'admin.hr.update'){
+                                if (currentRouteName === 'admin.hr.create' ||
+                                    currentRouteName === 'admin.hr.edit') {
                                     window.location.href =
                                         "{{ route('admin.hr.index') }}";
-                                }
-                                else{
+                                } else if (currentRouteName ===
+                                    'admin.manager.create' || currentRouteName ===
+                                    'admin.manager.edit') {
                                     window.location.href =
                                         "{{ route('admin.manager.index') }}";
                                 }

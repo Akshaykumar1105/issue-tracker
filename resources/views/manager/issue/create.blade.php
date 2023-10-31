@@ -7,10 +7,20 @@
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link href="{{ asset('asset/css/comment.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('asset/css/loader.css') }}">
-    <style>
-        .selectStatus{
+
+    <style type="text/css">
+        .selectStatus {
             background: #007bff;
             color: #fff;
+        }
+
+        label.error {
+            float: none;
+            color: red;
+            font-size: 15px;
+            font-weight: 400 !important;
+            padding-left: .3em;
+            vertical-align: top;
         }
     </style>
 @endsection
@@ -66,7 +76,9 @@
                                             <option value="default">Select Status</option>
                                             <option data-status="OPEN" value="OPEN"
                                                 {{ $issue->status == 'OPEN' ? 'selected' : '' }}>Open</option>
-                                            <option vlaue="IN_PROGRESS" class="{{ $issue->status == 'IN_PROGRESS' ? 'selectStatus' : '' }}" data-status="IN_PROGRESS"
+                                            <option vlaue="IN_PROGRESS"
+                                                class="{{ $issue->status == 'IN_PROGRESS' ? 'selectStatus' : '' }}"
+                                                data-status="IN_PROGRESS"
                                                 {{ $issue->status == 'IN_PROGRESS' ? 'selected' : '' }}>In Progress
                                             </option>
                                             <option value="ON_HOLD" data-status="ON_HOLD"
@@ -308,8 +320,6 @@
             }, "{{ __('validation.valueNotEquals', ['attribute' => 'issue status']) }}");
 
             $("#issueEdit").validate({
-                errorElement: "span",
-                errorClass: "text-danger fw-normal",
                 rules: {
                     status: {
                         required: true,

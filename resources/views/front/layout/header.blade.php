@@ -1,9 +1,9 @@
 <header class="navigation bg-tertiary">
     <nav class="navbar navbar-expand-xl navbar-light text-center py-3">
         <div class="container">
-            <a class="navbar-brand" href="{{route('home')}}">
-                <img style="width: 50px; margin: 0 10px 0 0;" loading="prelaod" decoding="async" class="img-fluid" width="160"
-                    src="{{ asset('asset/logo/logo.png') }}" alt="Issue Tracker">Issue Tracker
+            <a class="navbar-brand" href="{{ route('home') }}">
+                <img style="width: 50px; margin: 0 10px 0 0;" loading="prelaod" decoding="async" class="img-fluid"
+                    width="160" src="{{ asset('asset/logo/logo.png') }}" alt="Issue Tracker">Issue Tracker
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
@@ -45,7 +45,10 @@
                 @if (!auth()->user())
                     <a href="{{ route('login') }}" class="btn btn-outline-primary">Log In</a>
                 @endif
-                <a href="{{ route('hr.register.create') }}" class="btn btn-primary ms-2 ms-lg-3">Sign Up</a>
+
+                @unless (Route::currentRouteName() == 'hr.register.create')
+                    <a href="{{ route('hr.register.create') }}" class="btn btn-primary ms-2 ms-lg-3">Sign Up</a>
+                @endunless
             </div>
         </div>
     </nav>

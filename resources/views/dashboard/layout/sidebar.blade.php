@@ -84,7 +84,7 @@
                     </li>
 
                     <li
-                        class="nav-item {{ in_array(Route::currentRouteName(), ['admin.manager.index', 'admin.hr.index', 'admin.hr.edit', 'admin.manager.edit']) ? 'menu-is-opening menu-open' : '' }}">
+                        class="nav-item {{ in_array(Route::currentRouteName(), ['admin.manager.index' , 'admin.hr.create' ,  'admin.hr.index', 'admin.hr.edit', 'admin.manager.edit', 'admin.manager.create']) ? 'menu-is-opening menu-open' : '' }}">
                         <a href="#" class="nav-link {{ in_array(Route::currentRouteName(), ['admin.manager.index', 'admin.hr.index', 'admin.hr.edit', 'admin.manager.edit'])  ? 'active' : '410' }} ">
                             <i class="fas fa-users"></i>
                             <p>
@@ -93,17 +93,17 @@
                             </p>
                         </a>
                         <ul class="nav nav-treeview"
-                            style="{{ in_array(Route::currentRouteName(), ['admin.hr.index', 'admin.hr.edit', 'admin.manager.index', 'admin.manager.edit']) ? 'display: block;' : '' }}">
+                            style="{{ in_array(Route::currentRouteName(), ['admin.hr.index', 'admin.hr.edit' , 'admin.hr.create', 'admin.manager.index', 'admin.manager.edit', 'admin.manager.create']) ? 'display: block;' : '' }}">
                             <li class="nav-item">
                                 <a href="{{ route('admin.hr.index') }}" style=""
-                                    class="nav-link {{ in_array(Route::currentRouteName(), ['admin.hr.index', 'admin.hr.edit']) ? 'active' : '' }}">
+                                    class="nav-link {{ in_array(Route::currentRouteName(), ['admin.hr.index', 'admin.hr.create', 'admin.hr.edit']) ? 'active' : '' }}">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>View Hr</p>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a href="{{ route('admin.manager.index') }}"
-                                    class="nav-link {{ in_array(Route::currentRouteName(), ['admin.manager.index', 'admin.manager.edit']) ? 'active' : '' }}">
+                                    class="nav-link {{ in_array(Route::currentRouteName(), ['admin.manager.index', 'admin.manager.create', 'admin.manager.edit']) ? 'active' : '' }}">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>View Manager</p>
                                 </a>
@@ -119,7 +119,7 @@
                     </li>
 
                     <li
-                        class="nav-item {{ in_array(Route::currentRouteName(), ['admin.discount-coupon.index', 'admin.discount-coupon.edit']) ? 'menu-open' : '' }}">
+                        class="nav-item {{ in_array(Route::currentRouteName(), ['admin.discount-coupon.index', 'admin.discount-coupon.create', 'admin.discount-coupon.edit']) ? 'menu-open' : '' }}">
                         <a href="{{ route('admin.discount-coupon.index') }}" class="nav-link">
                             <i class="fas fa-tags"></i>
                             <p>Coupon</p>

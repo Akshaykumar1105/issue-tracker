@@ -2,6 +2,7 @@
 @section('style')
     <!-- toastr css -->
     <link rel="stylesheet" href="{{ asset('asset/css/toastr.css') }}">
+    <link rel="stylesheet" href="{{ asset('asset/css/loader.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
         integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -23,7 +24,7 @@
     <x-loader />
 
     <div class="w-50 mx-auto my-5">
-        <h2 style="font-weight: 200;margin: 12px 0;">Generate issue</h2>
+        <h2 style="font-weight: 200;margin: 12px 0;">{{$companyObj->name}} : Generate issue</h2>
         @php
             $uuid = $companyObj->uuid;
         @endphp
@@ -130,6 +131,7 @@
                     },
                 },
                 submitHandler: function(form) {
+                    $(form).prop('disabled', true);
                     $.ajax({
                         url: $(form).attr("action"),
                         type: $(form).attr("method"),
@@ -141,6 +143,7 @@
                             }
                             toastr.success(response.success);
                             form.reset();
+                            $(form).prop('disabled', false);
                         },
                         error: function(xhr, status, error) {
                             var response = JSON.parse(xhr.responseText);

@@ -199,7 +199,7 @@
                             }
                             manager = row.manager_id;
                             const selectHtml =
-                                `<select name="status" data-manager-id="${manager}"  data-status="${row.id}" id="status" class="custom-select custom-select-sm form-control form-control-sm">${optionsHtml}</select>`;
+                                `<select name="status" data-manager-id="${manager}" data-priority="${row.priority}" data-due-date="${row.due_date}"  data-status="${row.id}" id="status" class="custom-select custom-select-sm form-control form-control-sm">${optionsHtml}</select>`;
                             return selectHtml;
                         },
                     },
@@ -247,12 +247,16 @@
                 status = $(this).val();
                 let issueId = $(this).attr('data-status');
                 let managerId = $(this).attr('data-manager-id');
+                let priority = $(this).attr('data-priority');
+                let dueDate = $(this).attr('data-due-date');
                 var csrfToken = $('meta[name="csrf-token"]').attr('content');
                 $.ajax({
                     url: "{{ route('hr.issue.update', ['issue' => ':id']) }}".replace(':id',issueId),
                     type: 'patch',
                     data: {
-                        managerId: managerId,
+                        manager_id: managerId,
+                        priority: priority,
+                        due_date: dueDate,
                         status: status,
                         _token: csrfToken,
                     },

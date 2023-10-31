@@ -14,42 +14,46 @@
                 @php
                     $votes = [];
                 @endphp
-                @if ($comment->users->count() > 0)
-                    @foreach ($comment->users as $user)
-                        @foreach ($user->media as $img)
-                        @endforeach
-                    @endforeach
 
+
+                @if ($comment->user->count() > 0)
+                    @foreach ($comment->user->media as $img)
+                        {{-- @foreach ($users->media as $img)
+                        @endforeach --}}
+                    @endforeach
                     @foreach ($comment->commentUpvotes as $vote)
                         @php
                             $votes[] = $vote->user_id;
                         @endphp
                     @endforeach
 
-                    @if ($user->pivot->user_id == auth()->user()->id)
+                    @if ($comment->user->id == auth()->user()->id)
                         <div class="msg right-msg">
                             <div style="padding: 25px; margin: 0 10px 0 0;background-size: cover; background-image: url('@if (isset(auth()->user()->getMedia('user')->first()->filename)) {{ asset('storage/user/' .auth()->user()->getMedia('user')->first()->filename .'.' .auth()->user()->getMedia('user')->first()->extension) }}');" @else {{ asset('storage/user/user.png') }}')" @endif class="img-circle
                                 elevation-2" alt="User Image"></div>
-                            <div class="dropdown">
-                                <div class="custom-dropdown">
-                                    <div class="selected-option"><i class="fa-solid fa-ellipsis-vertical"></i></div>
-                                    <ul class="options">
-                                        <li data-value="option1"><a id="comment{{ $comment->id }}"
-                                                data-comment-id="{{ $comment->id }}" class="edit-comment"
-                                                href="">Edit</a></li>
-                                        <li data-value="option2">
-                                            <a id="commentDelete{{ $comment->id }}" class="commentDelete"
-                                                data-comment-id="{{ $comment->id }}" data-bs-toggle="modal" data-bs-target="#deleteComment">Delete</a>
-                                        </li>
-                                    </ul>
+                            @if ($comment->issue->status !== 'SEND_FOR_REVIEW'  && $comment->issue->status !== 'COMPLETED')
+                                <div class="dropdown">
+                                    <div class="custom-dropdown">
+                                        <div class="selected-option"><i class="fa-solid fa-ellipsis-vertical"></i></div>
+                                        <ul class="options">
+                                            <li data-value="option1"><a id="comment{{ $comment->id }}"
+                                                    data-comment-id="{{ $comment->id }}" class="edit-comment"
+                                                    href="">Edit</a></li>
+                                            <li data-value="option2">
+                                                <a id="commentDelete{{ $comment->id }}" class="commentDelete"
+                                                    data-comment-id="{{ $comment->id }}" data-bs-toggle="modal"
+                                                    data-bs-target="#deleteComment">Delete</a>
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </div>
-
-                            </div>
+                            @endif
 
                             <div class="msg-bubble d-block" style="width: 100%;">
                                 <div class="msg-info">
                                     <div class="msg-info-name">{{ auth()->user()->name }}</div>
-                                    <div class="msg-info-time">{{ date(config('site.date_time'), strtotime($comment->created_at)) }}</div>
+                                    <div class="msg-info-time">
+                                        {{ date(config('site.date_time'), strtotime($comment->created_at)) }}</div>
                                 </div>
 
                                 <div class="msg-text">
@@ -64,7 +68,7 @@
                                 </div>
 
                                 <div class="msg-text">
-                                    Status:-{{  str_replace('_', ' ', ucwords(strtolower($comment->status))) }}
+                                    Status:-{{ str_replace('_', ' ', ucwords(strtolower($comment->status))) }}
                                 </div>
 
                                 <div class="rating">
@@ -104,8 +108,9 @@
                                 elevation-2" alt="User Image"></div>
                             <div class="msg-bubble d-block">
                                 <div class="msg-info">
-                                    <div class="msg-info-name">{{ $user->name }}</div>
-                                    <div class="msg-info-time">{{ date(config('site.date_time'), strtotime($comment->created_at)) }}</div>
+                                    <div class="msg-info-name">{{ $comment->user->name }}</div>
+                                    <div class="msg-info-time">
+                                        {{ date(config('site.date_time'), strtotime($comment->created_at)) }}</div>
                                 </div>
 
                                 <div class="msg-text">
@@ -143,12 +148,13 @@
                                     @endif
                                 </div>
 
-                                {{-- <x-vote :comment="$comment" :vote="$vote" --}}
                             </div>
                         </div>
                     @endif
                 @endif
             @endforeach
+
+
         </main>
     @else
         <p style="margin: 30px;text-align:center; font-size: 32px;">No comment yet.</p>

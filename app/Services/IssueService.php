@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Issue;
 use App\Models\Comment;
@@ -11,11 +12,10 @@ use App\Jobs\ReviewIssue;
 use App\Jobs\AssignManager;
 use Illuminate\Support\Str;
 use App\Jobs\IssueStatusChanged;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use App\Jobs\IssueSolve as JobsIssueSolve;
 use App\Jobs\SendIssueCreatorNotification;
-use Exception;
-use Illuminate\Support\Facades\Log;
 
 class IssueService
 {
@@ -31,8 +31,8 @@ class IssueService
 
     public function index($request)
     {
-        $hrId = $request->company;
-        $user = User::where('company_id', $hrId)->get();
+        $companyId = $request->company;
+        $user = User::where('company_id', $companyId)->whereNull('parent_id')->get();
         return ['hrs' => $user];
     }
 
@@ -76,59 +76,25 @@ class IssueService
     public function update($id, $request)
     {
         $issue = Issue::find($id);
-        $managerId = (int) $request->manager_id;
-
-        if (auth()->user()->hasRole('manager') && $request->status === 'OPEN') {
-            Issue::find($id)->fill($request->except('status'))->save();
-            return ['error' => 'You do not have the required role to set the status to "Open."'];
-        }
-        $issue->fill($request->all())->save();
-
-        if (auth()->user()->hasRole(config('site.role.hr'))) {
-            if ($request->status == 'COMPLETED') {
-                $email = $issue->email;
-                // Issue resolve email
-                try {
-                    JobsIssueSolve::dispatch([
-                        'email' => $email,
-                        'issue' => $issue,
-                    ]);
-                } catch (Exception $e) {
-                    Log::info($e);
-                }
-            } else {
-                if ($issue->manager_id !== $request->manager_id) {
-                    $user = User::find($issue->manager_id);
-                    // Assign manager email
-                    try {
-                        AssignManager::dispatch($user->email, $issue);
-                    } catch (Exception $e) {
-                        Log::info($e);
-                    }
-                }
-                try {
-                    $email = $issue->email;
-                    // issue creater email
-                    SendIssueCreatorNotification::dispatch($email, $user);
-                } catch (Exception $e) {
-                    Log::info($e);
-                }
+        if (auth()->user()->hasRole('manager')) {
+            if ($issue->status == 'OPEN') {
+                Issue::find($id)->fill($request->all())->save();
+            } else if ($request->status === 'OPEN' && $issue->status !== 'OPEN') {
+                Issue::find($id)->fill($request->except('status'))->save();
+                return ['error' => 'You do not have the required role to set the status to "Open."'];
             }
-        } else if (auth()->user()->hasRole(config('site.role.manager'))) {
-            if ($request->status == $issue->status) {
-                $user = $issue->hr;
-                // issue statsu change email
-                try {
-                    IssueStatusChanged::dispatch($issue, $user);
-                } catch (Exception $e) {
-                    Log::info($e);
-                }
-            }
+            Issue::find($id)->fill($request->all())->save();
         }
 
         if ($request->body) {
             $this->commentService->store($request, $id);
         }
+        if (auth()->user()->hasRole(config('site.role.hr'))) {
+            $this->UpdateIssueByHr($request, $issue);
+        } else if (auth()->user()->hasRole(config('site.role.manager'))) {
+            $this->UpdateIssueByManager($request, $issue);
+        }
+
         return  ['success' => __('entity.entityUpdated', ['entity' => 'Issue'])];
     }
 
@@ -168,5 +134,38 @@ class IssueService
                 break;
         }
         return $query;
+    }
+
+    private function UpdateIssueByManager($request, $issue)
+    {
+        if ($request->status !== $issue->status) {
+            $user = $issue->hr;
+            IssueStatusChanged::dispatch($issue, $user);
+        }
+        $issue->fill($request->all())->save();
+    }
+
+    private function UpdateIssueByHr($request, $issue)
+    {
+        if ($issue->manager_id !== $request->manager_id) {
+            $user = User::find($request->manager_id);
+            // Assign manager email
+            AssignManager::dispatch($user->email, $issue);
+        }
+        if ($request->status == 'COMPLETED') {
+            $email = $issue->email;
+            // Issue resolve email
+            JobsIssueSolve::dispatch([
+                'email' => $email,
+                'issue' => $issue,
+            ]);
+        } else {
+            $email = $issue->email;
+            SendIssueCreatorNotification::dispatch($email, $user);
+        }
+
+        $issue->fill($request->all());
+        $issue->assign_at = Carbon::now();
+        $issue->save();
     }
 }

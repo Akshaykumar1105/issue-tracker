@@ -26,7 +26,7 @@
             @if (Route::currentRouteName() == 'admin.manager.index')
                 <h1>Managers</h1>
             @else
-                <h1>Hr</h1>
+                <h1>Hrs</h1>
             @endif
         </div>
 

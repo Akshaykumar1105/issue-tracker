@@ -3,6 +3,16 @@
     <link rel="stylesheet" href="{{ asset('asset/css/dropify.min.css') }}">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" />
     <link rel="stylesheet" href="{{ asset('asset/css/loader.css') }}">
+    <style type="text/css">
+        label.error {
+            float: none; 
+            color: red;
+            font-size: 15px;
+            font-weight: 400 !important;
+            padding-left: .3em; 
+            vertical-align: top;  
+        }
+    </style>
     {{-- <link href="https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap4.min.css" rel="stylesheet"> --}}
 @endsection
 @section('content')
@@ -110,7 +120,6 @@
             }, "{{ __('validation.valid', ['attribute' => 'mobile']) }}");
 
             $("#managerCreate").validate({
-                errorClass: "text-danger fw-normal",
                 rules: {
                     name: {
                         required: true,

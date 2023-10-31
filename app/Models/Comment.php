@@ -12,11 +12,17 @@ class Comment extends Model{
     protected $fillable = [
         'issue_id',
         'body',
-        'status'
+        'status',
+        'user_id'
     ];
 
-    public function users(){
-        return $this->belongsToMany(User::class, 'comment_user', 'comment_id', 'user_id' );
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function issue(){
+        return $this->belongsTo(Issue::class, 'issue_id');
     }
 
     public function commentUpvotes(){

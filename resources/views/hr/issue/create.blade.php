@@ -6,6 +6,16 @@
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link href="{{ asset('asset/css/comment.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('asset/css/loader.css') }}">
+    <style type="text/css">
+        label.error {
+            float: none; 
+            color: red;
+            font-size: 15px;
+            font-weight: 400 !important;
+            padding-left: .3em; 
+            vertical-align: top;  
+        }
+    </style>
 @endsection
 @section('content')
     <x-loader />
@@ -322,8 +332,6 @@
             
 
             $("#issueEdit").validate({
-                errorElement: "p",
-                errorClass: "invalid-feedback fs-6",
                 rules: {
                     priority: {
                         required: true

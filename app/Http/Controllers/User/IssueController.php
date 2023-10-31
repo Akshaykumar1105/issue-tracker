@@ -19,8 +19,8 @@ class IssueController extends Controller
     }
 
     public function index($company, Request $request){        
-        $companyObj = Company::where('uuid', $company)->first();
-        if (!$company) {
+        $companyObj = Company::where('uuid', $company)->where('is_active', config('site.status.active'))->first();
+        if (!$companyObj) {
             return abort(404);
         }
         $hrs = User::where('company_id', $companyObj->id)->whereNull('parent_id')->get();

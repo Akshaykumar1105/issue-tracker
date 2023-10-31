@@ -32,10 +32,11 @@ class CompanyController extends Controller
                     $edit = route('admin.company.edit', ['company' => $row->id]);
                     $hr = route('admin.hr.index', ['company_id' => $row->id]);
                     $manager = route('admin.manager.index', ['company_id' => $row->id]);
+                    $issue = route('admin.issue.index', ['company_id' => $row->id]);
                     $actionBtn = '<div class="d-flex" style="flex-direction: column;justify-content: initial;align-items: baseline;gap: 10px;"><div><a href=' . $edit . ' id="edit' . $row->id . '" data-user-id="' . $row->id . '" class="edit btn btn-success btn-sm"><i class="fas fa-pencil-alt" style="margin: 0 5px 0 0">
                     </i>Edit</a> <button type="submit" data-user-id="' . $row->id . '" class="delete btn btn-danger btn-sm" data-bs-toggle="modal"
                 data-bs-target="#deleteCompany"> <i class="fas fa-trash" style="margin: 0 5px 0 0;">
-                </i>Delete</button></div> <a href=' . $hr . ' id="viewHr' . $row->id . '" data-user-id="' . $row->id . '" class="hr btn btn-primary btn-sm"> <i class="fa-solid fa-eye" style="margin:0 5px 0 0"></i>View Hr</a> <a href=' . $manager . ' type="submit" data-user-id="' . $row->id . '"  class="manager btn btn-primary btn-sm"><i class="fa-solid fa-eye" style="margin:0 5px 0 0"></i>View Manager</a></div>';
+                </i>Delete</button></div> <a href=' . $hr . ' id="viewHr' . $row->id . '" data-user-id="' . $row->id . '" class="hr btn btn-primary btn-sm"> <i class="fa-solid fa-eye" style="margin:0 5px 0 0"></i>View Hr</a> <a href=' . $manager . ' type="submit" data-user-id="' . $row->id . '"  class="manager btn btn-primary btn-sm"><i class="fa-solid fa-eye" style="margin:0 5px 0 0"></i>View Manager</a> <a href=' . $issue . ' type="submit"   class="manager btn btn-primary btn-sm"><i class="fa-solid fa-eye" style="margin:0 5px 0 0"></i>View Issue</a></div>';
                     return $actionBtn;
                 })
                 ->addIndexColumn()

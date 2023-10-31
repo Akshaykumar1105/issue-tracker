@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\User;
 use App\Models\Company;
+use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
 use Plank\Mediable\Facades\MediaUploader;
 
@@ -23,8 +24,16 @@ class HrService
                 ->toDirectory('user')->upload();
             $this->user->attachMedia($media, 'user');
         }
+        if(!auth()->user()){
+            Auth::login($this->user);
+            return [
+                'success' =>   __('entity.entityCreated', ['entity' => 'Hr']),
+                'route' => route('hr.dashboard')
+            ];
+        }
+        
         return [
-            'success' =>  __('messages.register'),
+            'success' =>   __('entity.entityCreated', ['entity' => 'Hr']),
             'route' => route('login')
         ];
     }
@@ -50,7 +59,7 @@ class HrService
         }
 
         return  [
-            'success' =>  __('entity.entityUpdated', ['entity' => 'Your data']),
+            'success' =>  __('entity.entityUpdated', ['entity' => 'hr ']),
         ];
     }
 

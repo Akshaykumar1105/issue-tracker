@@ -37,7 +37,6 @@ class AssignManager extends Mailable
      */
     public function content(): Content
     {
-        // dd(3);
         return new Content(
             view: 'email.assign-manager',
             with: ['issue' => $this->issue]

@@ -3,13 +3,13 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
 use Plank\Mediable\Mediable;
+use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
@@ -49,19 +49,23 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    public function issues(){
+    public function issues()
+    {
         return $this->hasMany(Issue::class);
     }
 
-    public function company(){
+    public function company()
+    {
         return $this->belongsTo(Company::class);
     }
 
-    public function comments(){
-        return $this->belongsToMany(Comment::class, 'comment_user', 'user_id', 'comment_id');
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
     }
 
-    public function hrUser(){
+    public function hrUser()
+    {
         return $this->belongsTo(User::class, 'parent_id');
     }
 }

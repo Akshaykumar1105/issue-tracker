@@ -214,8 +214,7 @@
                             }
                             toastr.success(response.success);
                             setTimeout(function() {
-                                window.location.href =
-                                    "{{ route('admin.hr.index') }}";
+                                window.location.href = response.route;
                             }, 2000);
                             $('#issueSubmit').prop("disabled", false);
                         },

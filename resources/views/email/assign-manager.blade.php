@@ -76,7 +76,7 @@
             </div>
             <p class="emailDody">Hello {{$issue->manager->name}},</p>
 
-            <p>{{$issue->hr->name}} HR has assigned you as the manager for the following issue:</p>
+            <p>{{$issue->hr->name}} HR has  {{ $issue->status == 'COMPLETED' ? 'complete this issue:' : 'assigned you as the manager for the following issue:' }}</p>
 
             <ul>
                 <li><strong>Issue Title:</strong> {{ $issue->title }}</li>

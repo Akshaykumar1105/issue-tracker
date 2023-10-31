@@ -28,7 +28,7 @@ class IssueController extends Controller
             $query = $this->issueService->collection($request);
             return DataTables::of($query)->addIndexColumn()
                 ->orderColumn('title', function ($query, $order) {
-                    $query->orderBy('id', $order);
+                    $query->orderBy('assign_at', $order);
                 })
                 ->addColumn('dueDate', function ($row) {
                     if ($row->due_date) {

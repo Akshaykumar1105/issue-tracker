@@ -24,7 +24,7 @@ use App\Http\Controllers\Hr\DashboardController as HrDashboardController;
 use App\Http\Controllers\Admin\ManagerController as AdminManagerController;
 use App\Http\Controllers\Manager\IssueController as ManagerIssueController;
 use App\Http\Controllers\Manager\DashboardController as ManagerDashboardController;
-
+use App\Http\Controllers\User\CompanyController as UserCompanyController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
@@ -48,6 +48,11 @@ Route::prefix('/hr')->group(function () {
     Route::post('/register', [HrController::class, 'store'])->name('hr.register.store');
 });
 
+Route::get('/company', [UserCompanyController::class, 'create'])->name('user.company');
+Route::post('/company/step-form', [UserCompanyController::class, 'validateStep'])->name('company.step');
+Route::post('/company/step/2', [UserCompanyController::class, 'validateStepSecond'])->name('company.step.second');
+Route::post('company/discount',[ UserCompanyController::class,'applyDiscount'])->name('company.discount');
+
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/dashboard/issue/chart', [DashboardController::class, 'issueChart'])->name('dashboard.issue.chart');
@@ -67,12 +72,11 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->grou
     Route::resource('/manager', AdminManagerController::class);
 
     //issue
-    Route::resource('/issue', IssueController::class)->only(['index', 'show', 'destroy']);
+    Route::resource('/issue', IssueController::class)->except(['show']);
     
     //discount coupon
     Route::resource('/discount-coupon', CouponController::class)->except(['show']);
     Route::post('/discount-coupon/status', CouponStatusController::class)->name('discount-coupon.status');
-
 });
 
 Route::prefix('hr')->name('hr.')->middleware(['auth', 'role:hr'])->group(function () {

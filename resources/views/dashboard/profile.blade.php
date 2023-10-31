@@ -144,6 +144,18 @@
 
                                 <div class="card-footer">
                                     <button type="submit" class="btn btn-primary">Update</button>
+                                    @php
+                                        $user = auth()->user();
+                                        if ($user->hasRole('hr')) {
+                                            $link = route('hr.dashboard');
+                                        } elseif ($user->hasRole('manager')) {
+                                            $link = route('manager.dashboard');
+                                        } else {
+                                            $link = route('admin.dashboard');
+                                        }
+                                    @endphp
+                                    <a href="{{ $link }}" type="submit"
+                                        class="btn  btn-outline-secondary">Back</a>
                                 </div>
                             </form>
                         </div>

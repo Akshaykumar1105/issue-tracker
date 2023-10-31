@@ -2,6 +2,16 @@
 
 @section('style')
     <link rel="stylesheet" href="{{ asset('asset/css/loader.css') }}">
+    <style type="text/css">
+        label.error {
+            float: none; 
+            color: red;
+            font-size: 15px;
+            font-weight: 400 !important;
+            padding-left: .3em; 
+            vertical-align: top;  
+        }
+    </style>
 @endsection
 
 @section('content')
@@ -160,7 +170,6 @@
 
 
             $("#createDiscountCoupon").validate({
-                errorClass: "text-danger font-weight-normal",
                 rules: {
                     code: {
                         required: true,

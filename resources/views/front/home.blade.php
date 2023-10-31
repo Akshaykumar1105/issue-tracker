@@ -241,7 +241,7 @@
                                             <div class="card-body">
                                                 <i class="mdi mdi-cube-outline pricing-plan-icon"></i>
                                                 <p class="pricing-plan-title">Basic</p>
-                                                <h3 class="pricing-plan-cost ml-auto">FREE</h3>
+                                                <h3 class="pricing-plan-cost ml-auto">$2000</h3>
                                                 <ul class="pricing-plan-features">
                                                     <li>Unlimited conferences</li>
                                                     <li>100 participants max</li>
@@ -257,14 +257,14 @@
                                             <div class="card-body">
                                                 <i class="mdi mdi-trophy pricing-plan-icon"></i>
                                                 <p class="pricing-plan-title">Premium</p>
-                                                <h3 class="pricing-plan-cost ml-auto">₹5000</h3>
+                                                <h3 class="pricing-plan-cost ml-auto">$3000</h3>
                                                 <ul class="pricing-plan-features">
                                                     <li>Unlimited conferences</li>
-                                                    <li>100 participants max</li>
+                                                    <li>200 participants max</li>
                                                     <li>Custom Hold Music</li>
-                                                    <li>10 participants max</li>
+                                                    <li>20 participants max</li>
                                                 </ul>
-                                                <a href="#!" class="btn pricing-plan-purchase-btn">Purchase</a>
+                                                <a href="#" class="btn pricing-plan-purchase-btn">Purchase</a>
                                             </div>
                                         </div>
                                     </div>

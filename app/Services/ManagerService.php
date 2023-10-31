@@ -96,7 +96,7 @@ class ManagerService
         }
 
         return  [
-            'success' =>  __('entity.entityUpdated', ['entity' => 'Your data']),
+            'success' =>  __('entity.entityUpdated', ['entity' => 'Manager data']),
             'route' => route('hr.manager.index')
         ];
     }

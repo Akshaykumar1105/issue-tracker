@@ -2,11 +2,11 @@
 
 namespace App\Notifications;
 
-use App\Mail\AssignManager as MailAssignManager;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use App\Mail\AssignManager as MailAssignManager;
+use Illuminate\Notifications\Messages\MailMessage;
 
 class AssignManager extends Notification
 {
@@ -36,7 +36,6 @@ class AssignManager extends Notification
      */
     public function toMail(object $notifiable)
     {
-        // dd($this->issue->user->email);
         return (new MailAssignManager($this->issue))->to($this->issue->manager->email);    
     }
 

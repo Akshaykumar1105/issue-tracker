@@ -11,7 +11,7 @@
 @endsection
 @section('content')
     <section class="content" style="margin: 0 auto; max-width: 100%">
-        <h1>Issue</h1>
+        <h1>Issues</h1>
 
         <div
             class=""style="margin-top:40px;padding: 10px;border: 0 solid rgba(0,0,0,.125); border-radius: .25rem;background-color: #fff;box-shadow: 0 0 1px rgba(0,0,0,.125), 0 1px 3px rgba(0,0,0,.2);margin-bottom: 1rem;">
@@ -98,10 +98,11 @@
                     url: "{{ route('admin.issue.index') }}",
                     dataType: "JSON",
                     data: function(d) {
+                        let urlParams = new URLSearchParams(window.location.search);
                         d.filter = priority;
                         d.duedate = date;
                         d.table = 'admin';
-                        d.company = company;
+                        d.company = urlParams.get('company_id') || "";
                     }
                 },
                 columns: [{

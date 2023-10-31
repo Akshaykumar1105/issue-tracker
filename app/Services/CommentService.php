@@ -15,7 +15,7 @@ class CommentService{
     }
 
     public function index($request){
-        $comments = Comment::with('users.media')
+        $comments = Comment::with('user.media')
             ->with('commentUpvotes')
             ->where('issue_id', $request->issueId)
             ->orderBy('created_at')
@@ -24,14 +24,15 @@ class CommentService{
     }
 
     public function store($request, $id){
+        $userId = auth()->user()->id;
         $comment = Comment::create([
             'issue_id' => $id,
             'body' => $request->body,
-            'status' => $request->status
+            'status' => $request->status,
+            'user_id' => $userId
         ]);
         $commentId = $comment->id;
-        $user = auth()->user();
-        $user->comments()->attach([$commentId => ['user_id' => $user->id]]);
+        // $user->comments()->attach([$commentId => ['user_id' => $user->id]]);
     }
 
     public function update($id, $request){

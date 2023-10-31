@@ -22,7 +22,8 @@ class Issue extends Model
         'status',
         'slug',
         'hr_id',
-        'manager_id'
+        'manager_id',
+        'assign_at'
     ];
 
 
@@ -51,5 +52,8 @@ class Issue extends Model
         return $this->belongsTo(Company::class);
     }
     
+    public function comments(){
+        return $this->hasMany(Comment::class, 'issue_id');
+    }
     
 }

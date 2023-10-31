@@ -43,7 +43,7 @@ class ManagerController extends Controller{
                 ->addColumn('action', function ($row) {
                     $manager = $row->id;
                     $editManager = route('admin.manager.edit', ['manager' => $manager]);
-                    $actionBtn = '<div class="d-flex" style="flex-direction: column;justify-content: initial;align-items: baseline;gap: 10px;"><div><a href=' . $editManager . ' id="edit' . $row->id . '" data-userId="' . $row->id . '" class="edit btn btn-success btn-sm"><i class="fas fa-pencil-alt" style="margin: 0 5px 0 0"></i>Edit</a> <button type="submit" data-user-id="' . $row->id . '" class="delete btn btn-danger btn-sm" data-bs-toggle="modal"
+                    $actionBtn = '<div class="d-flex" style="flex-direction: column;justify-content: initial;align-items: baseline;gap: 10px;"><div><a href=' . $editManager . ' id="edit' . $row->id . '"  class="edit btn btn-success btn-sm"><i class="fas fa-pencil-alt" style="margin: 0 5px 0 0"></i>Edit</a> <button type="submit" data-user-id="' . $row->id . '" class="delete btn btn-danger btn-sm" data-bs-toggle="modal"
                     data-bs-target="#deleteUser"><i class="fas fa-trash" style="margin: 0 5px 0 0;"></i>Delete</button></div></div>';
                     return $actionBtn;
                 })
@@ -74,7 +74,7 @@ class ManagerController extends Controller{
         $companies = Company::where('is_active', config('site.status.active'))->get();
         if($request->ajax()){
             $hrs = User::where('company_id', $request->companyId);
-            return $hrs;
+            return response()->json($hrs);
         }
         return view('admin.user.create', ['companies' => $companies, 'user' => $user]);
     }

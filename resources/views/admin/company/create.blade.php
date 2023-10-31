@@ -2,6 +2,16 @@
 
 @section('style')
     <link rel="stylesheet" href="{{ asset('asset/css/loader.css') }}">
+    <style type="text/css">
+        label.error {
+            float: none; 
+            color: red;
+            font-size: 15px;
+            font-weight: 400 !important;
+            padding-left: .3em; 
+            vertical-align: top;  
+        }
+    </style>
 @endsection
 
 @section('content')
@@ -33,7 +43,7 @@
 
                     <div class="form-group">
                         <label class="form-label fw-bold" for="name">Name<span class="text-danger ms-1">*</span></label>
-                        <input type="text" id="name" name="name" class="form-control"
+                        <input style="color: #000;" type="text" id="name" name="name" class="form-control"
                             value="{{ isset($company) ? $company->name : '' }}" placeholder="Bolton and Green Trading" />
                     </div>
 
@@ -135,7 +145,6 @@
             }, "{{ __('validation.valid', ['attribute' => 'mobile']) }}");
 
             $("#companyRegister").validate({
-                errorClass: "invalid-feedback fs-6",
                 rules: {
                     name: {
                         required: true,
@@ -185,6 +194,7 @@
                     $(".loader-container").fadeIn();
                     store(form);
                 },
+                
             });
         });
     </script>
