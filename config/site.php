@@ -30,7 +30,7 @@ return [
     ],
 
     'percentage' => '%',
-    'currency' => '₹',
+    'currency' => '$',
 
     'date' => 'jS M Y',
     'date_time' => 'jS M Y H:i A',

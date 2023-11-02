@@ -444,27 +444,63 @@
                     <h6>Selected subscription plan</h6>
                     <section>
                         <div class="row mb-3">
-                            <div class="row">
-                                <div class="col-md-6">
+                            <div class="" style="display:flex; gap: 10px">
+                                @foreach ($subscriptionPlans as $subscriptionPlan)
                                     <div class="card pricing-card pricing-plan-basic">
                                         <div class="card-body">
                                             <i class="mdi mdi-cube-outline pricing-plan-icon"></i>
                                             <div class="d-flex align-items-center">
-                                                <input type="radio" value='basic' id="sub_plan_basic" checked
-                                                    name="subscription_plan">
-                                                <label class="pricing-plan-title ms-2" for="sub_plan_basic">Basic</label>
+                                                <input type="radio" value='{{$subscriptionPlan->name}}' id="sub_plan_basic" {{$subscriptionPlan->name == 'Basic' ? 'checked' : ''}} 
+                                                    name="subscription_name">
+                                                <label class="pricing-plan-title ms-2"
+                                                    for="sub_plan_basic">{{ $subscriptionPlan->name }}</label>
                                             </div>
-                                            <h3 class="pricing-plan-cost ml-auto">$2000</h3>
-                                            <ul class="pricing-plan-features">
-                                                <li>Unlimited conferences</li>
-                                                <li>100 participants max</li>
-                                                <li>Custom Hold Music</li>
-                                                <li>10 participants max</li>
-                                            </ul>
+                                            @if ($subscriptionPlan->discount_price)
+                                            <h3 class="">
+                                                <span class="line" style="color: #a59d9d; text-decoration: line-through;">{{ config('site.currency') }}{{ $subscriptionPlan->price}}</span><span>{{ config('site.currency') }}{{$subscriptionPlan->price - $subscriptionPlan->discount_price}}</span>/<small>{{ $subscriptionPlan->type}}</small> </h3>
+                                            @else
+                                            <h3 class="">
+                                                {{ config('site.currency') }}{{ $subscriptionPlan->price}}/<small>{{ $subscriptionPlan->type}}</small> </h3>
+                                            @endif
+                                            <table>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>Create hr limit</td>
+                                                        <td>{{$subscriptionPlan->hr_create_limit}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Create manager limit</td>
+                                                        <td>{{$subscriptionPlan->manager_create_limit}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Create issue limit</td>
+                                                        <td>{{$subscriptionPlan->issue_create_limit}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Can manage issues</td>
+                                                        <td>{{$subscriptionPlan->can_manage_issues == 1 ? 'Yes' : 'No'}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Features</td>
+                                                        <td>
+                                                            <ul class="pricing-plan-features" style="list-style-type: none !impo; ">
+                                                                @php
+                                                                    $features = explode(', ', $subscriptionPlan->features);
+                                                                @endphp
+                                                                @foreach ($features as $feature)
+                                                                    <li>{{ $feature }}</li>
+                                                                @endforeach
+                                                            </ul>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                                
                                         </div>
                                     </div>
-                                </div>
-                                <div class="col-md-6">
+                                @endforeach
+
+                                {{-- <div class="col-md-6">
                                     <div class="card pricing-card pricing-card-highlighted  pricing-plan-pro">
                                         <div class="card-body">
                                             <i class="mdi mdi-trophy pricing-plan-icon"></i>
@@ -483,7 +519,7 @@
                                             </ul>
                                         </div>
                                     </div>
-                                </div>
+                                </div> --}}
                             </div>
                         </div>
 
@@ -587,8 +623,8 @@
                         },
                         success: function(response) {
                             if (response.success) {
-                                if (response.subscription_plan) {
-                                    $('#subscriptionPlan').html(response.subscription_plan)
+                                if (response.subscription_name) {
+                                    $('#subscriptionPlan').html(response.subscription_name)
                                 }
                                 if (response.amount) {
                                     $('#subscriptionAmount').html('$' + response.amount)
@@ -640,7 +676,8 @@
                             if (response.coupon.discount_type == 'VARIABLE') {
                                 let discountAmount = (amount * response.coupon.discount) / 100;
                                 let discountedTotal = amount - discountAmount;
-                                $('#discount').html('-' + '$' + discountAmount + '(' + response.coupon
+                                $('#discount').html('-' + '$' + discountAmount + '(' + response
+                                    .coupon
                                     .discount + "%" + ')')
                                 $('#total').html('$' + discountedTotal)
                             } else {

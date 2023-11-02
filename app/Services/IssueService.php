@@ -76,7 +76,7 @@ class IssueService
     public function update($id, $request)
     {
         $issue = Issue::find($id);
-        if (auth()->user()->hasRole('manager')) {
+        if (auth()->user()->hasRole(config('site.role.manager'))) {
             if ($issue->status == 'OPEN') {
                 Issue::find($id)->fill($request->all())->save();
             } else if ($request->status === 'OPEN' && $issue->status !== 'OPEN') {
@@ -90,9 +90,9 @@ class IssueService
             $this->commentService->store($request, $id);
         }
         if (auth()->user()->hasRole(config('site.role.hr'))) {
-            $this->UpdateIssueByHr($request, $issue);
+            $this->updateIssueByHr($request, $issue);
         } else if (auth()->user()->hasRole(config('site.role.manager'))) {
-            $this->UpdateIssueByManager($request, $issue);
+            $this->updateIssueByManager($request, $issue);
         }
 
         return  ['success' => __('entity.entityUpdated', ['entity' => 'Issue'])];
@@ -136,7 +136,7 @@ class IssueService
         return $query;
     }
 
-    private function UpdateIssueByManager($request, $issue)
+    private function updateIssueByManager($request, $issue)
     {
         if ($request->status !== $issue->status) {
             $user = $issue->hr;
@@ -145,7 +145,7 @@ class IssueService
         $issue->fill($request->all())->save();
     }
 
-    private function UpdateIssueByHr($request, $issue)
+    private function updateIssueByHr($request, $issue)
     {
         if ($issue->manager_id !== $request->manager_id) {
             $user = User::find($request->manager_id);

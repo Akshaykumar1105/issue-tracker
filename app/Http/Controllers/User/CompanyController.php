@@ -5,6 +5,7 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Models\City;
 use App\Models\Coupon;
+use App\Models\Subscription;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
@@ -13,7 +14,8 @@ class CompanyController extends Controller
 {
     public function create(){
         $cities = City::get();
-        return view('front.company.create', ['cities' => $cities]);
+        $subscriptionPlans = Subscription::all();
+        return view('front.company.create', ['cities' => $cities, 'subscriptionPlans' => $subscriptionPlans]);
     }
 
     public function validateStep(Request $request){
@@ -23,13 +25,14 @@ class CompanyController extends Controller
             'number' => 'required|min:10|digits:10',
             'address' => 'required',
             'city_id' => 'required|exists:cities,id',
-            'subscription_plan' => 'required',
         ]);
 
-        if( $request->subscription_plan == 'premium'){
-            $amount = 3000;
+        $subscription = Subscription::where('name', $request->subscription_name)->first();
+        $subscriptionName = $subscription->name;
+        if($subscription->discount_price){
+            $subscriptionPrice = $subscription->price - $subscription->discount_price;
         }else{
-            $amount = 2000;
+            $subscriptionPrice = $subscription->price;
         }
     
         if ($validator->fails()) {
@@ -39,7 +42,7 @@ class CompanyController extends Controller
             ]);
         }
     
-        return response()->json(['success' => true, 'subscription_plan' => $request->subscription_plan, 'amount' => $amount]);
+        return response()->json(['success' => true,  'subscription_name' => $subscriptionName, 'amount' => $subscriptionPrice]);
     }
 
     public function validateStepSecond(Request $request){
